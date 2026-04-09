@@ -48,7 +48,7 @@ export type ProjectsSearchRequest = {
     offset?: number;
     limit?: number;
     sort_field?: string;
-    sort_order?: "asc" | "desc";
+    sort_order?: SortOrder;
 }
 
 
@@ -112,4 +112,9 @@ export type PublicationsSearch = {
     core_project_nums?: string[];
     get_non_nih_pubs: boolean;
     filter_appl_ids: boolean;
+}
+
+export enum SortOrder {
+    ASC = "asc",
+    DESC = "desc"
 }
