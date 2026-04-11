@@ -2,7 +2,7 @@ import type { Field } from "./field";
 
 export type ProjectsSearchRequest = {
     criteria: {
-        use_relevance: boolean;
+        use_relevance?: boolean;
         fiscal_years?: number[];
         include_active_projects?: boolean;
         pi_names?: NameCriteria[];
@@ -17,8 +17,8 @@ export type ProjectsSearchRequest = {
         appl_ids?: number[];
         project_num_split?: ProjectNumSplit;
         agencies?: string[];
-        is_agency_admin: boolean 
-        is_agency_funding: boolean;
+        is_agency_admin?: boolean 
+        is_agency_funding?: boolean;
         activity_codes?: string[];
         cooperative_agreement_codes?: string[];
         award_types?: string[];
