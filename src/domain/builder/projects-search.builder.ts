@@ -13,6 +13,10 @@ export class ProjectsSearchBuilder {
         this.request = DefaultsFactory.createDefaultProjectsSearchRequest()
     }
 
+    /**
+     * Get the search request object
+     * @returns request object
+     */
     build(): ProjectsSearchRequest {
         return this.request;
     }
@@ -47,6 +51,10 @@ export class ProjectsSearchBuilder {
         return this;
     }
 
+    /**
+     * Include these fields in the results. If null then all fields are included by default. If empty, then no fields are included.
+     * @param fields - fields to include in results
+     */
     includeFields(...fields: Field[]): this {
         const excludedFields = new Set(this.request.exclude_fields ?? []);
         const conflicts = fields.filter(f => excludedFields.has(f));
@@ -62,6 +70,10 @@ export class ProjectsSearchBuilder {
         return this;
     }
 
+    /**
+     * Exclude these fields in the results. If null or empty, no fields are excluded.
+     * @param fields - fields to exclude from resutls
+     */
     excludeFields(...fields: Field[]): this {
         const includedFields = new Set(this.request.include_fields ?? []);
         const conflicts = fields.filter(f => includedFields.has(f));
@@ -76,6 +88,8 @@ export class ProjectsSearchBuilder {
         this.request.exclude_fields = fields;
         return this;
     }
+
+    
 
     private formatList(fields: string[]): string {
         return fields.map(f => ` - ${f}`).join("\n");
