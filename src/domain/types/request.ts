@@ -1,3 +1,5 @@
+import type { Field } from "./field";
+
 export type ProjectsSearchRequest = {
     criteria: {
         use_relevance: boolean;
@@ -43,8 +45,8 @@ export type ProjectsSearchRequest = {
         advanced_text_search?: AdvancedTextSearch;
         publications_search?: PublicationsSearch;
     };
-    include_fields?: string[];
-    exclude_fields?: string[];
+    include_fields?: Field[];
+    exclude_fields?: Field[];
     offset?: number;
     limit?: number;
     sort_field?: string;
@@ -114,7 +116,8 @@ export type PublicationsSearch = {
     filter_appl_ids: boolean;
 }
 
-export enum SortOrder {
-    ASC = "asc",
-    DESC = "desc"
-}
+export const SortOrder = {
+    ASC: "asc",
+    DESC: "desc"
+} as const;
+export type SortOrder = typeof SortOrder[keyof typeof SortOrder]
