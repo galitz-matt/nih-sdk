@@ -100,10 +100,10 @@ export type ProjectNumSplit = {
 }
 
 export type NameCriteria = {
-    any_name: string;
-    first_name: string;
-    last_name: string;
-    middle_name: string;
+    any_name?: string;
+    first_name?: string;
+    last_name?: string;
+    middle_name?: string;
 }
 
 export type PublicationsSearch = {
