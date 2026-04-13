@@ -12,75 +12,75 @@ import type { NameCriteriaIr } from "../types/ir";
  * These modes cannot be combined.
  */
 export class NameCriteriaIrBuilder {
-    private readonly piName: NameCriteriaIr = {};
+    private readonly ir: NameCriteriaIr = {};
 
     anyName(anyName: string): NameCriteriaIrAnyBuilder {
-        this.piName.anyName = anyName
-        return new NameCriteriaIrAnyBuilder(this.piName);
+        this.ir.anyName = anyName
+        return new NameCriteriaIrAnyBuilder(this.ir);
     }
 
     firstName(firstName: string): NameCriteriaIrStructuredBuilder {
-        this.piName.firstName = firstName;
-        return new NameCriteriaIrStructuredBuilder(this.piName);
+        this.ir.firstName = firstName;
+        return new NameCriteriaIrStructuredBuilder(this.ir);
     }
 
     lastName(lastName: string): NameCriteriaIrStructuredBuilder {
-        this.piName.lastName = lastName;
-        return new NameCriteriaIrStructuredBuilder(this.piName);
+        this.ir.lastName = lastName;
+        return new NameCriteriaIrStructuredBuilder(this.ir);
     }
 
     middleName(middleName: string): NameCriteriaIrStructuredBuilder {
-        this.piName.middleName = middleName;
-        return new NameCriteriaIrStructuredBuilder(this.piName);
+        this.ir.middleName = middleName;
+        return new NameCriteriaIrStructuredBuilder(this.ir);
     }
 }
 
 export class NameCriteriaIrStructuredBuilder {
-    private readonly piName: NameCriteriaIr;
+    private readonly ir: NameCriteriaIr;
     
     constructor(piName: NameCriteriaIr) {
-        this.piName = piName;
+        this.ir = piName;
     }
 
     firstName(firstName: string): this {
-        this.piName.firstName = firstName;
+        this.ir.firstName = firstName;
         return this;
     }
 
     lastName(lastName: string): this {
-        this.piName.lastName = lastName;
+        this.ir.lastName = lastName;
         return this;
     }
 
     middleName(middleName: string): this {
-        this.piName.middleName = middleName;
+        this.ir.middleName = middleName;
         return this;
     }
 
     build(): NameCriteriaIr {
-        if (this.piName.anyName !== undefined) {
+        if (this.ir.anyName !== undefined) {
             throw new DomainError("Invalid State: Cannot combine anyName with firstName, lastName, and/or middleName.")
         }
-        return { ...this.piName };
+        return { ...this.ir };
     }
 }
 
 export class NameCriteriaIrAnyBuilder {
-    private readonly piName: NameCriteriaIr;
+    private readonly ir: NameCriteriaIr;
 
     constructor(piName: NameCriteriaIr) {
-        this.piName = piName;
+        this.ir = piName;
     }
 
     build(): NameCriteriaIr {
         if (
-            this.piName.firstName !== undefined ||
-            this.piName.lastName !== undefined ||
-            this.piName.middleName !== undefined
+            this.ir.firstName !== undefined ||
+            this.ir.lastName !== undefined ||
+            this.ir.middleName !== undefined
         ) {
             throw new DomainError("Invalid State: Cannot combine anyName with firstName, lastName, and/or middleName.")
         }
 
-        return { ...this.piName };
+        return { ...this.ir };
     }
 }
