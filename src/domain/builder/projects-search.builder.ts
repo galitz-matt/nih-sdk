@@ -2,12 +2,12 @@ import { DomainError } from "../errors";
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { IrToDtoMapper } from "../mapper/ir-to-dto.mapper";
 import { Field } from "../types/field";
-import type { PiName } from "../types/ir";
+import { PiNameBuilder } from "./pi-name.builder";
 import {
     SortOrder,
     type ProjectsSearchRequest
 } from "../types/request"
-import { PiNameBuilder } from "./pi-name.builder";
+import type { PiNameAnyBuilder, PiNameStructuredBuilder } from "./pi-name.builder";
 
 export class ProjectsSearchBuilder {
     private request: ProjectsSearchRequest;
@@ -122,27 +122,34 @@ export class ProjectsSearchBuilder {
     /**
      * Filters projects by Principal Investigator (PI) names.
      *
-     * Each provided name is converted into API-compatible criteria.
-     * See {@link PiName} for matching behavior and field semantics.
+     * Matching semantics:
+     * - Fields chained on a single builder are combined with AND (same PI)
+     * - Multiple builders are combined with OR (across PIs)
+     *
+     * See {@link PiNameBuilder} for matching modes and constraints.
      * 
-     * Example usage:
+     * Example Usage:
+     * ```
+     * piNames(
+     *   pi().firstName("John"),
+     *   pi().lastName("Smith")
+     * )
+     * ```
+     * matches projects with:
+     * - a PI with first name containing "John" OR
+     * - a PI with last name containing "Smith"
      * 
      * ```
-     * nih.projects
-     *    .piNames(
-     *        pi().firstName("Christopher").lastName("Moltisanti"),
-     *        { firstName: "Corrado", middleName: "Junior" },
-     *        pi().anyName("Gualtieri")
-     *    )
+     * piNames(
+     *   pi().firstName("John").lastName("Smith")
+     * )
      * ```
+     * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
-    piNames(...names: (PiName | PiNameBuilder)[]): this {
-        this.request.criteria.pi_names = names.map(n => {
-            n = n instanceof PiNameBuilder
-                ? n.build()
-                : n;
-            return IrToDtoMapper.toNameCriteria(n)
-        });
+    piNames(...names: (PiNameStructuredBuilder | PiNameAnyBuilder)[]): this {
+        this.request.criteria.pi_names = names.map(n =>
+            IrToDtoMapper.toNameCriteria(n.build())
+        );
         return this;
     }
 
