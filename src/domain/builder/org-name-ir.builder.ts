@@ -19,7 +19,7 @@ export class OrgNamedIrBuilder {
         this.ir = ir;
     }
 
-    strict(): this {
+    exact(): this {
         this.ir.kind = "exact";
         return this;
     }
