@@ -8,6 +8,8 @@ import {
     type ProjectsSearchRequest
 } from "../types/request"
 import type { NameCriteriaIrAnyBuilder, NameCriteriaIrStructuredBuilder } from "./name-criteria-ir.builder";
+import type { OrgNameIr } from "../types/ir";
+import type { OrgNamedIrBuilder, OrgNameIrBuilder } from "./org-name-ir.builder";
 
 export class ProjectsSearchBuilder {
     private request: ProjectsSearchRequest;
@@ -184,6 +186,16 @@ export class ProjectsSearchBuilder {
         this.request.criteria.po_names = names.map(n =>
             IrToDtoMapper.toNameCriteria(n.build())
         );
+        return this;
+    }
+
+    orgNames(...orgs: OrgNamedIrBuilder[]): this {
+        const builtOrgs = orgs.map(o => o.build());
+        this.request.criteria.org_names =
+            builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
+        this.request.criteria.org_names_exact_match =
+            builtOrgs.filter(o => o.kind === "exact").map(o => o.name);
+        
         return this;
     }
 
