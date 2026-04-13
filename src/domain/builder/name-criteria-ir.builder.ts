@@ -1,8 +1,8 @@
 import { DomainError } from "../errors";
-import type { PiName } from "../types/ir";
+import type { NameCriteriaIr } from "../types/ir";
 
 /**
- * Builder for PI name search criteria.
+ * Builder for PI/PO name search criteria.
  *
  * The first method called determines the matching mode:
  *
@@ -11,34 +11,34 @@ import type { PiName } from "../types/ir";
  *
  * These modes cannot be combined.
  */
-export class PiNameBuilder {
-    private readonly piName: PiName = {};
+export class NameCriteriaIrBuilder {
+    private readonly piName: NameCriteriaIr = {};
 
-    anyName(anyName: string): PiNameAnyBuilder {
+    anyName(anyName: string): NameCriteriaIrAnyBuilder {
         this.piName.anyName = anyName
-        return new PiNameAnyBuilder(this.piName);
+        return new NameCriteriaIrAnyBuilder(this.piName);
     }
 
-    firstName(firstName: string): PiNameStructuredBuilder {
+    firstName(firstName: string): NameCriteriaIrStructuredBuilder {
         this.piName.firstName = firstName;
-        return new PiNameStructuredBuilder(this.piName);
+        return new NameCriteriaIrStructuredBuilder(this.piName);
     }
 
-    lastName(lastName: string): PiNameStructuredBuilder {
+    lastName(lastName: string): NameCriteriaIrStructuredBuilder {
         this.piName.lastName = lastName;
-        return new PiNameStructuredBuilder(this.piName);
+        return new NameCriteriaIrStructuredBuilder(this.piName);
     }
 
-    middleName(middleName: string): PiNameStructuredBuilder {
+    middleName(middleName: string): NameCriteriaIrStructuredBuilder {
         this.piName.middleName = middleName;
-        return new PiNameStructuredBuilder(this.piName);
+        return new NameCriteriaIrStructuredBuilder(this.piName);
     }
 }
 
-export class PiNameStructuredBuilder {
-    private readonly piName: PiName;
+export class NameCriteriaIrStructuredBuilder {
+    private readonly piName: NameCriteriaIr;
     
-    constructor(piName: PiName) {
+    constructor(piName: NameCriteriaIr) {
         this.piName = piName;
     }
 
@@ -57,7 +57,7 @@ export class PiNameStructuredBuilder {
         return this;
     }
 
-    build(): PiName {
+    build(): NameCriteriaIr {
         if (this.piName.anyName !== undefined) {
             throw new DomainError("Invalid State: Cannot combine anyName with firstName, lastName, and/or middleName.")
         }
@@ -65,14 +65,14 @@ export class PiNameStructuredBuilder {
     }
 }
 
-export class PiNameAnyBuilder {
-    private readonly piName: PiName;
+export class NameCriteriaIrAnyBuilder {
+    private readonly piName: NameCriteriaIr;
 
-    constructor(piName: PiName) {
+    constructor(piName: NameCriteriaIr) {
         this.piName = piName;
     }
 
-    build(): PiName {
+    build(): NameCriteriaIr {
         if (
             this.piName.firstName !== undefined ||
             this.piName.lastName !== undefined ||
