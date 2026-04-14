@@ -233,6 +233,24 @@ export class ProjectsSearchBuilder {
         return this;
     }
 
+    /**
+     * Filters project by PI Profile IDs
+     * 
+     * Each PI in the RePORTER database has a unique identifier that is constant
+    from project to project and year to year, but changes may be observed for investigators
+    that have had multiple accounts in the past, particularly for those associated with
+    contracts or sub-projects.
+     * 
+     * @param ids - PI Profile IDs
+     */
+    piProfileIds(...ids: number[]): this {
+        const uniqueIds = new Set(ids);
+        this.request.criteria.pi_profile_ids = [ ...uniqueIds ];
+        return this;
+    }
+
+    
+
     private formatList(fields: (string | number)[]): string {
         return fields.map(f => ` - ${f}`).join("\n");
     }
