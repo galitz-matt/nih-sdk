@@ -2,6 +2,8 @@ import type { OrgNameIr } from "../types/ir";
 
 /**
  * Builder for Organization Name search criteria
+ * 
+ * Name must be provided, build() cannot be called before name()
  */
 export class OrgNameIrBuilder {
     name(name: string): OrgNamedIrBuilder {

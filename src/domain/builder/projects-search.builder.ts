@@ -123,6 +123,8 @@ export class ProjectsSearchBuilder {
 
     /**
      * Filters projects by Principal Investigator (PI) names.
+     * 
+     * @param names - PI builders
      *
      * Matching semantics:
      * - Fields chained on a single builder are combined with AND (same PI)
@@ -157,6 +159,8 @@ export class ProjectsSearchBuilder {
     
     /**
      * Filters projects by Project Officer (PO) names.
+     * 
+     * @param names PO builders
      *
      * Matching semantics:
      * - Fields chained on a single builder are combined with AND (same PI)
@@ -165,12 +169,14 @@ export class ProjectsSearchBuilder {
      * See {@link NameCriteriaIrBuilder} for matching modes and constraints.
      * 
      * Example Usage:
+     * 
      * ```
      * poNames(
      *   po().firstName("John"),
      *   po().lastName("Smith")
      * )
      * ```
+     * 
      * matches projects with:
      * - a PO with first name containing "John" OR
      * - a PO with last name containing "Smith"
@@ -189,13 +195,41 @@ export class ProjectsSearchBuilder {
         return this;
     }
 
+    /**
+     * Filters projects by Organization names
+     * 
+     * @param orgs - Organization name builders
+     * 
+     * See {@link OrgNameIrBuilder} for more on constraints 
+     * 
+     * Example Usage:
+     * ```
+     * orgNames(
+     *   orgName().name("Yale").partial()
+     * )
+     * ```
+     * matches projects conducted by an organization with name contain "Yale"
+     * 
+     * ```
+     * orgNames(
+     *   orgName().name("UNIV OF NORTH CAROLINA CHAPEL HILL").exact()
+     * )
+     * ```
+     * matches projects conducted by an organization with exact name "UNIV OF NORTH CAROLINA CHAPEL HILL"
+     * 
+     * ```
+     * orgNames(
+     *   orgName().name("Yale")
+     * )
+     * ```
+     * identical behavior as first example, defaults to "partial"
+     */
     orgNames(...orgs: OrgNamedIrBuilder[]): this {
         const builtOrgs = orgs.map(o => o.build());
         this.request.criteria.org_names =
             builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
         this.request.criteria.org_names_exact_match =
             builtOrgs.filter(o => o.kind === "exact").map(o => o.name);
-        
         return this;
     }
 
