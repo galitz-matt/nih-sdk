@@ -117,7 +117,7 @@ export type PublicationsSearch = {
 }
 
 export const SortOrder = {
-    ASC: "asc",
-    DESC: "desc"
+    ASCENDING: "asc",
+    DESCENDING: "desc"
 } as const;
 export type SortOrder = typeof SortOrder[keyof typeof SortOrder]
