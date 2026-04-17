@@ -1,11 +1,9 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { BASE_URLS } from "../src/infra/config";
+import type { ApiItem } from "./types"
 
-const URL = "https://reporter.nih.gov/services/Lookup/orgCountries";
-
-type ApiItem = {
-  value: string;
-};
+const URL = BASE_URLS.WEBAPP + "/services/Lookup/orgCountries";
 
 function toPascalCase(value: string): string {
   return value
@@ -48,7 +46,7 @@ async function main() {
     // Edge case: keys starting with number
     const safeKey = /^[0-9]/.test(key) ? `_${key}` : key;
 
-    return `  ${safeKey}: "${value}",`;
+    return `   ${safeKey}: "${value}",`;
   });
 
   const output = `export const OrgCountry = {

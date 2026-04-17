@@ -1,13 +1,9 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { BASE_URLS } from "../src/infra/config";
+import type { ApiItemWithChildren } from "./types";
 
-const URL = "https://reporter.nih.gov/services/Lookup/orgStates";
-
-type ApiItem = {
-  name: string | null;
-  value: string;
-  children_values: string[] | null;
-};
+const URL = BASE_URLS.WEBAPP + "/services/Lookup/orgStates"
 
 function toPascalCase(value: string): string {
   return value
@@ -26,7 +22,7 @@ async function main() {
     throw new Error("Expected array from orgStates endpoint");
   }
 
-  const data: ApiItem[] = raw;
+  const data: ApiItemWithChildren[] = raw;
 
   // ✅ Only leaf nodes (actual states/territories)
   const leaves = data.filter(item => item.children_values === null);
@@ -47,7 +43,7 @@ async function main() {
     new Map(entries.map(e => [e.key, e])).values()
   ).sort((a, b) => a.key.localeCompare(b.key));
 
-  const lines = unique.map(e => `  ${e.key}: "${e.value}",`);
+  const lines = unique.map(e => `   ${e.key}: "${e.value}",`);
 
   const output = `export const OrgState = {
 ${lines.join("\n")}
