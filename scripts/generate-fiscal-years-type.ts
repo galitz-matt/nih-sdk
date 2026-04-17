@@ -32,13 +32,13 @@ async function main() {
 
     const output = `export const FiscalYear = {
 ${lines.join("\n")}
-}
+} as const;
 export type FiscalYear = typeof FiscalYear[keyof typeof FiscalYear];
     `;
 
     const OUTPUT_PATH = join(
         import.meta.dir,
-        "../src/domain/types/fiscal-year.ts"
+        "../src/domain/types/enum/fiscal-year.ts"
     )
 
     writeFileSync(OUTPUT_PATH, output);
