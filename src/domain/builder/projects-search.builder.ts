@@ -8,8 +8,8 @@ import {
     type ProjectsSearchRequest
 } from "../types/request"
 import type { NameCriteriaIrAnyBuilder, NameCriteriaIrStructuredBuilder } from "./name-criteria-ir.builder";
-import type { OrgNameIr } from "../types/ir";
 import type { OrgNamedIrBuilder, OrgNameIrBuilder } from "./org-name-ir.builder";
+import type { OrgState } from "../types/org/org-state";
 
 export class ProjectsSearchBuilder {
     private request: ProjectsSearchRequest;
@@ -126,7 +126,7 @@ export class ProjectsSearchBuilder {
      * 
      * @param names - PI builders
      *
-     * Matching semantics:
+     * Matching Behavior:
      * - Fields chained on a single builder are combined with AND (same PI)
      * - Multiple builders are combined with OR (across PIs)
      *
@@ -162,7 +162,7 @@ export class ProjectsSearchBuilder {
      * 
      * @param names PO builders
      *
-     * Matching semantics:
+     * Matching Behavior:
      * - Fields chained on a single builder are combined with AND (same PI)
      * - Multiple builders are combined with OR (across PIs)
      *
@@ -234,6 +234,49 @@ export class ProjectsSearchBuilder {
     }
 
     /**
+     * Filter projects by city in which the business office of the grantee organization or contractor is located.
+     * 
+     * @param cities - Organization cities 
+     * 
+     * Example Usage:
+     * ```
+     * orgCities(
+     *   "New York",
+     *   "Vegas"
+     * )
+     * ```
+     * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
+     */
+    orgCities(...cities: string[]): this {
+        this.request.criteria.org_cities = cities;
+        return this;
+    }
+
+    /**
+     * Filter projects conducted by organization based in specified states
+     * 
+     * @param states - US States (abbreviated
+     * 
+     * Example Usage:
+     * ```
+     * orgStates(
+     *   State.NewJersey,
+     *   "NY"
+     * )
+     * ```
+     * 
+     * matches projects conducted by organization based in New York state OR New Jersey
+     */
+    orgStates(...states: OrgState[]): this {
+        this.request.criteria.org_states = states;
+        return this;
+    }
+
+    orgCountries(...countries: string[]): this {
+        return this;
+    }
+
+    /**
      * Filters project by PI Profile IDs
      * 
      * Each PI in the RePORTER database has a unique identifier that is constant
@@ -244,12 +287,9 @@ export class ProjectsSearchBuilder {
      * @param ids - PI Profile IDs
      */
     piProfileIds(...ids: number[]): this {
-        const uniqueIds = new Set(ids);
-        this.request.criteria.pi_profile_ids = [ ...uniqueIds ];
+        this.request.criteria.pi_profile_ids = ids;
         return this;
     }
-
-    
 
     private formatList(fields: (string | number)[]): string {
         return fields.map(f => ` - ${f}`).join("\n");
