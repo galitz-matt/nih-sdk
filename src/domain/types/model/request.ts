@@ -98,11 +98,8 @@ export type ProjectNumSplit = {
     suffix_code?: string; 
 }
 
-export type NameCriteria = 
-| {
+export type NameCriteria = {
     any_name?: string;
-} 
-| {
     first_name?: string;
     last_name?: string;
     middle_name?: string;
