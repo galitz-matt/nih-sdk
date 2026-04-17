@@ -1,4 +1,4 @@
-export type OrgNameIr = {
+export type OrgNameDto = {
 	/**
 	 * Exact or partial organization name
 	 * 

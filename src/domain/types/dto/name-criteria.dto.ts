@@ -1,4 +1,4 @@
-export type NameCriteriaIr = {
+export type NameCriteriaDto = {
     /**
      * Matches any part of a PI's/PO's name.
      *
@@ -16,7 +16,6 @@ export type NameCriteriaIr = {
      *     - another PI/PO has "Smith" in their name
      */
     anyName?: string;
-
     /**
      * First name of the PI/PO.
      *
