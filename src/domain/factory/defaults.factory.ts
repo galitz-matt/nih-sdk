@@ -1,4 +1,4 @@
-import type { ProjectsSearchRequest } from "../types/request";
+import type { ProjectsSearchRequest } from "../types/model/request";
 
 export class DefaultsFactory {
     static createDefaultProjectsSearchRequest(): ProjectsSearchRequest {
