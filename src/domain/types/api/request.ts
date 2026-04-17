@@ -1,10 +1,9 @@
-import type { Field } from "./field";
+import type { Field } from "../enum/field";
 
 export type ProjectsSearchRequest = {
     criteria: {
         use_relevance?: boolean;
         fiscal_years?: string[];
-        include_active_projects?: boolean;
         pi_names?: NameCriteria[];
         po_names?: NameCriteria[];
         org_names?: string[];
