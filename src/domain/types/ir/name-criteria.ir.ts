@@ -1,4 +1,4 @@
-export type NameCriteriaDto = {
+export type NameCriteriaIr = {
     /**
      * Matches any part of a PI's/PO's name.
      *

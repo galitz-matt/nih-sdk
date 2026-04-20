@@ -2,7 +2,7 @@ import { FiscalYear } from "../enum/fiscal-year"
 
 const ALL = FiscalYear.ALL
 
-export type FiscalYearDto =
+export type FiscalYearIr =
     | {
         kind: "all"
     }

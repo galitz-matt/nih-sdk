@@ -1,8 +1,8 @@
 import type { NameCriteria } from "../types/model/request";
-import type { NameCriteriaDto } from "../types/dto/name-criteria.dto";
+import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 
-export class DtoToModelMapper {
-    static toNameCriteria(piName: NameCriteriaDto): NameCriteria {
+export class IrToModelMapper {
+    static toNameCriteria(piName: NameCriteriaIr): NameCriteria {
         const res: NameCriteria = {};
         if (piName.anyName !== undefined) res.any_name;
         if (piName.firstName !== undefined) res.first_name = piName.firstName;
