@@ -1,0 +1,25 @@
+export const OrgType = {
+    DomesticForProfits: "FP",
+    DomesticHigherEducationDhe: "10",
+    IndependentHospitals: "30",
+    OrganizedResearchUnits: "Organized Research Units",
+    OtherDomesticHigherEducation: "Other",
+    OtherDomesticNonProfits: "NP",
+    ResearchInstitutes: "20",
+    SchoolsOfAlliedHealthProfessions: "Sch Allied Health Professions",
+    SchoolsOfArtsAndSciences: "Schools of Arts and Sciences",
+    SchoolsOfDentistry: "Schools of Dentistry/oral Hygn;School of Medicine & Dentistry",
+    SchoolsOfEarthSciencesNaturalResources: "Earth Sciences/Resources",
+    SchoolsOfEducation: "Schools of Education",
+    SchoolsOfEngineering: "Biomed Engr/Col Engr/Engr Sta",
+    SchoolsOfMedicine: "Schools of Medicine;Overall Medical;School of Medicine & Dentistry",
+    SchoolsOfNursing: "Schools of Nursing",
+    SchoolsOfOptometryOphthalmology: "Schools of Optometry/Opht Tech",
+    SchoolsOfOsteopathicMedicine: "Schools of Osteopathic Medicine;Schools of Osteopathy",
+    SchoolsOfPharmacy: "Schools of Pharmacy",
+    SchoolsOfPublicHealth: "Schools of Public Health",
+    SchoolsOfSocialWork: "Schools of Social Welfare/work",
+    SchoolsOfVeterinaryMedicine: "Schools of Veterinary Medicine",
+} as const;
+
+export type OrgType = typeof OrgType[keyof typeof OrgType];
