@@ -2,24 +2,16 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { BASE_URLS } from "../src/infra/config";
 import type { ApiItemWithChildren } from "./types";
+import { toPascalCase } from "./utils";
 
 const URL = BASE_URLS.WEBAPP + "/services/Lookup/orgStates"
-
-function toPascalCase(value: string): string {
-  return value
-    .replace(/[^a-zA-Z0-9 ]/g, " ")
-    .split(/\s+/)
-    .filter((w): w is string => w.length > 0)
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join("");
-}
 
 async function main() {
   const res = await fetch(URL);
   const raw = await res.json();
 
   if (!Array.isArray(raw)) {
-    throw new Error("Expected array from orgStates endpoint");
+    throw new Error("Unexpected response: not an array");
   }
 
   const data: ApiItemWithChildren[] = raw;
@@ -54,7 +46,7 @@ export type OrgState = typeof OrgState[keyof typeof OrgState];
 
   const OUTPUT_PATH = join(
     import.meta.dir,
-    "../src/domain/types/org/org-state.ts"
+    "../src/domain/types/enum/org-state.ts"
   )
   writeFileSync(OUTPUT_PATH, output);
 

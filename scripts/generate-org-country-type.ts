@@ -2,17 +2,9 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { BASE_URLS } from "../src/infra/config";
 import type { ApiItem } from "./types"
+import { toPascalCase } from "./utils";
 
 const URL = BASE_URLS.WEBAPP + "/services/Lookup/orgCountries";
-
-function toPascalCase(value: string): string {
-  return value
-    .replace(/[^a-zA-Z0-9 ]/g, " ")   // remove symbols like /, ', etc.
-    .split(/\s+/)
-    .filter((w): w is string => w.length > 0)
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join("");
-}
 
 async function main() {
   const res = await fetch(URL);
@@ -27,7 +19,7 @@ async function main() {
         item === null ||
         typeof (item as any).value !== "string"
     ) {
-        throw new Error("Invalid item shape")
+        throw new Error("Unexpected resposne: invalid item shape")
     }
 
     return { value: (item as any).value }
@@ -58,7 +50,7 @@ export type OrgCountry = typeof OrgCountry[keyof typeof OrgCountry];
 
   const OUTPUT_PATH = join(
     import.meta.dir,
-    "../src/domain/types/org/org-country.ts"
+    "../src/domain/types/enum/org-country.ts"
   )
   writeFileSync(OUTPUT_PATH, output);
 

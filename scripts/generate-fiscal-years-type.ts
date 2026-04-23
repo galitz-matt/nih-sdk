@@ -18,7 +18,7 @@ async function main() {
             item === null ||
             typeof (item as any).value !== "string"
         ) {
-            throw new Error("Invalid item shape");
+            throw new Error("Unexpected response: invalid item shape");
         }
         return item.value;
     });
