@@ -19,8 +19,8 @@ async function main() {
   const leaves = data.filter(item => item.children_values === null);
 
   const entries = leaves.map(item => {
-    if (!item.name) {
-      throw new Error(`Missing name for value: ${item.value}`);
+    if (!item.name || !item.value) {
+      throw new Error("Unexpected response: item missing name and/or value");
     }
 
     return {

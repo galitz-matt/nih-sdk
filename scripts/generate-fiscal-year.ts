@@ -42,6 +42,8 @@ export type FiscalYear = typeof FiscalYear[keyof typeof FiscalYear];
     )
 
     writeFileSync(OUTPUT_PATH, output);
+
+    console.log(`Generated ${unique.length} fiscal year values`)
 }
 
 main();

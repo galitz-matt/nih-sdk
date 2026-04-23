@@ -43,6 +43,8 @@ export type DeptType = typeof DeptType[keyof typeof DeptType];
     );
 
     writeFileSync(OUTPUT_PATH, output);
+
+    console.log(`Generated ${unique.length} dept types`);
 }
 
 main();
