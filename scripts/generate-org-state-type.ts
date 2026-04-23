@@ -16,7 +16,6 @@ async function main() {
 
   const data: ApiItemWithChildren[] = raw;
 
-  // ✅ Only leaf nodes (actual states/territories)
   const leaves = data.filter(item => item.children_values === null);
 
   const entries = leaves.map(item => {
@@ -30,7 +29,6 @@ async function main() {
     };
   });
 
-  // Deduplicate + sort for stable output
   const unique = Array.from(
     new Map(entries.map(e => [e.key, e])).values()
   ).sort((a, b) => a.key.localeCompare(b.key));
