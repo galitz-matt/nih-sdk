@@ -4,6 +4,7 @@ export type ApiItem = {
 
 export type ApiItemWithChildren = {
   name: string | null;
-  value: string;
+  display: string | null;
+  value: string | null;
   children_values: string[] | null;
 };
