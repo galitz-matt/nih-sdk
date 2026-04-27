@@ -1,15 +1,15 @@
 import { DomainError } from "../errors";
 import { DefaultsFactory } from "../factory/defaults.factory";
-import { IrToDtoMapper } from "../mapper/ir-to-dto.mapper";
-import { Field } from "../types/field";
-import { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
+import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
+import { Field } from "../types/enum/field";
 import {
     SortOrder,
     type ProjectsSearchRequest
-} from "../types/request"
-import type { NameCriteriaIrAnyBuilder, NameCriteriaIrStructuredBuilder } from "./name-criteria-ir.builder";
-import type { OrgNamedIrBuilder, OrgNameIrBuilder } from "./org-name-ir.builder";
-import type { OrgState } from "../types/org/org-state";
+} from "../types/model/request"
+import type { OrgNameIrBuilder } from "./org-name-ir.builder";
+import type { OrgState } from "../types/enum/org-state";
+import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
+import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 
 export class ProjectsSearchBuilder {
     private request: ProjectsSearchRequest;
@@ -94,30 +94,10 @@ export class ProjectsSearchBuilder {
 
     /**
      * Filter results by fiscal year appropriation from which project funds were obligated
-     * @param years - fiscal years
+     * 
+     * @param values - FiscalYear value or number representing year
      */
-    fiscalYears(...years: number[]): this {
-        const conflicts = years.filter(y => 
-            !Number.isInteger(y)
-        );
-        if (conflicts.length !== 0) {
-            throw new DomainError(
-                `Cannot filter by fiscal years:\n${this.formatList(conflicts)}\n` +
-                `Fiscal years must be integers`
-            )
-        }
-
-        this.request.criteria.fiscal_years = years;
-        return this;
-    }
-
-    /**
-     * Include active projects (project whose latest Budget End Date has not occurred yet) that match criteria.
-     * This expands results and may override filters such as `fiscal_years`
-     * @param - true/false
-     */
-    includeActiveProjects(include: boolean): this {
-        this.request.criteria.include_active_projects = include;
+    fiscalYears(): this {
         return this;
     }
 
@@ -130,7 +110,7 @@ export class ProjectsSearchBuilder {
      * - Fields chained on a single builder are combined with AND (same PI)
      * - Multiple builders are combined with OR (across PIs)
      *
-     * See {@link NameCriteriaIrBuilder} for matching modes and constraints.
+     * See {@link NameCriteriaIr} for matching modes and constraints.
      * 
      * Example Usage:
      * ```
@@ -150,9 +130,9 @@ export class ProjectsSearchBuilder {
      * ```
      * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
-    piNames(...names: (NameCriteriaIrStructuredBuilder | NameCriteriaIrAnyBuilder)[]): this {
+    piNames(...names: NameCriteriaIrBuilder[]): this {
         this.request.criteria.pi_names = names.map(n =>
-            IrToDtoMapper.toNameCriteria(n.build())
+            IrToModelMapper.toNameCriteria(n.build())
         );
         return this;
     }
@@ -166,7 +146,7 @@ export class ProjectsSearchBuilder {
      * - Fields chained on a single builder are combined with AND (same PI)
      * - Multiple builders are combined with OR (across PIs)
      *
-     * See {@link NameCriteriaIrBuilder} for matching modes and constraints.
+     * See {@link NameCriteriaIrBuilderO} for matching modes and constraints.
      * 
      * Example Usage:
      * 
@@ -188,9 +168,9 @@ export class ProjectsSearchBuilder {
      * ```
      * matches projects with a PO with first name containing "John" AND last name containing "Smith"
      */
-    poNames(...names: (NameCriteriaIrAnyBuilder | NameCriteriaIrAnyBuilder)[]): this {
+    poNames(...names: NameCriteriaIrBuilder[]): this {
         this.request.criteria.po_names = names.map(n =>
-            IrToDtoMapper.toNameCriteria(n.build())
+            IrToModelMapper.toNameCriteria(n.build())
         );
         return this;
     }
@@ -224,7 +204,7 @@ export class ProjectsSearchBuilder {
      * ```
      * identical behavior as first example, defaults to "partial"
      */
-    orgNames(...orgs: OrgNamedIrBuilder[]): this {
+    orgNames(...orgs: OrgNameIrBuilder[]): this {
         const builtOrgs = orgs.map(o => o.build());
         this.request.criteria.org_names =
             builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
@@ -294,4 +274,5 @@ export class ProjectsSearchBuilder {
     private formatList(fields: (string | number)[]): string {
         return fields.map(f => ` - ${f}`).join("\n");
     }
+
 }
