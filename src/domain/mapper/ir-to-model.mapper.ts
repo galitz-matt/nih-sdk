@@ -1,4 +1,4 @@
-import type { NameCriteria } from "../types/model/projects-search.model";
+import type { NameCriteria } from "../types/model/projects-search-input.model";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 
 export class IrToModelMapper {

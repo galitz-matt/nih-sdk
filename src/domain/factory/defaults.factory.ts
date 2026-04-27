@@ -1,7 +1,7 @@
-import type { ProjectsSearchInputModel } from "../types/model/projects-search.model";
+import type { ProjectsSearchInput } from "../types/model/projects-search-input.model";
 
 export class DefaultsFactory {
-    static createDefaultProjectsSearchInputModel(): ProjectsSearchInputModel {
+    static createDefaultProjectsSearchInputModel(): ProjectsSearchInput {
         return {
             criteria: {},
             limit: 50,

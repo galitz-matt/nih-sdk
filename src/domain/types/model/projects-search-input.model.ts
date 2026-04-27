@@ -1,6 +1,6 @@
 import type { Field } from "../enum/field";
 
-export type ProjectsSearchInputModel = {
+export type ProjectsSearchInput = {
     criteria: {
         use_relevance?: boolean;
         fiscal_years?: string[];
