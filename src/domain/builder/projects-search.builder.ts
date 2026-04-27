@@ -4,26 +4,26 @@ import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
 import {
     SortOrder,
-    type ProjectsSearchRequest
-} from "../types/model/request"
+    type ProjectsSearchInputModel
+} from "../types/model/projects-search.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import type { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 
 export class ProjectsSearchBuilder {
-    private request: ProjectsSearchRequest;
+    private payload: ProjectsSearchInputModel;
 
     constructor() {
-        this.request = DefaultsFactory.createDefaultProjectsSearchRequest()
+        this.payload = DefaultsFactory.createDefaultProjectsSearchInputModel()
     }
 
     /**
      * Get the search request object
      * @returns request object
      */
-    build(): ProjectsSearchRequest {
-        return this.request;
+    build(): ProjectsSearchInputModel {
+        return this.payload;
     }
 
     /**
@@ -31,7 +31,7 @@ export class ProjectsSearchBuilder {
      * @param sortByRelevance true/false
      */
     sortByRelevance(sortByRelevance: boolean): this {
-        this.request.criteria.use_relevance = sortByRelevance;
+        this.payload.criteria.use_relevance = sortByRelevance;
         return this;
     }
 
@@ -40,7 +40,7 @@ export class ProjectsSearchBuilder {
      * @param order 
      */
     setOrder(order: SortOrder): this {
-        this.request.sort_order = order;
+        this.payload.sort_order = order;
         return this;
     }
 
@@ -52,7 +52,7 @@ export class ProjectsSearchBuilder {
         if (limit <= 0 || limit > 500) {
             throw new RangeError("limit must be a positive number less than or equal to 500");
         }
-        this.request.limit = limit;
+        this.payload.limit = limit;
         return this;
     }
 
@@ -61,7 +61,7 @@ export class ProjectsSearchBuilder {
      * @param fields - fields to include in results
      */
     includeFields(...fields: Field[]): this {
-        const excludedFields = new Set(this.request.exclude_fields ?? []);
+        const excludedFields = new Set(this.payload.exclude_fields ?? []);
         const conflicts = fields.filter(f => excludedFields.has(f));
         if (conflicts.length !== 0) {
             throw new DomainError(
@@ -70,7 +70,7 @@ export class ProjectsSearchBuilder {
             )
         }
 
-        this.request.include_fields = fields;
+        this.payload.include_fields = fields;
         return this;
     }
 
@@ -79,7 +79,7 @@ export class ProjectsSearchBuilder {
      * @param fields - fields to exclude from resutls
      */
     excludeFields(...fields: Field[]): this {
-        const includedFields = new Set(this.request.include_fields ?? []);
+        const includedFields = new Set(this.payload.include_fields ?? []);
         const conflicts = fields.filter(f => includedFields.has(f));
         if (conflicts.length !== 0) {
             throw new DomainError(
@@ -88,7 +88,7 @@ export class ProjectsSearchBuilder {
             )
         }
         
-        this.request.exclude_fields = fields;
+        this.payload.exclude_fields = fields;
         return this;
     }
 
@@ -131,7 +131,7 @@ export class ProjectsSearchBuilder {
      * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
     piNames(...names: NameCriteriaIrBuilder[]): this {
-        this.request.criteria.pi_names = names.map(n =>
+        this.payload.criteria.pi_names = names.map(n =>
             IrToModelMapper.toNameCriteria(n.build())
         );
         return this;
@@ -169,7 +169,7 @@ export class ProjectsSearchBuilder {
      * matches projects with a PO with first name containing "John" AND last name containing "Smith"
      */
     poNames(...names: NameCriteriaIrBuilder[]): this {
-        this.request.criteria.po_names = names.map(n =>
+        this.payload.criteria.po_names = names.map(n =>
             IrToModelMapper.toNameCriteria(n.build())
         );
         return this;
@@ -206,9 +206,9 @@ export class ProjectsSearchBuilder {
      */
     orgNames(...orgs: OrgNameIrBuilder[]): this {
         const builtOrgs = orgs.map(o => o.build());
-        this.request.criteria.org_names =
+        this.payload.criteria.org_names =
             builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
-        this.request.criteria.org_names_exact_match =
+        this.payload.criteria.org_names_exact_match =
             builtOrgs.filter(o => o.kind === "exact").map(o => o.name);
         return this;
     }
@@ -228,7 +228,7 @@ export class ProjectsSearchBuilder {
      * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
      */
     orgCities(...cities: string[]): this {
-        this.request.criteria.org_cities = cities;
+        this.payload.criteria.org_cities = cities;
         return this;
     }
 
@@ -248,7 +248,7 @@ export class ProjectsSearchBuilder {
      * matches projects conducted by organization based in New York state OR New Jersey
      */
     orgStates(...states: OrgState[]): this {
-        this.request.criteria.org_states = states;
+        this.payload.criteria.org_states = states;
         return this;
     }
 
@@ -267,7 +267,7 @@ export class ProjectsSearchBuilder {
      * @param ids - PI Profile IDs
      */
     piProfileIds(...ids: number[]): this {
-        this.request.criteria.pi_profile_ids = ids;
+        this.payload.criteria.pi_profile_ids = ids;
         return this;
     }
 
