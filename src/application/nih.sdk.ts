@@ -1,6 +1,7 @@
 import { FetchHttpClient } from "../infra/http/fetch-http.client";
 import { ProjectsClient } from "../infra/nih/projects.client";
 import { ProjectsFacade } from "./facade/projects.facade";
+import { createNihSdk } from "./factory/sdk.factory";
 
 export class NihSdk {
     public readonly projects: ProjectsFacade
@@ -11,4 +12,5 @@ export class NihSdk {
     }
 }
 
-export default new NihSdk();
+const nih = createNihSdk();
+export default nih;
