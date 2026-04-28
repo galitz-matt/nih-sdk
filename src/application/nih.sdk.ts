@@ -10,3 +10,5 @@ export class NihSdk {
         this.projects = new ProjectsFacade(client);
     }
 }
+
+export default new NihSdk();
