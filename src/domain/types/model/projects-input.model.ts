@@ -1,4 +1,5 @@
 import type { Field } from "../enum/field";
+import type { SortOrder } from "../enum/sort-order";
 
 export type ProjectsInput = {
     criteria: {
@@ -115,8 +116,3 @@ export type PublicationsSearch = {
     filter_appl_ids: boolean;
 }
 
-export const SortOrder = {
-    ASCENDING: "asc",
-    DESCENDING: "desc"
-} as const;
-export type SortOrder = typeof SortOrder[keyof typeof SortOrder]

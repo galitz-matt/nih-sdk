@@ -2,14 +2,12 @@ import { DomainError } from "../errors";
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
-import {
-    SortOrder,
-    type ProjectsInput
-} from "../types/model/projects-input.model"
+import type { ProjectsInput } from "../types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import type { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
+import type { SortOrder } from "../types/enum/sort-order";
 
 export class ProjectsBuilder {
     private payload: ProjectsInput;
