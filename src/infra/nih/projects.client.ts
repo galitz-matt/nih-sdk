@@ -10,7 +10,7 @@ export class ProjectsClient {
 
     async search(payload: ProjectsInput): Promise<ProjectsOutput> {
         return this.httpClient.post(
-            BASE_URLS + "v2/projects/search",
+            BASE_URLS.API + "/v2/projects/search",
             payload,
             { timeoutMs: 10_000, retries: 2 }
         );
