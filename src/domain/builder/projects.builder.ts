@@ -4,25 +4,25 @@ import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
 import {
     SortOrder,
-    type ProjectsSearchInput
-} from "../types/model/projects-search-input.model"
+    type ProjectsInput
+} from "../types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import type { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 
-export class ProjectsSearchBuilder {
-    private payload: ProjectsSearchInput;
+export class ProjectsBuilder {
+    private payload: ProjectsInput;
 
     constructor() {
-        this.payload = DefaultsFactory.createDefaultProjectsSearchInputModel()
+        this.payload = DefaultsFactory.createDefaultProjectsInput()
     }
 
     /**
      * Get the search request object
      * @returns request object
      */
-    build(): ProjectsSearchInput {
+    build(): ProjectsInput {
         return this.payload;
     }
 
