@@ -1,7 +1,7 @@
-import { FetchHttpClient } from "../infra/http/fetch-http.client";
-import { ProjectsClient } from "../infra/nih/projects.client";
-import { ProjectsFacade } from "./facade/projects.facade";
-import { createNihSdk } from "./factory/sdk.factory";
+import { FetchHttpClient } from "../../infra/http/fetch-http.client";
+import { ProjectsClient } from "../../infra/nih/projects.client";
+import { ProjectsFacade } from "../facade/projects.facade";
+import { createNihSdk } from "../factory/sdk.factory";
 
 export class NihSdk {
     public readonly projects: ProjectsFacade
