@@ -19,8 +19,12 @@ type Meta = {
 };
 
 type Project = {
+  appl_id: number;
+  activity_code: string | null;
   fiscal_year: number;
   project_num: string;
+  project_serial_num: unknown | null; // TODO: determine this type
+  project_num_split: unknown | null; // TODO: determine this type
 
   project_title: string;
   abstract_text: string;
