@@ -8,6 +8,7 @@ import type { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 import type { SortOrder } from "../types/enum/sort-order";
+import type { FiscalYear } from "../types/enum/fiscal-year";
 
 export class ProjectsBuilder {
     private payload: ProjectsInput;
@@ -107,7 +108,13 @@ export class ProjectsBuilder {
      * 
      * @param values - FiscalYear value or number representing year
      */
-    fiscalYears(): this {
+    fiscalYears(...years: FiscalYear[]): this {
+        this.payload.criteria.fiscal_years = years
+        return this;
+    }
+
+    includeActiveProjects(include: boolean): this {
+        this.payload.criteria.include_active_projects = include;
         return this;
     }
 
