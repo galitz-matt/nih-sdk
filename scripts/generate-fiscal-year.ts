@@ -23,11 +23,12 @@ async function main() {
         return item.value;
     });
 
-    const unique = [ ...new Set(data) ].sort();
+    const numbers = data.filter(item => !Number.isNaN(Number.parseInt(item)));
+    const unique = [ ...new Set(numbers) ].sort();
 
     const lines = unique.map(key => {
         const safeKey = /^[0-9]/.test(key) ? `_${key}` : key;
-        return `    ${safeKey.toUpperCase()}: "${key}",`;
+        return `    ${safeKey.toUpperCase()}: ${key},`;
     })
 
     const output = `export const FiscalYear = {
