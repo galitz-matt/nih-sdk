@@ -44,13 +44,25 @@ export class ProjectsBuilder {
 
     /**
      * Set limit the on number of search results returned
-     * @param limit - must be a positive number less than or equal to 500 (default: 50)
+     * @param limit - must be a positive integer less than or equal to 500 (default: 50)
      */
     limit(limit: number): this {
         if (limit <= 0 || limit > 500) {
-            throw new RangeError("limit must be a positive number less than or equal to 500");
+            throw new DomainError("Invalid limit: must be a positive integer less than or equal to 500");
         }
         this.payload.limit = limit;
+        return this;
+    }
+
+    /**
+     * Set the starting counter for matching projects. Offset should not exceed total records count.
+     * @param offset - must be a non-negative integer less than 15000
+     */
+    offset(offset: number): this {
+        if (offset < 0 || offset >= 15000) {
+            throw new DomainError("Invalid offset: must be a non-negative integer less than 15000")
+        }
+        this.payload.offset = offset;
         return this;
     }
 
@@ -233,7 +245,7 @@ export class ProjectsBuilder {
     /**
      * Filter projects conducted by organization based in specified states
      * 
-     * @param states - US States (abbreviated
+     * @param states - US States & Territories (abbreviated)
      * 
      * Example Usage:
      * ```
@@ -243,14 +255,27 @@ export class ProjectsBuilder {
      * )
      * ```
      * 
-     * matches projects conducted by organization based in New York state OR New Jersey
+     * Filters projects conducted by organization based in New York state OR New Jersey
      */
     orgStates(...states: OrgState[]): this {
         this.payload.criteria.org_states = states;
         return this;
     }
 
+    /**
+     * Filter projects conducted by organization based in specified countries
+     * 
+     * @param countries - Countries
+     * 
+     * Example usage:
+     * ```
+     * orgCountries(
+     *     
+     * )
+     * ```
+     */
     orgCountries(...countries: string[]): this {
+        this.payload.criteria.org_countries = countries;
         return this;
     }
 
