@@ -4,7 +4,8 @@ import type { SortOrder } from "../enum/sort-order";
 export type ProjectsInput = {
     criteria: {
         use_relevance?: boolean;
-        fiscal_years?: string[];
+        fiscal_years?: number[];
+        include_active_projects?: boolean;
         pi_names?: NameCriteria[];
         po_names?: NameCriteria[];
         org_names?: string[];
