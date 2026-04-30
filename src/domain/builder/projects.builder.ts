@@ -9,6 +9,9 @@ import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 import type { SortOrder } from "../types/enum/sort-order";
 import type { FiscalYear } from "../types/enum/fiscal-year";
+import type { OrgType } from "../types/enum/org-type";
+import type { OrgCountry } from "../types/enum/org-country";
+import type { SpendingCategory } from "../types/enum/spending-category";
 
 export class ProjectsBuilder {
     private payload: ProjectsInput;
@@ -277,12 +280,33 @@ export class ProjectsBuilder {
      * Example usage:
      * ```
      * orgCountries(
-     *     
+     *   OrgCountry.UnitedStates
      * )
      * ```
+     * 
+     * Filters projects conducted by organization based in the United States
      */
-    orgCountries(...countries: string[]): this {
+    orgCountries(...countries: OrgCountry[]): this {
         this.payload.criteria.org_countries = countries;
+        return this;
+    }
+
+    /**
+     * Filter projects conducted by specified organization types
+     * 
+     * @param types - organization types
+     * 
+     * Example usage:
+     * ```
+     * orgTypes(
+     *   OrgType.SchoolsOfEngineering
+     * )
+     * ```
+     * 
+     * Filters projects conducted by schools of engineering
+     */
+    orgTypes(...types: OrgType[]): this {
+        this.payload.criteria.organization_type = types;
         return this;
     }
 
