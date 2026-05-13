@@ -8,12 +8,10 @@ import type { ProjectQuery } from "../types/project.query";
 export class ProjectsFacade {
     constructor(
         private readonly client: ProjectsClient
-    ) {
-        this.client = client;
-    }
+    ) {}
 
     query(): ProjectQuery {
-        const builder = new ProjectsBuilder();
+        const builder = new ProjectsBuilder(); // create new builder instance per query
         return QueryFactory.createProjectsQuery(builder, this.client);
     }
 
