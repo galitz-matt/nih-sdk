@@ -4,7 +4,7 @@ import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
 import type { ProjectsInput } from "../types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
-import type { OrgState } from "../types/enum/org-state";
+import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 import type { SortOrder } from "../types/enum/sort-order";
@@ -12,6 +12,7 @@ import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgType } from "../types/enum/org-type";
 import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
+import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
 
 export class ProjectsBuilder {
     private payload: ProjectsInput;
@@ -310,6 +311,30 @@ export class ProjectsBuilder {
         return this;
     }
 
+    // TODO: doc-string
+    congDists(...types: CongDist[]): this {
+        const states = this.payload.criteria?.org_states
+        
+        if (!states || states.length === 0) {
+            throw new DomainError("Initialize orgStates before initializing congDists");
+        }
+
+        for (const t of types) {
+            const validDists = new Set<string>(
+                states.flatMap(state => {
+                    if (!this.hasCongDists(state)) return [];
+                    return CongDistGroup[state];
+                })
+            )
+            if (!validDists.has(t))
+                // TODO: implement dynamic tips
+                throw new DomainError(`First include the orgState associated with congDist: ${t}`)
+        }
+
+        this.payload.criteria.cong_dists = types;
+        return this;
+    }
+
     /**
      * Filters project by PI Profile IDs
      * 
@@ -329,4 +354,9 @@ export class ProjectsBuilder {
         return fields.map(f => ` - ${f}`).join("\n");
     }
 
+    private hasCongDists(
+        state: string
+    ): state is keyof typeof CongDistGroup {
+        return state in CongDistGroup
+    }
 }
