@@ -24,7 +24,7 @@ export type ProjectsInput = {
         cooperative_agreement_codes?: string[];
         award_types?: string[];
         dept_types?: string[];
-        cong_dsts?: string[];
+        cong_dists?: string[];
         foa?: string[];
         opportunity_numbers?: string[];
         spending_categories?: SpendingCategoriesCriteria;
