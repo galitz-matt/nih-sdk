@@ -2,11 +2,13 @@ import { OrgState } from "../src/domain/types/enum/org-state";
 import { BASE_URLS } from "../src/infra/config";
 import { join } from "path";
 import { writeFileSync } from "fs"
+import { line, block, seq, render, newline } from "@galitz-matt/ts-struct";
 
 async function main() {
     const states = Object.values(OrgState)
 
-    let results: string[] = []
+    let results = new Map<string, string[]>()
+    let resultsList: string[] = [];
     for (const [i, s] of states.entries()) {
         const URL = getUrlForState(s);
         const res = await fetch(URL);
@@ -34,17 +36,35 @@ async function main() {
         })
 
         const unique = [ ...new Set(data) ].sort()
-        results = results.concat(unique);
+        results.set(s, unique);
+        resultsList = resultsList.concat(unique)
     }
 
-    const lines = results.map(key => 
-        `   ${key.toUpperCase().replace("-", "_")}: "${key}",`
+    const output = render(
+        seq(
+            block(
+                "export const CongDist = {",
+                resultsList.map(dist => 
+                    line(`${dist.toUpperCase().replaceAll("-", "_")}: "${dist}",`)
+                ),
+                "} as const"
+            ),
+            line("export type CongDist = typeof CongDist[keyof typeof CongDist]"),
+            newline(),
+            block(
+                "export const CongDistGroup = {",
+                results.keys().map(state => {
+                    return block(
+                        `${state}: [`,
+                        results.get(state)!.map(dist => 
+                            line(`"${dist}",`)
+                        ),
+                        "],"
+                    )
+                }).toArray(),
+            "} as const"),
+        )
     )
-
-    const output = `export const CongDist = {
-${lines.join("\n")}
-} as const;
-export type CongDist = typeof CongDist[keyof typeof CongDist];`
 
     const OUTPUT_PATH = join(
         import.meta.dir,
@@ -53,7 +73,7 @@ export type CongDist = typeof CongDist[keyof typeof CongDist];`
 
     writeFileSync(OUTPUT_PATH, output);
 
-    console.log(`Generated ${results.length} congressional district values.`)
+    console.log(`Generated ${resultsList.length} congressional district values.`)
 }
 
 function getUrlForState(state: string): string {
