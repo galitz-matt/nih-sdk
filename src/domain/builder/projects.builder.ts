@@ -28,6 +28,47 @@ export class ProjectsBuilder {
     build(): ProjectsInput {
         return this.payload;
     }
+    
+    /**
+     * Filter projects by the congressional district in which business office of the grantee organization or contractor is located
+     * 
+     * @param types - constitutional districts
+     * 
+     * Example usage:
+     * ```
+     * congDists(
+     *   CongDist.AL_02
+     * )
+     * ```
+     * 
+     * Filter projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
+     * 
+     */
+    congDists(...types: CongDist[]): this {
+        const states = this.payload.criteria?.org_states
+        
+        if (!states || states.length === 0) {
+            throw new DomainError("Initialize orgStates before initializing congDists");
+        }
+
+        for (const t of types) {
+            const validDists = new Set<string>(
+                states.flatMap(state => {
+                    if (!this.hasCongDists(state)) return [];
+                    return CongDistGroup[state];
+                })
+            )
+            if (!validDists.has(t))
+                // TODO: implement dynamic tips
+                // what state should be included for specified congDist(s)
+                // correct usage snippet
+                throw new DomainError(`First include the orgState associated with congDist: ${t}`)
+        }
+
+        this.payload.criteria.cong_dists = types;
+        return this;
+    }
+
 
     /**
      * Order search results based on how closely they match your specified search criteria (relevance)
@@ -111,12 +152,16 @@ export class ProjectsBuilder {
      * Filter results by fiscal year appropriation from which project funds were obligated
      * 
      * @param values - FiscalYear value or number representing year
-     /
+    */
     fiscalYears(...years: FiscalYear[]): this {
         this.payload.criteria.fiscal_years = years
         return this;
     }
 
+    /**
+     * 
+     * @param include 
+     */
     includeActiveProjects(include: boolean): this {
         this.payload.criteria.include_active_projects = include;
         return this;
@@ -308,46 +353,6 @@ export class ProjectsBuilder {
      */
     orgTypes(...types: OrgType[]): this {
         this.payload.criteria.organization_type = types;
-        return this;
-    }
-
-    /**
-     * Filter projects by the congressional district in which business office of the grantee organization or contractor is located
-     * 
-     * @param types - constitutional districts
-     * 
-     * Example usage:
-     * ```
-     * congDists(
-     *   CongDist.AL_02
-     * )
-     * ```
-     * 
-     * Filter projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
-     * 
-     */
-    congDists(...types: CongDist[]): this {
-        const states = this.payload.criteria?.org_states
-        
-        if (!states || states.length === 0) {
-            throw new DomainError("Initialize orgStates before initializing congDists");
-        }
-
-        for (const t of types) {
-            const validDists = new Set<string>(
-                states.flatMap(state => {
-                    if (!this.hasCongDists(state)) return [];
-                    return CongDistGroup[state];
-                })
-            )
-            if (!validDists.has(t))
-                // TODO: implement dynamic tips
-                // what state should be included for specified congDist(s)
-                // correct usage snippet
-                throw new DomainError(`First include the orgState associated with congDist: ${t}`)
-        }
-
-        this.payload.criteria.cong_dists = types;
         return this;
     }
 
