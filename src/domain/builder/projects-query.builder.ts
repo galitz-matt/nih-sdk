@@ -13,6 +13,7 @@ import type { OrgType } from "../types/enum/org-type";
 import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
+import type { SpendingCategoriesIrBuilder } from "./spending-categories-ir.builder";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -372,6 +373,15 @@ export class ProjectsQueryBuilder {
      */
     piProfileIds(...ids: number[]): this {
         this.payload.criteria.pi_profile_ids = ids;
+        return this;
+    }
+
+    spendingCategories(categories: SpendingCategoriesIrBuilder): this {
+        const ir = categories.build();
+        this.payload.criteria.spending_categories = {
+            values: ir.values,
+            match_all: ir.match_all
+        }
         return this;
     }
 
