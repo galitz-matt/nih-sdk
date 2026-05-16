@@ -11,10 +11,9 @@ export class ProjectsFacade {
 
     query(): ProjectsQueryBuilder & Executable<ProjectsOutput> {
         const builder = new ProjectsQueryBuilder(); // create new builder instance per query
-        return Object.assign(builder, {
-            execute: async () => await this.client.search(builder.serialize())
-        })
-
+        const query = builder as ProjectsQueryBuilder & Executable<ProjectsOutput>
+        query.execute = async () => await this.client.search(builder.serialize())
+        return query;
     }
 
     async execute(input: ProjectsInput): Promise<ProjectsOutput> {
