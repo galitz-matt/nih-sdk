@@ -13,44 +13,44 @@ export type ProjectsInput = {
         pi_profile_ids?: number[];
         org_cities?: string[];
         org_states?: string[];
-        project_nums?: string[];
         org_countries?: string[];
-        appl_ids?: number[];
-        project_num_split?: ProjectNumSplit;
-        agencies?: string[];
-        is_agency_admin?: boolean 
-        is_agency_funding?: boolean;
-        activity_codes?: string[];
-        cooperative_agreement_codes?: string[];
-        award_types?: string[];
-        dept_types?: string[];
+        project_nums?: string[]; // TODO: add builder method
+        appl_ids?: number[]; // TODO: add builder method
+        project_num_split?: ProjectNumSplit; // TODO: add builder method, and dto builder
+        agencies?: string[]; // TODO: add builder method
+        is_agency_admin?: boolean // TODO: add builder method
+        is_agency_funding?: boolean; // TODO: add builder method
+        activity_codes?: string[]; // TODO: add builder method
+        cooperative_agreement_codes?: string[]; // TODO: add builder method
+        award_types?: string[]; // TODO: add builder method
+        dept_types?: string[]; // TODO: add builder method
         cong_dists?: string[];
-        foa?: string[];
-        opportunity_numbers?: string[];
-        spending_categories?: SpendingCategoriesCriteria;
-        project_start_date?: DateRange;
-        project_end_date?: DateRange;
-        date_added?: DateRange;
-        organization_type?: string[];
-        full_study_sections?: FullStudySection[];
-        award_notice_date?: DateRange;
-        award_amount_range?: AmountRange;
-        exclude_sub_projects?: boolean;
-        multi_pi_only?: boolean;
-        newly_added_projects_only?: boolean;
-        sub_project_only?: boolean;
-        funding_mechanism?: string[];
-        covid_response?: string[];
-        outcomes_only?: boolean;
-        arra_type?: string[];
-        advanced_text_search?: AdvancedTextSearch;
-        publications_search?: PublicationsSearch;
+        foa?: string[]; // TODO: add builder method
+        opportunity_numbers?: string[]; // TODO: add builder method
+        spending_categories?: SpendingCategoriesCriteria; // TODO: add builder method, and dto builder
+        project_start_date?: DateRange; // TODO: add builder method
+        project_end_date?: DateRange; // TODO: add builder method
+        date_added?: DateRange; // TODO: add builder method
+        organization_type?: string[]; 
+        full_study_sections?: FullStudySection[]; // TODO: add builder method, and dto builder
+        award_notice_date?: DateRange; // TODO: add builder method
+        award_amount_range?: AmountRange; // TODO: add builder method
+        exclude_sub_projects?: boolean; // TODO: add builder method
+        multi_pi_only?: boolean; // TODO: add builder method
+        newly_added_projects_only?: boolean; // TODO: add builder method
+        sub_project_only?: boolean; // TODO: add builder method
+        funding_mechanism?: string[]; // TODO: add builder method
+        covid_response?: string[]; // TODO: add builder method
+        outcomes_only?: boolean; // TODO: add builder method
+        arra_type?: string[]; // TODO: add builder method
+        advanced_text_search?: AdvancedTextSearch; // TODO: add builder method, and dto builder
+        publications_search?: PublicationsSearch; // TODO: add builder method, and dto builder
     };
     include_fields?: Field[];
     exclude_fields?: Field[];
     offset?: number;
     limit?: number;
-    sort_field?: string;
+    sort_field?: string; // TODO: add builder method
     sort_order?: SortOrder;
 }
 
