@@ -159,8 +159,11 @@ export class ProjectsBuilder {
     }
 
     /**
+     * Include active projects in results.
+     * An active project is one whose latest Budget End Date has not occurred yet. 
+     * The project becomes inactive when the latest Budget End date has past current date.
      * 
-     * @param include 
+     * @param include - true/false
      */
     includeActiveProjects(include: boolean): this {
         this.payload.criteria.include_active_projects = include;
@@ -282,7 +285,7 @@ export class ProjectsBuilder {
         this.payload.criteria.organization_type = types;
         return this;
     }
-    
+
     /**
      * Filters projects by Principal Investigator (PI) names.
      * 
