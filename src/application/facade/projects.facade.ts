@@ -2,17 +2,19 @@ import { ProjectsQueryBuilder } from "../../domain/builder/projects-query.builde
 import type { ProjectsInput } from "../../domain/types/model/projects-input.model";
 import type { ProjectsOutput } from "../../domain/types/model/projects-output.model";
 import type { ProjectsClient } from "../../infra/nih/projects.client";
-import { ExecutableProjectsQueryFactory } from "../factory/executable-projects-query.factory";
-import type { ExecutableProjectsQuery } from "../types/executable-projects-query";
+import type { Executable } from "../types/executable";
 
 export class ProjectsFacade {
     constructor(
         private readonly client: ProjectsClient
     ) {}
 
-    query(): ExecutableProjectsQuery {
+    query(): ProjectsQueryBuilder & Executable<ProjectsOutput> {
         const builder = new ProjectsQueryBuilder(); // create new builder instance per query
-        return ExecutableProjectsQueryFactory.createProjectsQuery(builder, this.client);
+        return Object.assign(builder, {
+            execute: async () => await this.client.search(builder.serialize())
+        })
+
     }
 
     async execute(input: ProjectsInput): Promise<ProjectsOutput> {
