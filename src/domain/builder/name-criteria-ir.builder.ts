@@ -1,7 +1,7 @@
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 
 export class NameCriteriaIrBuilder {
-  private readonly ir: Partial<NameCriteriaIr> = {};
+  private readonly ir: NameCriteriaIr = {};
 
   anyName(value: string): this {
     this.ir.anyName = value;
@@ -24,8 +24,6 @@ export class NameCriteriaIrBuilder {
   }
 
   build(): NameCriteriaIr {
-
-
-    return this.ir as NameCriteriaIr;
+    return this.ir;
   }
 }
