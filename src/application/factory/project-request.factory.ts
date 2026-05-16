@@ -1,12 +1,12 @@
 import type { ProjectsQueryBuilder } from "../../domain/builder/projects-query.builder"
 import type { ProjectsClient } from "../../infra/nih/projects.client"
-import type { ProjectQuery } from "../types/project.query"
+import type { ProjectsRequest } from "../types/project-request"
 
-export class QueryFactory {
+export class ProjectsRequestFactory {
     static createProjectsQuery(
         builder: ProjectsQueryBuilder,
         client: ProjectsClient
-    ): ProjectQuery {
+    ): ProjectsRequest {
         return Object.assign(builder, {
             async execute() {
                 return await client.search(builder.serialize())

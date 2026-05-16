@@ -2,4 +2,4 @@ import type { ProjectsQueryBuilder } from "../../domain/builder/projects-query.b
 import type { ProjectsOutput } from "../../domain/types/model/projects-output.model";
 import type { Executable } from "./executable";
 
-export type ProjectQuery = ProjectsQueryBuilder & Executable<ProjectsOutput>
+export type ProjectsRequest = ProjectsQueryBuilder & Executable<ProjectsOutput>
