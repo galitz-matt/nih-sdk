@@ -9,6 +9,7 @@ export class NihSdk {
 
     constructor() {
         const client = new ProjectsClient(
+            // TODO: revist this abstraction pattern? is this how we http middleware to be declared?
             new RateLimitedHttpClient(
                 new FetchHttpClient(),
                 1000
