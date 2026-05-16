@@ -342,6 +342,8 @@ export class ProjectsBuilder {
             )
             if (!validDists.has(t))
                 // TODO: implement dynamic tips
+                // what state should be included for specified congDist(s)
+                // correct usage snippet
                 throw new DomainError(`First include the orgState associated with congDist: ${t}`)
         }
 
