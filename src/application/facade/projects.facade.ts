@@ -1,4 +1,4 @@
-import { ProjectsBuilder } from "../../domain/builder/projects.builder";
+import { ProjectsQueryBuilder } from "../../domain/builder/projects-query.builder";
 import type { ProjectsInput } from "../../domain/types/model/projects-input.model";
 import type { ProjectsOutput } from "../../domain/types/model/projects-output.model";
 import type { ProjectsClient } from "../../infra/nih/projects.client";
@@ -11,7 +11,7 @@ export class ProjectsFacade {
     ) {}
 
     query(): ProjectQuery {
-        const builder = new ProjectsBuilder(); // create new builder instance per query
+        const builder = new ProjectsQueryBuilder(); // create new builder instance per query
         return QueryFactory.createProjectsQuery(builder, this.client);
     }
 

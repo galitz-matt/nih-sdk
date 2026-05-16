@@ -1,10 +1,10 @@
-import type { ProjectsBuilder } from "../../domain/builder/projects.builder"
+import type { ProjectsQueryBuilder } from "../../domain/builder/projects-query.builder"
 import type { ProjectsClient } from "../../infra/nih/projects.client"
 import type { ProjectQuery } from "../types/project.query"
 
 export class QueryFactory {
     static createProjectsQuery(
-        builder: ProjectsBuilder,
+        builder: ProjectsQueryBuilder,
         client: ProjectsClient
     ): ProjectQuery {
         return Object.assign(builder, {

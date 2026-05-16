@@ -14,7 +14,7 @@ import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
 
-export class ProjectsBuilder {
+export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
 
     constructor() {
