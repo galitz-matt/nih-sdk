@@ -25,7 +25,7 @@ export class ProjectsBuilder {
      * Get the search request object
      * @returns request object
      */
-    build(): ProjectsInput {
+    serialize(): ProjectsInput {
         return this.payload;
     }
     

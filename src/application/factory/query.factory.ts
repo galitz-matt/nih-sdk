@@ -9,7 +9,7 @@ export class QueryFactory {
     ): ProjectQuery {
         return Object.assign(builder, {
             async execute() {
-                return await client.search(builder.build())
+                return await client.search(builder.serialize())
             }
         })
     }
