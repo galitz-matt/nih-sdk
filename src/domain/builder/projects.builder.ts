@@ -111,7 +111,7 @@ export class ProjectsBuilder {
      * Filter results by fiscal year appropriation from which project funds were obligated
      * 
      * @param values - FiscalYear value or number representing year
-     */
+     /
     fiscalYears(...years: FiscalYear[]): this {
         this.payload.criteria.fiscal_years = years
         return this;
@@ -311,7 +311,21 @@ export class ProjectsBuilder {
         return this;
     }
 
-    // TODO: doc-string
+    /**
+     * Filter projects by the congressional district in which business office of the grantee organization or contractor is located
+     * 
+     * @param types - constitutional districts
+     * 
+     * Example usage:
+     * ```
+     * congDists(
+     *   CongDist.AL_02
+     * )
+     * ```
+     * 
+     * Filter projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
+     * 
+     */
     congDists(...types: CongDist[]): this {
         const states = this.payload.criteria?.org_states
         
