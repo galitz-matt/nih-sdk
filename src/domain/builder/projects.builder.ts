@@ -167,79 +167,6 @@ export class ProjectsBuilder {
         return this;
     }
 
-    /**
-     * Filters projects by Principal Investigator (PI) names.
-     * 
-     * @param names - PI builders
-     *
-     * Matching Behavior:
-     * - Fields chained on a single builder are combined with AND (same PI)
-     * - Multiple builders are combined with OR (across PIs)
-     *
-     * See {@link NameCriteriaIr} for matching modes and constraints.
-     * 
-     * Example Usage:
-     * ```
-     * piNames(
-     *   pi().firstName("John"),
-     *   pi().lastName("Smith")
-     * )
-     * ```
-     * matches projects with:
-     * - a PI with first name containing "John" OR
-     * - a PI with last name containing "Smith"
-     * 
-     * ```
-     * piNames(
-     *   pi().firstName("John").lastName("Smith")
-     * )
-     * ```
-     * matches projects with a PI with first name containing "John" AND last name containing "Smith"
-     */
-    piNames(...names: NameCriteriaIrBuilder[]): this {
-        this.payload.criteria.pi_names = names.map(n =>
-            IrToModelMapper.toNameCriteria(n.build())
-        );
-        return this;
-    }
-    
-    /**
-     * Filters projects by Project Officer (PO) names.
-     * 
-     * @param names PO builders
-     *
-     * Matching Behavior:
-     * - Fields chained on a single builder are combined with AND (same PI)
-     * - Multiple builders are combined with OR (across PIs)
-     *
-     * See {@link NameCriteriaIrBuilderO} for matching modes and constraints.
-     * 
-     * Example Usage:
-     * 
-     * ```
-     * poNames(
-     *   po().firstName("John"),
-     *   po().lastName("Smith")
-     * )
-     * ```
-     * 
-     * matches projects with:
-     * - a PO with first name containing "John" OR
-     * - a PO with last name containing "Smith"
-     * 
-     * ```
-     * poNames(
-     *   po().firstName("John").lastName("Smith")
-     * )
-     * ```
-     * matches projects with a PO with first name containing "John" AND last name containing "Smith"
-     */
-    poNames(...names: NameCriteriaIrBuilder[]): this {
-        this.payload.criteria.po_names = names.map(n =>
-            IrToModelMapper.toNameCriteria(n.build())
-        );
-        return this;
-    }
 
     /**
      * Filters projects by Organization names
@@ -353,6 +280,80 @@ export class ProjectsBuilder {
      */
     orgTypes(...types: OrgType[]): this {
         this.payload.criteria.organization_type = types;
+        return this;
+    }
+    
+    /**
+     * Filters projects by Principal Investigator (PI) names.
+     * 
+     * @param names - PI builders
+     *
+     * Matching Behavior:
+     * - Fields chained on a single builder are combined with AND (same PI)
+     * - Multiple builders are combined with OR (across PIs)
+     *
+     * See {@link NameCriteriaIr} for matching modes and constraints.
+     * 
+     * Example Usage:
+     * ```
+     * piNames(
+     *   pi().firstName("John"),
+     *   pi().lastName("Smith")
+     * )
+     * ```
+     * matches projects with:
+     * - a PI with first name containing "John" OR
+     * - a PI with last name containing "Smith"
+     * 
+     * ```
+     * piNames(
+     *   pi().firstName("John").lastName("Smith")
+     * )
+     * ```
+     * matches projects with a PI with first name containing "John" AND last name containing "Smith"
+     */
+    piNames(...names: NameCriteriaIrBuilder[]): this {
+        this.payload.criteria.pi_names = names.map(n =>
+            IrToModelMapper.toNameCriteria(n.build())
+        );
+        return this;
+    }
+    
+    /**
+     * Filters projects by Project Officer (PO) names.
+     * 
+     * @param names PO builders
+     *
+     * Matching Behavior:
+     * - Fields chained on a single builder are combined with AND (same PI)
+     * - Multiple builders are combined with OR (across PIs)
+     *
+     * See {@link NameCriteriaIrBuilderO} for matching modes and constraints.
+     * 
+     * Example Usage:
+     * 
+     * ```
+     * poNames(
+     *   po().firstName("John"),
+     *   po().lastName("Smith")
+     * )
+     * ```
+     * 
+     * matches projects with:
+     * - a PO with first name containing "John" OR
+     * - a PO with last name containing "Smith"
+     * 
+     * ```
+     * poNames(
+     *   po().firstName("John").lastName("Smith")
+     * )
+     * ```
+     * matches projects with a PO with first name containing "John" AND last name containing "Smith"
+     */
+    poNames(...names: NameCriteriaIrBuilder[]): this {
+        this.payload.criteria.po_names = names.map(n =>
+            IrToModelMapper.toNameCriteria(n.build())
+        );
         return this;
     }
 
