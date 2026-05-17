@@ -27,7 +27,7 @@ export type ProjectsInput = {
         cong_dists?: string[];
         foa?: string[]; // TODO: add builder method
         opportunity_numbers?: string[]; // TODO: add builder method
-        spending_categories?: SpendingCategoriesCriteria; // TODO: add builder method, and dto builder
+        spending_categories?: SpendingCategoriesCriteria; 
         project_start_date?: DateRange; // TODO: add builder method
         project_end_date?: DateRange; // TODO: add builder method
         date_added?: DateRange; // TODO: add builder method
