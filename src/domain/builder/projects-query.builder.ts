@@ -31,14 +31,16 @@ export class ProjectsQueryBuilder {
     
     /**
      * Filter projects by the congressional district in which business office of the grantee organization or contractor is located
+     * Must call orgStates() before congDists()
+     * orgStates() arguments must contain OrgStates associated with provided CongDists
      * 
      * @param types - constitutional districts
      * 
      * Example usage:
      * ```
-     * congDists(
-     *   CongDist.AL_02
-     * )
+     * nih.projects.query()
+     * .orgState(OrgState.AL)
+     * .congDists(CongDist.AL_02)
      * ```
      * 
      * Filter projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
@@ -48,7 +50,7 @@ export class ProjectsQueryBuilder {
         const states = this.payload.criteria?.org_states
         
         if (!states || states.length === 0) {
-            throw new DomainError("Initialize orgStates before initializing congDists");
+            throw new DomainError("congDists: initialize orgStates before initializing congDists");
         }
 
         for (const t of types) {
@@ -62,7 +64,9 @@ export class ProjectsQueryBuilder {
                 // TODO: implement dynamic tips
                 // what state should be included for specified congDist(s)
                 // correct usage snippet
-                throw new DomainError(`First include the orgState associated with congDist: ${t}`)
+                throw new DomainError(
+                    `congDists: include the orgState associated with congDist: ${t}\n`
+                )
         }
 
         this.payload.criteria.cong_dists = types;
@@ -180,14 +184,16 @@ export class ProjectsQueryBuilder {
      * 
      * Example Usage:
      * ```
-     * orgNames(
+     * nih.projects.query()
+     * .orgNames(
      *   orgName().name("Yale").partial()
      * )
      * ```
      * matches projects conducted by an organization with name contain "Yale"
      * 
      * ```
-     * orgNames(
+     * nih.projects.query()
+     * .orgNames(
      *   orgName().name("UNIV OF NORTH CAROLINA CHAPEL HILL").exact()
      * )
      * ```
@@ -201,6 +207,7 @@ export class ProjectsQueryBuilder {
      * identical behavior as first example, defaults to "partial"
      */
     orgNames(...orgs: OrgNameIrBuilder[]): this {
+        // TODO: delete builder
         const builtOrgs = orgs.map(o => o.build());
         this.payload.criteria.org_names =
             builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
@@ -216,7 +223,8 @@ export class ProjectsQueryBuilder {
      * 
      * Example Usage:
      * ```
-     * orgCities(
+     * nih.projects.query()
+     * .orgCities(
      *   "New York",
      *   "Vegas"
      * )
@@ -235,7 +243,8 @@ export class ProjectsQueryBuilder {
      * 
      * Example Usage:
      * ```
-     * orgStates(
+     * nih.projects.query()
+     * .orgStates(
      *   State.NewJersey,
      *   "NY"
      * )
@@ -255,7 +264,8 @@ export class ProjectsQueryBuilder {
      * 
      * Example usage:
      * ```
-     * orgCountries(
+     * nih.projects.query()
+     * .orgCountries(
      *   OrgCountry.UnitedStates
      * )
      * ```
@@ -274,7 +284,8 @@ export class ProjectsQueryBuilder {
      * 
      * Example usage:
      * ```
-     * orgTypes(
+     * nih.projects.query()
+     * .orgTypes(
      *   OrgType.SchoolsOfEngineering
      * )
      * ```
@@ -299,7 +310,8 @@ export class ProjectsQueryBuilder {
      * 
      * Example Usage:
      * ```
-     * piNames(
+     * nih.projects.query()
+     * .piNames(
      *   pi().firstName("John"),
      *   pi().lastName("Smith")
      * )
@@ -331,12 +343,13 @@ export class ProjectsQueryBuilder {
      * - Fields chained on a single builder are combined with AND (same PI)
      * - Multiple builders are combined with OR (across PIs)
      *
-     * See {@link NameCriteriaIrBuilderO} for matching modes and constraints.
+     * See {@link NameCriteriaIrBuilder} for matching modes and constraints.
      * 
      * Example Usage:
      * 
      * ```
-     * poNames(
+     * nih.projects.query()
+     * .poNames(
      *   po().firstName("John"),
      *   po().lastName("Smith")
      * )
@@ -361,7 +374,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filters project by PI Profile IDs
+     * Filters projects by PI Profile IDs
      * 
      * Each PI in the RePORTER database has a unique identifier that is constant
     from project to project and year to year, but changes may be observed for investigators
@@ -375,17 +388,39 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
-    spendingCategories(categories: {
+    /**
+     * Filter projects by (congressionally mandated) reporting categories
+     * Available for fiscal years 2008 and later.
+     * 
+     * @param input - spending categories and filtering behavior
+     * 
+     * If match_all is true, filter behaves like AND on spending category values
+     * otherwise, filter behaves like OR on spending category values
+     * 
+     * match_all is false by default
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .spendingCategories({
+     *   values: [SpendingCategory.BackPain, SpendingCategory.Autism]
+     *   match_all: true
+     * })
+     * ```
+     * 
+     * Query results will consist of projects with ALL spending categories
+     */
+    spendingCategories(input: {
         values: SpendingCategory[];
         matchAll?: boolean;
     }): this {
-        if (categories.values.length === 0) {
+        if (input.values.length === 0) {
             throw new DomainError("spendingCategories: 'values' cannot be empty");
         }
-        
+
         this.payload.criteria.spending_categories = {
-            values: categories.values,
-            match_all: categories.matchAll ?? false
+            values: input.values,
+            match_all: input.matchAll ?? false
         }
         return this;
     }
