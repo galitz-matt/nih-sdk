@@ -13,6 +13,7 @@ import type { OrgType } from "../types/enum/org-type";
 import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
+import { ProjectsQueryValidator } from "../validator/projects-query.validator";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -26,6 +27,7 @@ export class ProjectsQueryBuilder {
      * @returns request object
      */
     serialize(): ProjectsInput {
+        ProjectsQueryValidator.validate(this.payload);
         return this.payload;
     }
     
@@ -34,7 +36,7 @@ export class ProjectsQueryBuilder {
      * Must call orgStates() before congDists()
      * orgStates() arguments must contain OrgStates associated with provided CongDists
      * 
-     * @param types - constitutional districts
+     * @param congDists - constitutional districts
      * 
      * Example usage:
      * ```
@@ -46,33 +48,10 @@ export class ProjectsQueryBuilder {
      * Filter projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
      * 
      */
-    congDists(...types: CongDist[]): this {
-        const states = this.payload.criteria?.org_states
-        
-        if (!states || states.length === 0) {
-            throw new DomainError("congDists: initialize orgStates before initializing congDists");
-        }
-
-        for (const t of types) {
-            const validDists = new Set<string>(
-                states.flatMap(state => {
-                    if (!this.hasCongDists(state)) return [];
-                    return CongDistGroup[state];
-                })
-            )
-            if (!validDists.has(t))
-                // TODO: implement dynamic tips
-                // what state should be included for specified congDist(s)
-                // correct usage snippet
-                throw new DomainError(
-                    `congDists: include the orgState associated with congDist: ${t}\n`
-                )
-        }
-
-        this.payload.criteria.cong_dists = types;
+    congDists(congDist: CongDist, ...congDists: CongDist[]): this {
+        this.payload.criteria.cong_dists = [congDist, ...congDists];
         return this;
     }
-
 
     /**
      * Order search results based on how closely they match your specified search criteria (relevance)
@@ -94,13 +73,13 @@ export class ProjectsQueryBuilder {
 
     /**
      * Set limit the on number of search results returned
-     * @param limit - must be a positive integer less than or equal to 500 (default: 50)
+     * @param n - must be a positive integer less than or equal to 500 (default: 50)
      */
-    limit(limit: number): this {
-        if (limit <= 0 || limit > 500) {
+    limit(n: number): this {
+        if (n <= 0 || n > 500) {
             throw new DomainError("Invalid limit: must be a positive integer less than or equal to 500");
         }
-        this.payload.limit = limit;
+        this.payload.limit = n;
         return this;
     }
 
@@ -120,9 +99,10 @@ export class ProjectsQueryBuilder {
      * Include these fields in the results. If null then all fields are included by default. If empty, then no fields are included.
      * @param fields - fields to include in results
      */
-    includeFields(...fields: Field[]): this {
+    includeFields(field: Field, ...fields: Field[]): this {
+        const allFields = [field, ...fields];
         const excludedFields = new Set(this.payload.exclude_fields ?? []);
-        const conflicts = fields.filter(f => excludedFields.has(f));
+        const conflicts = allFields.filter(f => excludedFields.has(f));
         if (conflicts.length !== 0) {
             throw new DomainError(
                 `Cannot include excluded fields:\n${this.formatList(conflicts)}` +
@@ -130,7 +110,7 @@ export class ProjectsQueryBuilder {
             )
         }
 
-        this.payload.include_fields = fields;
+        this.payload.include_fields = allFields;
         return this;
     }
 
@@ -138,9 +118,10 @@ export class ProjectsQueryBuilder {
      * Exclude these fields in the results. If null or empty, no fields are excluded.
      * @param fields - fields to exclude from resutls
      */
-    excludeFields(...fields: Field[]): this {
+    excludeFields(field: Field, ...fields: Field[]): this {
+        const allFields = [field, ...fields];
         const includedFields = new Set(this.payload.include_fields ?? []);
-        const conflicts = fields.filter(f => includedFields.has(f));
+        const conflicts = allFields.filter(f => includedFields.has(f));
         if (conflicts.length !== 0) {
             throw new DomainError(
                 `Cannot exclude included fields:\n${this.formatList(conflicts)}\n` +
@@ -148,7 +129,7 @@ export class ProjectsQueryBuilder {
             )
         }
         
-        this.payload.exclude_fields = fields;
+        this.payload.exclude_fields = allFields;
         return this;
     }
 
@@ -157,8 +138,8 @@ export class ProjectsQueryBuilder {
      * 
      * @param values - FiscalYear value or number representing year
     */
-    fiscalYears(...years: FiscalYear[]): this {
-        this.payload.criteria.fiscal_years = years
+    fiscalYears(year: FiscalYear, ...years: FiscalYear[]): this {
+        this.payload.criteria.fiscal_years = [year, ...years];
         return this;
     }
 
@@ -206,9 +187,9 @@ export class ProjectsQueryBuilder {
      * ```
      * identical behavior as first example, defaults to "partial"
      */
-    orgNames(...orgs: OrgNameIrBuilder[]): this {
-        // TODO: delete builder
-        const builtOrgs = orgs.map(o => o.build());
+    orgNames(org: OrgNameIrBuilder, ...orgs: OrgNameIrBuilder[]): this {
+        const allOrgs = [org, ...orgs];
+        const builtOrgs = allOrgs.map(o => o.build());
         this.payload.criteria.org_names =
             builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
         this.payload.criteria.org_names_exact_match =
@@ -231,8 +212,8 @@ export class ProjectsQueryBuilder {
      * ```
      * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
      */
-    orgCities(...cities: string[]): this {
-        this.payload.criteria.org_cities = cities;
+    orgCities(city: string, ...cities: string[]): this {
+        this.payload.criteria.org_cities = [city, ...cities];
         return this;
     }
 
@@ -252,8 +233,8 @@ export class ProjectsQueryBuilder {
      * 
      * Filters projects conducted by organization based in New York state OR New Jersey
      */
-    orgStates(...states: OrgState[]): this {
-        this.payload.criteria.org_states = states;
+    orgStates(state: OrgState, ...states: OrgState[]): this {
+        this.payload.criteria.org_states = [state, ...states];
         return this;
     }
 
@@ -272,8 +253,8 @@ export class ProjectsQueryBuilder {
      * 
      * Filters projects conducted by organization based in the United States
      */
-    orgCountries(...countries: OrgCountry[]): this {
-        this.payload.criteria.org_countries = countries;
+    orgCountries(country: OrgCountry, ...countries: OrgCountry[]): this {
+        this.payload.criteria.org_countries = [country, ...countries];
         return this;
     }
 
@@ -292,8 +273,8 @@ export class ProjectsQueryBuilder {
      * 
      * Filters projects conducted by schools of engineering
      */
-    orgTypes(...types: OrgType[]): this {
-        this.payload.criteria.organization_type = types;
+    orgTypes(type: OrgType, ...types: OrgType[]): this {
+        this.payload.criteria.organization_type = [type, ...types];
         return this;
     }
 
@@ -327,8 +308,9 @@ export class ProjectsQueryBuilder {
      * ```
      * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
-    piNames(...names: NameCriteriaIrBuilder[]): this {
-        this.payload.criteria.pi_names = names.map(n =>
+    piNames(name: NameCriteriaIrBuilder, ...names: NameCriteriaIrBuilder[]): this {
+        const allNames = [name, ...names];
+        this.payload.criteria.pi_names = allNames.map(n =>
             IrToModelMapper.toNameCriteria(n.build())
         );
         return this;
@@ -366,8 +348,9 @@ export class ProjectsQueryBuilder {
      * ```
      * matches projects with a PO with first name containing "John" AND last name containing "Smith"
      */
-    poNames(...names: NameCriteriaIrBuilder[]): this {
-        this.payload.criteria.po_names = names.map(n =>
+    poNames(name: NameCriteriaIrBuilder, ...names: NameCriteriaIrBuilder[]): this {
+        const allNames = [name, ...names];
+        this.payload.criteria.po_names = allNames.map(n =>
             IrToModelMapper.toNameCriteria(n.build())
         );
         return this;
@@ -383,8 +366,8 @@ export class ProjectsQueryBuilder {
      * 
      * @param ids - PI Profile IDs
      */
-    piProfileIds(...ids: number[]): this {
-        this.payload.criteria.pi_profile_ids = ids;
+    piProfileIds(id: number, ...ids: number[]): this {
+        this.payload.criteria.pi_profile_ids = [id, ...ids];
         return this;
     }
 
@@ -429,9 +412,4 @@ export class ProjectsQueryBuilder {
         return fields.map(f => ` - ${f}`).join("\n");
     }
 
-    private hasCongDists(
-        state: string
-    ): state is keyof typeof CongDistGroup {
-        return state in CongDistGroup
-    }
 }
