@@ -94,17 +94,7 @@ export class ProjectsQueryBuilder {
      * @param fields - fields to include in results
      */
     includeFields(field: Field, ...fields: Field[]): this {
-        const allFields = [field, ...fields];
-        const excludedFields = new Set(this.payload.exclude_fields ?? []);
-        const conflicts = allFields.filter(f => excludedFields.has(f));
-        if (conflicts.length !== 0) {
-            throw new DomainError(
-                `Cannot include excluded fields:\n${this.formatList(conflicts)}` +
-                `Remove them from includeFields or excludeFields`
-            )
-        }
-
-        this.payload.include_fields = allFields;
+        this.payload.include_fields = [field, ...fields];
         return this;
     }
 
@@ -113,17 +103,7 @@ export class ProjectsQueryBuilder {
      * @param fields - fields to exclude from resutls
      */
     excludeFields(field: Field, ...fields: Field[]): this {
-        const allFields = [field, ...fields];
-        const includedFields = new Set(this.payload.include_fields ?? []);
-        const conflicts = allFields.filter(f => includedFields.has(f));
-        if (conflicts.length !== 0) {
-            throw new DomainError(
-                `Cannot exclude included fields:\n${this.formatList(conflicts)}\n` +
-                `Remove them from includeFields or excludeFields`
-            )
-        }
-        
-        this.payload.exclude_fields = allFields;
+        this.payload.exclude_fields = [field, ...fields];
         return this;
     }
 
@@ -392,7 +372,7 @@ export class ProjectsQueryBuilder {
         matchAll?: boolean;
     }): this {
         if (input.values.length === 0) {
-            throw new DomainError("spendingCategories: 'values' cannot be empty");
+            throw new DomainError("Empty spendingCategories: 'values' cannot be empty");
         }
 
         this.payload.criteria.spending_categories = {
@@ -401,9 +381,4 @@ export class ProjectsQueryBuilder {
         }
         return this;
     }
-
-    private formatList(fields: (string | number)[]): string {
-        return fields.map(f => ` - ${f}`).join("\n");
-    }
-
 }
