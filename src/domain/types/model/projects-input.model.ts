@@ -1,10 +1,17 @@
+import type { CongDist } from "../enum/cong-dist";
+import type { DeptType } from "../enum/dept-type";
 import type { Field } from "../enum/field";
+import type { FiscalYear } from "../enum/fiscal-year";
+import type { OrgCountry } from "../enum/org-country";
+import type { OrgState } from "../enum/org-state";
+import type { OrgType } from "../enum/org-type";
 import type { SortOrder } from "../enum/sort-order";
+import type { SpendingCategory } from "../enum/spending-category";
 
 export type ProjectsInput = {
     criteria: {
         use_relevance?: boolean;
-        fiscal_years?: number[];
+        fiscal_years?: FiscalYear[];
         include_active_projects?: boolean;
         pi_names?: NameCriteria[];
         po_names?: NameCriteria[];
@@ -12,8 +19,8 @@ export type ProjectsInput = {
         org_names_exact_match?: string[];
         pi_profile_ids?: number[];
         org_cities?: string[];
-        org_states?: string[];
-        org_countries?: string[];
+        org_states?: OrgState[];
+        org_countries?: OrgCountry[];
         project_nums?: string[]; // TODO: add builder method
         appl_ids?: number[]; // TODO: add builder method
         project_num_split?: ProjectNumSplit; // TODO: add builder method, and dto builder
@@ -23,15 +30,15 @@ export type ProjectsInput = {
         activity_codes?: string[]; // TODO: add builder method
         cooperative_agreement_codes?: string[]; // TODO: add builder method
         award_types?: string[]; // TODO: add builder method
-        dept_types?: string[]; // TODO: add builder method
-        cong_dists?: string[];
+        dept_types?: DeptType[]; // TODO: add builder method
+        cong_dists?: CongDist[];
         foa?: string[]; // TODO: add builder method
         opportunity_numbers?: string[]; // TODO: add builder method
         spending_categories?: SpendingCategoriesCriteria; 
         project_start_date?: DateRange; // TODO: add builder method
         project_end_date?: DateRange; // TODO: add builder method
         date_added?: DateRange; // TODO: add builder method
-        organization_type?: string[]; 
+        organization_type?: OrgType[]; 
         full_study_sections?: FullStudySection[]; // TODO: add builder method, and dto builder
         award_notice_date?: DateRange; // TODO: add builder method
         award_amount_range?: AmountRange; // TODO: add builder method
@@ -86,7 +93,7 @@ export type DateRange = {
 }
 
 export type SpendingCategoriesCriteria = {
-    values?: number[];
+    values?: SpendingCategory[];
     match_all: boolean
 }
 
