@@ -3,6 +3,7 @@ import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
 import type { Field } from "../types/enum/field";
 import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgState } from "../types/enum/org-state";
+import { SpendingCategory } from "../types/enum/spending-category";
 import type { ProjectsInput, SpendingCategoriesCriteria } from "../types/model/projects-input.model";
 
 // TODO: centralize domain validation
@@ -50,7 +51,7 @@ export class ProjectsQueryValidator {
 
         throw new DomainError(
             `Overlapping includeFields and excludeFields: set of includeFields() and excludeFields() arguments must be disjoint.` +
-            `Remove the following fields from includeFields() or excludeFields: ${this.formatList(conflicts)}`
+            `Remove the following fields from includeFields() or excludeFields:\n${this.formatList(conflicts)}`
         )
     }
 
@@ -82,7 +83,7 @@ export class ProjectsQueryValidator {
         if (invalidFiscalYears && invalidFiscalYears.length > 0) {
             throw new DomainError(
                 "spendingCategories: Fiscal years prior to 2008 are incompatible with spendingCategories filter.\n" +
-                `Remove years ${invalidFiscalYears} from fiscalYears() or remove spendingCategories() from query`
+                `Remove spendingCategories() from query or remove the following fiscal years from fiscalYear():\n${this.formatList(invalidFiscalYears)}`
             )
         }
     }
