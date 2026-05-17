@@ -13,7 +13,6 @@ import type { OrgType } from "../types/enum/org-type";
 import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
-import type { SpendingCategoriesIrBuilder } from "./spending-categories-ir.builder";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -376,11 +375,17 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
-    spendingCategories(categories: SpendingCategoriesIrBuilder): this {
-        const ir = categories.build();
+    spendingCategories(categories: {
+        values: SpendingCategory[];
+        matchAll?: boolean;
+    }): this {
+        if (categories.values.length === 0) {
+            throw new DomainError("spendingCategories: 'values' cannot be empty");
+        }
+        
         this.payload.criteria.spending_categories = {
-            values: ir.values,
-            match_all: ir.match_all
+            values: categories.values,
+            match_all: categories.matchAll ?? false
         }
         return this;
     }
