@@ -10,9 +10,10 @@ import type { ProjectsInput, SpendingCategoriesCriteria } from "../types/model/p
 export class ProjectsQueryValidator {
     static validate(payload: ProjectsInput): void {
         this.validateCongDists(payload.criteria.cong_dists, payload.criteria.org_states);
-        this.validateFields(payload.include_fields, payload.exclude_fields)
+        this.validateFields(payload.include_fields, payload.exclude_fields);
         this.validateLimit(payload.limit);
         this.validateOffset(payload.offset);
+        this.validateProjectNums(payload.criteria.project_nums);
         this.validateSpendingCategories(payload.criteria.spending_categories, payload.criteria.fiscal_years);
     }
 
@@ -37,7 +38,7 @@ export class ProjectsQueryValidator {
                 // correct usage snippet
                 throw new DomainError(
                     `Invalid congDists: include the orgState associated with congDist: ${dist}\n`
-                )
+                );
         }
     }
 
@@ -52,7 +53,7 @@ export class ProjectsQueryValidator {
         throw new DomainError(
             `Overlapping includeFields and excludeFields: set of includeFields() and excludeFields() arguments must be disjoint.` +
             `Remove the following fields from includeFields() or excludeFields:\n${this.formatList(conflicts)}`
-        )
+        );
     }
 
     static validateLimit(limit: number | undefined): void {
@@ -67,7 +68,15 @@ export class ProjectsQueryValidator {
         if (!offset) return;
 
         if (offset < 0 || offset >= 15000) {
-            throw new DomainError("Invalid offset: Must be a non-negative integer less than 15000")
+            throw new DomainError("Invalid offset: Must be a non-negative integer less than 15000");
+        }
+    }
+
+    static validateProjectNums(nums: string[] | undefined): void {
+        if (!nums) return;
+
+        if (nums.length > 1000) {
+            throw new DomainError("Too many projectNums: Count of provided project numbers cannot exceed 1000");
         }
     }
 
@@ -84,12 +93,12 @@ export class ProjectsQueryValidator {
             throw new DomainError(
                 "spendingCategories: Fiscal years prior to 2008 are incompatible with spendingCategories filter.\n" +
                 `Remove spendingCategories() from query or remove the following fiscal years from fiscalYear():\n${this.formatList(invalidFiscalYears)}`
-            )
+            );
         }
     }
 
     private static hasCongDists(state: string): state is keyof typeof CongDistGroup {
-        return state in CongDistGroup
+        return state in CongDistGroup;
     }
 
     private static formatList(fields: (string | number)[]): string {

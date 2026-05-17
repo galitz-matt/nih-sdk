@@ -346,6 +346,19 @@ export class ProjectsQueryBuilder {
     }
 
     /**
+     * Filter projects by core project number(s)
+     * 
+     * @param nums - core project number(s), maximum of 1000 values can be passed
+     * 
+     * This identifier is not specific to any particular year of the project. 
+     * It consists of the project activity code, administering IC, and serial number (a concatenation of Activity, Administering_IC, and Serial_Number).
+     */
+    projectNums(num: string, ...nums: string[]): this {
+        this.payload.criteria.project_nums = [num, ...nums];
+        return this;
+    }
+
+    /**
      * Filter projects by (congressionally mandated) reporting categories
      * Available for fiscal years 2008 and later.
      * 
