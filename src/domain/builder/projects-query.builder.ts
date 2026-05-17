@@ -12,7 +12,7 @@ import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgType } from "../types/enum/org-type";
 import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
-import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
+import { CongDist } from "../types/enum/cong-dist";
 import { ProjectsQueryValidator } from "../validator/projects-query.validator";
 
 export class ProjectsQueryBuilder {
