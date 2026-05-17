@@ -349,7 +349,7 @@ export class ProjectsQueryBuilder {
      * Filter projects by (congressionally mandated) reporting categories
      * Available for fiscal years 2008 and later.
      * 
-     * @param input - spending categories and filtering behavior
+     * @param input - spending categories and filtering behavior, must include at least one spending category value
      * 
      * If match_all is true, filter behaves like AND on spending category values
      * otherwise, filter behaves like OR on spending category values
