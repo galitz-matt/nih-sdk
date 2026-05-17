@@ -5,6 +5,9 @@ import type { ProjectsInput } from "../types/model/projects-input.model";
 // TODO: centralize domain validation
 export class ProjectsQueryValidator {
     static validate(payload: ProjectsInput): void {
+        this.validateCongDists(payload);
+        this.validateLimit(payload.limit);
+        this.validateOffset(payload.offset);
         this.validateSpendingCategories(payload);
     }
 
@@ -35,8 +38,20 @@ export class ProjectsQueryValidator {
         }
     }
 
-    static validateLimit(payload: ProjectsInput): void {
-        
+    static validateLimit(limit: number | undefined): void {
+        if (!limit) return;
+
+        if (limit <= 0 || limit > 500) {
+            throw new DomainError("Invalid limit: must be a positive integer less than or equal to 500");
+        }
+    }
+
+    static validateOffset(offset: number | undefined): void {
+        if (!offset) return;
+
+        if (offset < 0 || offset >= 15000) {
+            throw new DomainError("Invalid offset: must be a non-negative integer less than 15000")
+        }
     }
 
     static validateSpendingCategories(payload: ProjectsInput): void {

@@ -76,22 +76,16 @@ export class ProjectsQueryBuilder {
      * @param n - must be a positive integer less than or equal to 500 (default: 50)
      */
     limit(n: number): this {
-        if (n <= 0 || n > 500) {
-            throw new DomainError("Invalid limit: must be a positive integer less than or equal to 500");
-        }
         this.payload.limit = n;
         return this;
     }
 
     /**
      * Set the starting counter for matching projects. Offset should not exceed total records count.
-     * @param offset - must be a non-negative integer less than 15000
+     * @param n - must be a non-negative integer less than 15000
      */
-    offset(offset: number): this {
-        if (offset < 0 || offset >= 15000) {
-            throw new DomainError("Invalid offset: must be a non-negative integer less than 15000")
-        }
-        this.payload.offset = offset;
+    offset(n: number): this {
+        this.payload.offset = n;
         return this;
     }
 
