@@ -9,6 +9,7 @@ import type { ProjectsInput, SpendingCategoriesCriteria } from "../types/model/p
 // TODO: centralize domain validation
 export class ProjectsQueryValidator {
     static validate(payload: ProjectsInput): void {
+        this.validateApplIds(payload.criteria.appl_ids);
         this.validateCongDists(payload.criteria.cong_dists, payload.criteria.org_states);
         this.validateFields(payload.include_fields, payload.exclude_fields);
         this.validateLimit(payload.limit);
@@ -17,12 +18,20 @@ export class ProjectsQueryValidator {
         this.validateSpendingCategories(payload.criteria.spending_categories, payload.criteria.fiscal_years);
     }
 
+    static validateApplIds(applIds: number[] | undefined): void {
+        if (!applIds) return;
+
+        if (applIds.length > 1000) {
+            throw new DomainError("Too many applIds: Count of provided application IDs cannot exceed 1000");
+        }
+    }
+
     static validateCongDists(congDists: CongDist[] | undefined, states: OrgState[] | undefined): void {
         if (!congDists) return;
 
         if (!states || states.length === 0) {
             // TODO: make this dynamic
-            throw new DomainError("congDists: Must initialize orgStates with OrgState(s) associated with provided CongDist(s)");
+            throw new DomainError("Invalid congDists: Must initialize orgStates with OrgState(s) associated with provided CongDist(s)");
         }
         
         for (const dist of congDists) {

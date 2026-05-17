@@ -21,8 +21,8 @@ export type ProjectsInput = {
         org_cities?: string[];
         org_states?: OrgState[];
         org_countries?: OrgCountry[];
-        project_nums?: string[]; // TODO: add builder method
-        appl_ids?: number[]; // TODO: add builder method
+        project_nums?: string[];
+        appl_ids?: number[];
         project_num_split?: ProjectNumSplit; // TODO: add builder method, and dto builder
         agencies?: string[]; // TODO: add builder method
         is_agency_admin?: boolean // TODO: add builder method

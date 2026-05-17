@@ -30,6 +30,20 @@ export class ProjectsQueryBuilder {
         ProjectsQueryValidator.validate(this.payload);
         return this.payload;
     }
+
+    /**
+     * Filter projects by their application ID (unique project identifier)
+     * 
+     * @param id - first application ID
+     * @param ids - rest of application IDs
+     * 
+     * Count of application IDs provided cannot exceed 1000
+     * 
+     */
+    applIds(id: number, ids: number[]): this {
+        this.payload.criteria.appl_ids = [id, ...ids];
+        return this;
+    }
     
     /**
      * Filter projects by the congressional district in which business office of the grantee organization or contractor is located
