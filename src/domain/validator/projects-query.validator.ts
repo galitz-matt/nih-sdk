@@ -3,7 +3,6 @@ import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
 import type { Field } from "../types/enum/field";
 import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgState } from "../types/enum/org-state";
-import { SpendingCategory } from "../types/enum/spending-category";
 import type { ProjectsInput, SpendingCategoriesCriteria } from "../types/model/projects-input.model";
 
 // TODO: centralize domain validation
