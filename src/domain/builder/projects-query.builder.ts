@@ -58,8 +58,8 @@ export class ProjectsQueryBuilder {
      * Count of application IDs provided cannot exceed 1000
      * 
      */
-    applIds(id: number, ids: number[]): this {
-        this.payload.criteria.appl_ids = uniqueFlat<number>(id, ids);
+    applIds(id: number, ...ids: number[]): this {
+        this.payload.criteria.appl_ids = uniqueFlat<number>(id, ...ids);
         return this;
     }
     
@@ -81,7 +81,7 @@ export class ProjectsQueryBuilder {
      * 
      */
     congDists(congDist: CongDist, ...congDists: CongDist[]): this {
-        this.payload.criteria.cong_dists = uniqueFlat(congDist, congDists);
+        this.payload.criteria.cong_dists = uniqueFlat(congDist, ...congDists);
         return this;
     }
 
