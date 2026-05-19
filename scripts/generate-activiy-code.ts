@@ -32,7 +32,7 @@ async function main() {
         block(
             "export const ActivityCode = {",
             allCodes.map(code => line(`${code}: "${code}",`)),
-            "}"
+            "} as const"
         ),
         line("export type ActivityCode = typeof ActivityCode[keyof typeof ActivityCode];")
     )
@@ -45,7 +45,7 @@ async function main() {
                 [...value].map(code => line(`${code}: "${code}",`)),
                 "},"
             )),
-            "}"
+            "} as const"
         ),
         line("export type ActivityCodeGroup = typeof ActivityCodeGroup[keyof typeof ActivityCodeGroup];")
     )
