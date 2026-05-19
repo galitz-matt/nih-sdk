@@ -14,6 +14,7 @@ import type { OrgCountry } from "../types/enum/org-country";
 import type { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist } from "../types/enum/cong-dist";
 import { ProjectsQueryValidator } from "../validator/projects-query.validator";
+import { ActivityCode, ActivityCodeGroup } from "../types/enum/activity-code";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -32,6 +33,23 @@ export class ProjectsQueryBuilder {
     }
 
     /**
+     * Filter projects by associated activity codes, or activity code group
+     * 
+     * @param code - first (group of) activity code
+     * @param codes - rest of (group(s) of) activity code(s)
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .activityCodes(ActivityCode.AY2, ActivityCodeGroup.Construction)
+     * ```
+     */
+    activityCodes(code: ActivityCode | ActivityCodeGroup, codes: (ActivityCode | ActivityCodeGroup)[]) {
+        const activityCodes = uniqueFlat<ActivityCode>(code, ...codes);
+        this.payload.criteria.activity_codes = activityCodes;
+    }
+
+    /**
      * Filter projects by their application ID (unique project identifier)
      * 
      * @param id - first application ID
@@ -41,7 +59,7 @@ export class ProjectsQueryBuilder {
      * 
      */
     applIds(id: number, ids: number[]): this {
-        this.payload.criteria.appl_ids = [id, ...ids];
+        this.payload.criteria.appl_ids = uniqueFlat<number>(id, ids);
         return this;
     }
     
@@ -63,7 +81,7 @@ export class ProjectsQueryBuilder {
      * 
      */
     congDists(congDist: CongDist, ...congDists: CongDist[]): this {
-        this.payload.criteria.cong_dists = [congDist, ...congDists];
+        this.payload.criteria.cong_dists = uniqueFlat(congDist, congDists);
         return this;
     }
 
@@ -408,4 +426,12 @@ export class ProjectsQueryBuilder {
         }
         return this;
     }
+}
+
+function uniqueFlat<T>(...values: readonly (T | readonly T[])[]): T[] {
+    return [...new Set(
+        values.flatMap(value =>
+            Array.isArray(value) ? value : [value]
+        )
+    )];
 }
