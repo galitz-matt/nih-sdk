@@ -41,9 +41,9 @@ async function main() {
         block(
             "export const ActivityCodeGroup = {",
             Array.from(codeGroups, ([key, value]) => block(
-                toPascalCase(key) + ": {",
-                [...value].map(code => line(`${code}: "${code}",`)),
-                "},"
+                toPascalCase(key) + ": [",
+                [...value].map(code => line(`"${code}",`)),
+                "],"
             )),
             "} as const"
         ),
