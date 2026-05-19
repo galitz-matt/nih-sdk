@@ -44,7 +44,7 @@ export class ProjectsQueryBuilder {
      * .activityCodes(ActivityCode.AY2, ActivityCodeGroup.Construction)
      * ```
      */
-    activityCodes(code: ActivityCode | ActivityCodeGroup, codes: (ActivityCode | ActivityCodeGroup)[]) {
+    activityCodes(code: ActivityCode | ActivityCodeGroup, ...codes: (ActivityCode | ActivityCodeGroup)[]) {
         const activityCodes = uniqueFlat<ActivityCode>(code, ...codes);
         this.payload.criteria.activity_codes = activityCodes;
     }
