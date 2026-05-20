@@ -2,7 +2,7 @@ import { DomainError } from "../errors";
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
-import type { ProjectsInput } from "../types/model/projects-input.model"
+import type { ProjectNumSplit, ProjectsInput } from "../types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
@@ -378,15 +378,49 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by core project number(s)
+     * Filter projects by their grant numbers
      * 
      * @param nums - core project number(s), maximum of 1000 values can be passed
      * 
      * This identifier is not specific to any particular year of the project. 
      * It consists of the project activity code, administering IC, and serial number (a concatenation of Activity, Administering_IC, and Serial_Number).
+     * 
+     * The wildcard asterik "*" can be used to match zero or more characters.
+     * It is not recommended to use the wildcard at the beginning of the text
      */
-    projectNums(num: string, ...nums: string[]): this {
+    grantNumbers(num: string, ...nums: string[]): this {
         this.payload.criteria.project_nums = [num, ...nums];
+        return this;
+    }
+
+    /**
+     * Filter projects by segments of their grant number
+     * 
+     * @param input - project num split object
+     * - appl_type_code: application type code
+     * - activity_code: activity code
+     * - ic_code: funding institute code
+     * - serial_num: 6 digit serial number
+     * - support_year: 2 digit support year
+     * - full_support_year: 4 digit support year
+     * - suffix_code: suffix code
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .partialGrantNumber({
+     *  appl_type_code: ApplicationTypeCode.New,
+     *  activity_code: "R37",
+     *  ic_code: IcCode.NationalEyeInstitute,
+     *  serial_num: 123456,
+     *  support_year: 20,
+     *  full_support_year: 2020,
+     *  suffix_code: "A1"
+     * })
+     * ```
+     */
+    partialGrantNumber(input: ProjectNumSplit): this {
+        this.payload.criteria.project_num_split = input;
         return this;
     }
 
