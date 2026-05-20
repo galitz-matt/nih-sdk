@@ -113,7 +113,7 @@ export type ProjectNumSplit = {
     appl_type_code?: ApplicationTypeCode;
     activity_code?: ActivityCode;
     ic_code?: IcCode;
-    serial_num?: SixDigit;
+    serial_num?: string;
     support_year?: TwoDigit;
     full_support_year?: FourDigit;
     suffix_code?: SuffixCode; 
