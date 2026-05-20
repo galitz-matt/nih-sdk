@@ -13,7 +13,7 @@ export class ProjectsQueryValidator {
         this.validateFields(payload.include_fields, payload.exclude_fields);
         this.validateLimit(payload.limit);
         this.validateOffset(payload.offset);
-        this.validateProjectNums(payload.criteria.project_nums);
+        this.validateGrantNumbers(payload.criteria.project_nums);
         this.validateSpendingCategories(payload.criteria.spending_categories, payload.criteria.fiscal_years);
     }
 
@@ -80,7 +80,7 @@ export class ProjectsQueryValidator {
         }
     }
 
-    static validateProjectNums(nums: string[] | undefined): void {
+    static validateGrantNumbers(nums: string[] | undefined): void {
         if (!nums) return;
 
         if (nums.length > 1000) {
