@@ -100,6 +100,14 @@ export type SpendingCategoriesCriteria = {
     match_all: boolean
 }
 
+export type SuffixCode =
+    | `A${number}`
+    | `S${number}`
+    | `X${number}`
+    | `P${number}`
+    | `D${number}`
+    | string;
+
 export type ProjectNumSplit = {
     appl_type_code?: ApplicationTypeCode;
     activity_code?: ActivityCode;
@@ -107,7 +115,7 @@ export type ProjectNumSplit = {
     serial_num?: string;
     support_year?: string;
     full_support_year?: string;
-    suffix_code?: string; 
+    suffix_code?: SuffixCode; 
 }
 
 export type NameCriteria = {
