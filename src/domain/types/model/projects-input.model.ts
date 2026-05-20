@@ -1,7 +1,10 @@
+import type { ActivityCode } from "../enum/activity-code";
+import type { ApplicationTypeCode } from "../enum/application-type-code";
 import type { CongDist } from "../enum/cong-dist";
 import type { DeptType } from "../enum/dept-type";
 import type { Field } from "../enum/field";
 import type { FiscalYear } from "../enum/fiscal-year";
+import type { IcCode } from "../enum/ic-code";
 import type { OrgCountry } from "../enum/org-country";
 import type { OrgState } from "../enum/org-state";
 import type { OrgType } from "../enum/org-type";
@@ -98,9 +101,9 @@ export type SpendingCategoriesCriteria = {
 }
 
 export type ProjectNumSplit = {
-    appl_type_code?: string;
-    activity_code?: string;
-    ic_code?: string;
+    appl_type_code?: ApplicationTypeCode;
+    activity_code?: ActivityCode;
+    ic_code?: IcCode;
     serial_num?: string;
     support_year?: string;
     full_support_year?: string;
