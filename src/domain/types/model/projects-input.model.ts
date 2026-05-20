@@ -10,6 +10,7 @@ import type { OrgState } from "../enum/org-state";
 import type { OrgType } from "../enum/org-type";
 import type { SortOrder } from "../enum/sort-order";
 import type { SpendingCategory } from "../enum/spending-category";
+import type { FourDigit, SixDigit, TwoDigit } from "../utils/digits";
 
 export type ProjectsInput = {
     criteria: {
@@ -112,9 +113,9 @@ export type ProjectNumSplit = {
     appl_type_code?: ApplicationTypeCode;
     activity_code?: ActivityCode;
     ic_code?: IcCode;
-    serial_num?: string;
-    support_year?: string;
-    full_support_year?: string;
+    serial_num?: SixDigit;
+    support_year?: TwoDigit;
+    full_support_year?: FourDigit;
     suffix_code?: SuffixCode; 
 }
 
