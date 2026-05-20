@@ -1,0 +1,28 @@
+export const IcCode = {
+  JohnEFogartyInternationalCenter: "TW",
+  NationalCenterForAdvancingTranslationalSciencesNCATS: "TR",
+  NationalCenterForComplementaryAndIntegrativeHealth: "AT",
+  NationalCancerInstitute: "CA",
+  NationalEyeInstitute: "EY",
+  NationalHumanGenomeResearchInstitute: "HG",
+  NationalHeartLungAndBloodInstitute: "HL",
+  NationalInstituteOnAging: "AG",
+  NationalInstituteOnAlcoholAbuseAndAlcoholism: "AA",
+  NationalInstituteOfAllergyAndInfectiousDiseases: "AI",
+  NationalInstituteOfArthritisAndMusculoskeletalAndSkinDiseases: "AR",
+  NationalInstituteOfBiomedicalImagingAndBioengineering: "EB",
+  EuniceKennedyShriverNationalInstituteOfChildHealthAndHumanDevelopment: "HD",
+  NationalInstituteOnDrugAbuse: "DA",
+  NationalInstituteOnDeafnessAndOtherCommunicationDisorders: "DC",
+  NationalInstituteOfDentalAndCraniofacialResearch: "DE",
+  NationalInstituteOfDiabetesAndDigestiveAndKidneyDiseases: "DK",
+  NationalInstituteOfEnvironmentalHealthSciences: "ES",
+  NationalInstituteOfGeneralMedicalSciences: "GM",
+  NationalInstituteOfMentalHealth: "MH",
+  NationalInstituteOnMinorityHealthAndHealthDisparities: "MD",
+  NationalInstituteOfNeurologicalDisordersAndStroke: "NS",
+  NationalInstituteOfNursingResearch: "NR",
+  NationalLibraryOfMedicine: "LM",
+} as const;
+
+export type IcCode = typeof IcCode[keyof typeof IcCode];
