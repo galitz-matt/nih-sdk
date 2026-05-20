@@ -1,0 +1,1 @@
+const NIH_GRANT_NUMBER_REGEX = /^(\d)([A-Z]\d{2}|[A-Z]{2,3}\d{2})([A-Z]{2})(\d{6})(\d{2})([A-Z]\d+)?$/;
