@@ -30,8 +30,8 @@ export type ProjectsInput = {
         appl_ids?: number[];
         project_num_split?: ProjectNumSplit; 
         agencies?: Agency[];
-        is_agency_admin?: boolean // TODO: add builder method
-        is_agency_funding?: boolean; // TODO: add builder method
+        is_agency_admin?: boolean
+        is_agency_funding?: boolean;
         activity_codes?: string[];
         cooperative_agreement_codes?: string[]; // TODO: add builder method
         award_types?: string[]; // TODO: add builder method
