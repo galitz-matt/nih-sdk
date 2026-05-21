@@ -1,4 +1,5 @@
 import type { ActivityCode } from "../enum/activity-code";
+import type { Agency } from "../enum/agency";
 import type { ApplicationTypeCode } from "../enum/application-type-code";
 import type { CongDist } from "../enum/cong-dist";
 import type { DeptType } from "../enum/dept-type";
@@ -28,7 +29,7 @@ export type ProjectsInput = {
         project_nums?: string[];
         appl_ids?: number[];
         project_num_split?: ProjectNumSplit; 
-        agencies?: string[]; // TODO: add builder method
+        agencies?: Agency[];
         is_agency_admin?: boolean // TODO: add builder method
         is_agency_funding?: boolean; // TODO: add builder method
         activity_codes?: string[];
