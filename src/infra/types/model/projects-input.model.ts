@@ -1,17 +1,17 @@
-import type { ActivityCode } from "../enum/activity-code";
-import type { Agency } from "../enum/agency";
-import type { ApplicationTypeCode } from "../enum/application-type-code";
-import type { CongDist } from "../enum/cong-dist";
-import type { DeptType } from "../enum/dept-type";
-import type { Field } from "../enum/field";
-import type { FiscalYear } from "../enum/fiscal-year";
-import type { IcCode } from "../enum/ic-code";
-import type { OrgCountry } from "../enum/org-country";
-import type { OrgState } from "../enum/org-state";
-import type { OrgType } from "../enum/org-type";
-import type { SortOrder } from "../enum/sort-order";
-import type { SpendingCategory } from "../enum/spending-category";
-import type { FourDigit, SixDigit, TwoDigit } from "../utils/digits";
+import type { ActivityCode } from "../../../domain/types/enum/activity-code";
+import type { Agency } from "../../../domain/types/enum/agency";
+import type { ApplicationTypeCode } from "../../../domain/types/enum/application-type-code";
+import type { CongDist } from "../../../domain/types/enum/cong-dist";
+import type { DeptType } from "../../../domain/types/enum/dept-type";
+import type { Field } from "../../../domain/types/enum/field";
+import type { FiscalYear } from "../../../domain/types/enum/fiscal-year";
+import type { IcCode } from "../../../domain/types/enum/ic-code";
+import type { OrgCountry } from "../../../domain/types/enum/org-country";
+import type { OrgState } from "../../../domain/types/enum/org-state";
+import type { OrgType } from "../../../domain/types/enum/org-type";
+import type { SortOrder } from "../../../domain/types/enum/sort-order";
+import type { SpendingCategory } from "../../../domain/types/enum/spending-category";
+import type { FourDigit, TwoDigit } from "../../../domain/types/utils/digits";
 
 export type ProjectsInput = {
     criteria: {
