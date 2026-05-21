@@ -2,7 +2,7 @@ import { DomainError } from "../errors";
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
-import type { ProjectNumSplit, ProjectsInput } from "../types/model/projects-input.model"
+import type { ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
@@ -16,6 +16,9 @@ import { CongDist } from "../types/enum/cong-dist";
 import { ProjectsQueryValidator } from "../validator/projects-query.validator";
 import { ActivityCode, ActivityCodeGroup } from "../types/enum/activity-code";
 import { Agency } from "../types/enum/agency";
+import type { AgencyIr } from "../types/ir/agency.ir";
+import { uniqueNonEmpty } from "../utils/unique";
+import { uniqueFlat } from "../utils/unique";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -51,13 +54,17 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by agency responsible for the administering of a research grant, project, or contract
+     * Filter projects by the agencies respondible for the administering of a research grant, project, or contract
      * 
-     * @param agency - first agency
-     * @param agencies - rest of agencies
+     * @param input - AgencyIr object
+     * 
+     * - agencies: list of agency codes, must be non-empty
+     * - isAdmin: indicates that provided agencies are managing the grant, defaults to true
+     * - isFunding: indicates that provided agencies are funding the project, defaults to false
+     * 
      */
-    agencies(agency: Agency, ...agencies: Agency[]): this {
-        this.payload.criteria.agencies = uniqueFlat<Agency>(agency, ...agencies);
+    agencies(input: AgencyIr): this {
+        input.agencies = uniqueNonEmpty<Agency>(input.agencies)
         return this;
     }
 
@@ -472,12 +479,4 @@ export class ProjectsQueryBuilder {
         }
         return this;
     }
-}
-
-function uniqueFlat<T>(...values: readonly (T | readonly T[])[]): T[] {
-    return [...new Set(
-        values.flatMap(value =>
-            Array.isArray(value) ? value : [value]
-        )
-    )];
 }
