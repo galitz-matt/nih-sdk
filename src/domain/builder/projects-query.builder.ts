@@ -15,6 +15,7 @@ import type { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist } from "../types/enum/cong-dist";
 import { ProjectsQueryValidator } from "../validator/projects-query.validator";
 import { ActivityCode, ActivityCodeGroup } from "../types/enum/activity-code";
+import { Agency } from "../types/enum/agency";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -46,6 +47,17 @@ export class ProjectsQueryBuilder {
      */
     activityCodes(code: ActivityCode | ActivityCodeGroup, ...codes: (ActivityCode | ActivityCodeGroup)[]): this {
         this.payload.criteria.activity_codes = uniqueFlat<ActivityCode>(code, ...codes);
+        return this;
+    }
+
+    /**
+     * Filter projects by agency responsible for the administering of a research grant, project, or contract
+     * 
+     * @param agency - first agency
+     * @param agencies - rest of agencies
+     */
+    agencies(agency: Agency, ...agencies: Agency[]): this {
+        this.payload.criteria.agencies = uniqueFlat<Agency>(agency, ...agencies);
         return this;
     }
 
@@ -219,7 +231,7 @@ export class ProjectsQueryBuilder {
      * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
      */
     orgCities(city: string, ...cities: string[]): this {
-        this.payload.criteria.org_cities = [city, ...cities];
+        this.payload.criteria.org_cities = uniqueFlat<string>(city, ...cities);
         return this;
     }
 
@@ -240,7 +252,7 @@ export class ProjectsQueryBuilder {
      * Filters projects conducted by organization based in New York state OR New Jersey
      */
     orgStates(state: OrgState, ...states: OrgState[]): this {
-        this.payload.criteria.org_states = [state, ...states];
+        this.payload.criteria.org_states = uniqueFlat<OrgState>(state, ...states);
         return this;
     }
 
