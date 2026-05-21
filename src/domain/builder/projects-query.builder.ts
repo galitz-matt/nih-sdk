@@ -62,6 +62,15 @@ export class ProjectsQueryBuilder {
      * - isAdmin: indicates that provided agencies are managing the grant, defaults to true
      * - isFunding: indicates that provided agencies are funding the project, defaults to false
      * 
+     * Example Usage:
+     * ```
+     * nih.projects.query()
+     * .agencies({
+     *  agencies: Agency.NationalInstitutesOfHealth,
+     *  isAdmin: false,
+     *  isFunding: true
+     * })
+     * ```
      */
     agencies(input: AgencyIr): this {
         input.agencies = uniqueNonEmpty<Agency>(input.agencies)
