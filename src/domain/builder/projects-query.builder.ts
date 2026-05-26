@@ -9,15 +9,17 @@ import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
 import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
 import type { SortOrder } from "../types/enum/sort-order";
 import type { FiscalYear } from "../types/enum/fiscal-year";
-import type { OrgType } from "../types/enum/org-type";
-import type { OrgCountry } from "../types/enum/org-country";
-import type { SpendingCategory } from "../types/enum/spending-category";
+import { OrgType } from "../types/enum/org-type";
+import { OrgCountry } from "../types/enum/org-country";
+import { SpendingCategory } from "../types/enum/spending-category";
 import { CongDist } from "../types/enum/cong-dist";
 import { ProjectsQueryValidator } from "../validator/projects-query.validator";
 import { ActivityCode, ActivityCodeGroup } from "../types/enum/activity-code";
 import { Agency } from "../types/enum/agency";
 import type { AgencyIr } from "../types/ir/agency.ir";
 import { unique, uniqueFlat } from "../utils/unique";
+import type { NonEmptyArray } from "../types/utils/non-empty";
+import type { SpendingCategoryIr } from "../types/ir/spending-category.ir";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -110,7 +112,7 @@ export class ProjectsQueryBuilder {
      * 
      */
     congDists(congDist: CongDist, ...congDists: CongDist[]): this {
-        this.payload.criteria.cong_dists = uniqueFlat(congDist, ...congDists);
+        this.payload.criteria.cong_dists = unique([congDist, ...congDists]);
         return this;
     }
 
@@ -248,7 +250,7 @@ export class ProjectsQueryBuilder {
      * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
      */
     orgCities(city: string, ...cities: string[]): this {
-        this.payload.criteria.org_cities = uniqueFlat<string>(city, ...cities);
+        this.payload.criteria.org_cities = unique<string>([city, ...cities]);
         return this;
     }
 
@@ -269,7 +271,7 @@ export class ProjectsQueryBuilder {
      * Filters projects conducted by organization based in New York state OR New Jersey
      */
     orgStates(state: OrgState, ...states: OrgState[]): this {
-        this.payload.criteria.org_states = uniqueFlat<OrgState>(state, ...states);
+        this.payload.criteria.org_states = unique<OrgState>([state, ...states]);
         return this;
     }
 
@@ -289,7 +291,7 @@ export class ProjectsQueryBuilder {
      * Filters projects conducted by organization based in the United States
      */
     orgCountries(country: OrgCountry, ...countries: OrgCountry[]): this {
-        this.payload.criteria.org_countries = [country, ...countries];
+        this.payload.criteria.org_countries = unique<OrgCountry>([country, ...countries]);
         return this;
     }
 
@@ -309,7 +311,7 @@ export class ProjectsQueryBuilder {
      * Filters projects conducted by schools of engineering
      */
     orgTypes(type: OrgType, ...types: OrgType[]): this {
-        this.payload.criteria.organization_type = [type, ...types];
+        this.payload.criteria.organization_type = unique<OrgType>([type, ...types]);
         return this;
     }
 
@@ -344,6 +346,7 @@ export class ProjectsQueryBuilder {
      * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
     piNames(name: NameCriteriaIrBuilder, ...names: NameCriteriaIrBuilder[]): this {
+        // TODO: do not use builder
         const allNames = [name, ...names];
         this.payload.criteria.pi_names = allNames.map(n =>
             IrToModelMapper.toNameCriteria(n.build())
@@ -384,6 +387,7 @@ export class ProjectsQueryBuilder {
      * matches projects with a PO with first name containing "John" AND last name containing "Smith"
      */
     poNames(name: NameCriteriaIrBuilder, ...names: NameCriteriaIrBuilder[]): this {
+        // TODO: do not use builder
         const allNames = [name, ...names];
         this.payload.criteria.po_names = allNames.map(n =>
             IrToModelMapper.toNameCriteria(n.build())
@@ -402,7 +406,7 @@ export class ProjectsQueryBuilder {
      * @param ids - PI Profile IDs
      */
     piProfileIds(id: number, ...ids: number[]): this {
-        this.payload.criteria.pi_profile_ids = [id, ...ids];
+        this.payload.criteria.pi_profile_ids = unique<number>([id, ...ids]);
         return this;
     }
 
@@ -418,7 +422,7 @@ export class ProjectsQueryBuilder {
      * It is not recommended to use the wildcard at the beginning of the text
      */
     grantNumbers(num: string, ...nums: string[]): this {
-        this.payload.criteria.project_nums = [num, ...nums];
+        this.payload.criteria.project_nums = unique<string>([num, ...nums]);
         return this;
     }
 
@@ -458,11 +462,8 @@ export class ProjectsQueryBuilder {
      * Available for fiscal years 2008 and later.
      * 
      * @param input - spending categories and filtering behavior, must include at least one spending category value
-     * 
-     * If match_all is true, filter behaves like AND on spending category values
-     * otherwise, filter behaves like OR on spending category values
-     * 
-     * match_all is false by default
+     * - values: spending category values
+     * - match_all: if true filter behaves like AND on spending category values otherwise, filter behaves like OR on spending category values. False by default
      * 
      * Example usage:
      * ```
@@ -475,16 +476,9 @@ export class ProjectsQueryBuilder {
      * 
      * Query results will consist of projects with ALL spending categories
      */
-    spendingCategories(input: {
-        values: SpendingCategory[];
-        matchAll?: boolean;
-    }): this {
-        if (input.values.length === 0) {
-            throw new DomainError("Empty spendingCategories: 'values' cannot be empty");
-        }
-
+    spendingCategories(input: SpendingCategoryIr): this {
         this.payload.criteria.spending_categories = {
-            values: input.values,
+            values: unique<SpendingCategory>(input.values),
             match_all: input.matchAll ?? false
         }
         return this;
