@@ -17,8 +17,7 @@ import { ProjectsQueryValidator } from "../validator/projects-query.validator";
 import { ActivityCode, ActivityCodeGroup } from "../types/enum/activity-code";
 import { Agency } from "../types/enum/agency";
 import type { AgencyIr } from "../types/ir/agency.ir";
-import { uniqueNonEmpty } from "../utils/unique";
-import { uniqueFlat } from "../utils/unique";
+import { unique, uniqueFlat } from "../utils/unique";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -73,7 +72,9 @@ export class ProjectsQueryBuilder {
      * ```
      */
     agencies(input: AgencyIr): this {
-        input.agencies = uniqueNonEmpty<Agency>(input.agencies)
+        this.payload.criteria.agencies = unique<Agency>(input.agencies);
+        this.payload.criteria.is_agency_admin = input.isAdministering ?? true;
+        this.payload.criteria.is_agency_funding = input.isFunding ?? false;
         return this;
     }
 
@@ -87,7 +88,7 @@ export class ProjectsQueryBuilder {
      * 
      */
     applIds(id: number, ...ids: number[]): this {
-        this.payload.criteria.appl_ids = uniqueFlat<number>(id, ...ids);
+        this.payload.criteria.appl_ids = unique<number>([id, ...ids]);
         return this;
     }
     
