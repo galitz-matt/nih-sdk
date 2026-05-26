@@ -41,6 +41,7 @@ async function main() {
     return `   ${safeKey}: "${value}",`;
   });
 
+  // TODO: rewrite w/ ts-struct
   const output = `export const OrgCountry = {
 ${lines.join("\n")}
 } as const;

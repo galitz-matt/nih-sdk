@@ -31,6 +31,7 @@ async function main() {
         return `    ${key}: "${value}",`
     });
 
+    // TODO: rewrite w/ ts-struct
     const output = `export const DeptType = {
 ${lines.join("\n")}
 } as const;

@@ -31,6 +31,7 @@ async function main() {
         return `    ${safeKey.toUpperCase()}: ${key},`;
     })
 
+    // TODO: rewrite w/ ts-struct
     const output = `export const FiscalYear = {
 ${lines.join("\n")}
 } as const;

@@ -30,6 +30,7 @@ async function main() {
 
     const lines = unique.map(e => `   ${e.key}: ${e.value},`);
 
+    // TODO: rewrite w/ ts-struct
     const output = `export const SpendingCategory = {
 ${lines.join("\n")}
 } as const;

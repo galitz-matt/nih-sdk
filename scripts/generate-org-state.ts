@@ -35,6 +35,7 @@ async function main() {
 
   const lines = unique.map(e => `   ${e.key}: "${e.value}",`);
 
+  // TODO: rewrite with ts-struct
   const output = `export const OrgState = {
 ${lines.join("\n")}
 } as const;
