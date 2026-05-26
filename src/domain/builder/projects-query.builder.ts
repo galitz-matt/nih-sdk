@@ -20,6 +20,7 @@ import type { AgencyIr } from "../types/ir/agency.ir";
 import { unique, uniqueFlat } from "../utils/unique";
 import type { NonEmptyArray } from "../types/utils/non-empty";
 import type { SpendingCategoryIr } from "../types/ir/spending-category.ir";
+import type { CoopAgreementCode } from "../types/enum/coop-agreement-code";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -99,7 +100,8 @@ export class ProjectsQueryBuilder {
      * Must call orgStates() before congDists()
      * orgStates() arguments must contain OrgStates associated with provided CongDists
      * 
-     * @param congDists - constitutional districts
+     * @param congDist - first constitutional district
+     * @param congDists - rest of constitutional districts
      * 
      * Example usage:
      * ```
@@ -113,6 +115,24 @@ export class ProjectsQueryBuilder {
      */
     congDists(congDist: CongDist, ...congDists: CongDist[]): this {
         this.payload.criteria.cong_dists = unique([congDist, ...congDists]);
+        return this;
+    }
+
+    /**
+     * Filter projects by cooperative agreement codes
+     * 
+     * @param code - first cooperative agreement code
+     * @param codes - rest of cooperative agreement codes
+     * 
+     * See {@link CoopAgreementCode} for list of valid arguments
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .coopAgreementCodes(CoopAgreementCode.U03, CoopAgreementCode.UE2)
+     */
+    coopAgreementCodes(code: CoopAgreementCode, ...codes: CoopAgreementCode[]): this {
+        this.payload.criteria.cooperative_agreement_codes = unique([code, ...codes]);
         return this;
     }
 
