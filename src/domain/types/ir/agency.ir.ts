@@ -3,6 +3,6 @@ import type { NonEmptyArray } from "../utils/non-empty"
 
 export type AgencyIr = {
     agencies: NonEmptyArray<Agency>,
-    isAdministering: boolean,
-    isFunding: boolean
+    isAdministering?: boolean,
+    isFunding?: boolean
 }
