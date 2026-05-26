@@ -44,6 +44,8 @@ export class ProjectsQueryBuilder {
      * @param code - first (group of) activity code
      * @param codes - rest of (group(s) of) activity code(s)
      * 
+     * See {@link ActivityCode} and {@link ActivityCodeGroup} for list of valid arguments
+     * 
      * Example usage:
      * ```
      * nih.projects.query()
@@ -63,6 +65,8 @@ export class ProjectsQueryBuilder {
      * - agencies: list of agency codes, must be non-empty
      * - isAdmin: indicates that provided agencies are managing the grant, defaults to true
      * - isFunding: indicates that provided agencies are funding the project, defaults to false
+     * 
+     * See {@link Agency} for list of valid agencies
      * 
      * Example Usage:
      * ```
@@ -102,6 +106,8 @@ export class ProjectsQueryBuilder {
      * 
      * @param congDist - first constitutional district
      * @param congDists - rest of constitutional districts
+     * 
+     * See {@link CongDist} for list of valid arguments
      * 
      * Example usage:
      * ```
@@ -147,7 +153,8 @@ export class ProjectsQueryBuilder {
 
     /**
      * Order search results in ascending or descending order
-     * @param order 
+     * @param order - sorting order
+     * 
      */
     setOrder(order: SortOrder): this {
         this.payload.sort_order = order;
@@ -175,6 +182,8 @@ export class ProjectsQueryBuilder {
     /**
      * Include these fields in the results. If null then all fields are included by default. If empty, then no fields are included.
      * @param fields - fields to include in results
+     * 
+     * See {@link Field} for list of valid arguments
      */
     includeFields(field: Field, ...fields: Field[]): this {
         this.payload.include_fields = [field, ...fields];
@@ -184,6 +193,8 @@ export class ProjectsQueryBuilder {
     /**
      * Exclude these fields in the results. If null or empty, no fields are excluded.
      * @param fields - fields to exclude from resutls
+     * 
+     * See {@link Field} for list of valid arguments
      */
     excludeFields(field: Field, ...fields: Field[]): this {
         this.payload.exclude_fields = [field, ...fields];
@@ -194,6 +205,8 @@ export class ProjectsQueryBuilder {
      * Filter results by fiscal year appropriation from which project funds were obligated
      * 
      * @param values - FiscalYear value or number representing year
+     * 
+     * See {@link FiscalYear} for list of valid arguments
     */
     fiscalYears(year: FiscalYear, ...years: FiscalYear[]): this {
         this.payload.criteria.fiscal_years = [year, ...years];
@@ -279,6 +292,8 @@ export class ProjectsQueryBuilder {
      * 
      * @param states - US States & Territories (abbreviated)
      * 
+     * See {@link OrgState} for list of valid arguments
+     * 
      * Example Usage:
      * ```
      * nih.projects.query()
@@ -300,6 +315,8 @@ export class ProjectsQueryBuilder {
      * 
      * @param countries - Countries
      * 
+     * See {@link OrgCountry} for list of valid arguments
+     * 
      * Example usage:
      * ```
      * nih.projects.query()
@@ -319,6 +336,8 @@ export class ProjectsQueryBuilder {
      * Filter projects conducted by specified organization types
      * 
      * @param types - organization types
+     * 
+     * See {@link OrgType} for list of valid arguments
      * 
      * Example usage:
      * ```
@@ -484,6 +503,8 @@ export class ProjectsQueryBuilder {
      * @param input - spending categories and filtering behavior, must include at least one spending category value
      * - values: spending category values
      * - match_all: if true filter behaves like AND on spending category values otherwise, filter behaves like OR on spending category values. False by default
+     * 
+     * See {@link SpendingCategory} for list of valid `values` arguments
      * 
      * Example usage:
      * ```
