@@ -19,6 +19,7 @@ import type { AgencyIr } from "../types/ir/agency.ir";
 import { unique, uniqueFlat } from "../utils/unique";
 import type { SpendingCategoryIr } from "../types/ir/spending-category.ir";
 import type { CoopAgreementCode } from "../types/enum/coop-agreement-code";
+import { AwardType } from "../types/enum/award-type";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -94,6 +95,25 @@ export class ProjectsQueryBuilder {
      */
     applIds(id: number, ...ids: number[]): this {
         this.payload.criteria.appl_ids = unique<number>([id, ...ids]);
+        return this;
+    }
+
+    /**
+     * Filter projects by type of award received
+     * 
+     * @param type - first award type
+     * @param types - rest of award types
+     * 
+     * See {@link AwardType} for list of valid arguments
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .awardTypes(AwardType.NewApplication, AwardType.ChangeOfInstituteOrDivision)
+     * ```
+     */
+    awardTypes(type: AwardType, ...types: AwardType[]): this {
+        this.payload.criteria.award_types = unique<AwardType>([type, ...types]);
         return this;
     }
     
