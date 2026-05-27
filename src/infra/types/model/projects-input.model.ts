@@ -1,6 +1,7 @@
 import type { ActivityCode } from "../../../domain/types/enum/activity-code";
 import type { Agency } from "../../../domain/types/enum/agency";
 import type { ApplicationTypeCode } from "../../../domain/types/enum/application-type-code";
+import type { AwardType } from "../../../domain/types/enum/award-type";
 import type { CongDist } from "../../../domain/types/enum/cong-dist";
 import type { DeptType } from "../../../domain/types/enum/dept-type";
 import type { Field } from "../../../domain/types/enum/field";
@@ -34,7 +35,7 @@ export type ProjectsInput = {
         is_agency_funding?: boolean;
         activity_codes?: string[];
         cooperative_agreement_codes?: string[];
-        award_types?: string[]; // TODO: add builder method
+        award_types?: AwardType[];
         dept_types?: DeptType[]; // TODO: add builder method
         cong_dists?: CongDist[];
         foa?: string[]; // TODO: add builder method
