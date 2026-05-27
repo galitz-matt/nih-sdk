@@ -56,7 +56,7 @@ async function main() {
 
     Bun.write(outputPath, output);
 
-    console.log(`Generated ${data.length} award types`)
+    console.log(`Generated ${data.length} award types.`)
 }
 
 main();
