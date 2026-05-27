@@ -20,6 +20,7 @@ import { unique, uniqueFlat } from "../utils/unique";
 import type { SpendingCategoryIr } from "../types/ir/spending-category.ir";
 import type { CoopAgreementCode } from "../types/enum/coop-agreement-code";
 import { AwardType } from "../types/enum/award-type";
+import { DeptType } from "../types/enum/dept-type";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -157,6 +158,25 @@ export class ProjectsQueryBuilder {
      */
     coopAgreementCodes(code: CoopAgreementCode, ...codes: CoopAgreementCode[]): this {
         this.payload.criteria.cooperative_agreement_codes = unique([code, ...codes]);
+        return this;
+    }
+
+    /**
+     * Filter projects by the departmental affiliation of the PI for a project
+     * 
+     * @param type - first dept type
+     * @param types - rest of dept types
+     * 
+     * See {@link DeptType} for list of valid arguments
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .deptTypes(DeptType.Administration, DeptType.Biochemistry)
+     * ```
+     */
+    deptTypes(type: DeptType, ...types: DeptType[]): this {
+        this.payload.criteria.dept_types = uniqueFlat<DeptType>(type, types);
         return this;
     }
 
