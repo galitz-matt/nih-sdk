@@ -1,4 +1,3 @@
-import { DomainError } from "../errors";
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
@@ -18,7 +17,6 @@ import { ActivityCode, ActivityCodeGroup } from "../types/enum/activity-code";
 import { Agency } from "../types/enum/agency";
 import type { AgencyIr } from "../types/ir/agency.ir";
 import { unique, uniqueFlat } from "../utils/unique";
-import type { NonEmptyArray } from "../types/utils/non-empty";
 import type { SpendingCategoryIr } from "../types/ir/spending-category.ir";
 import type { CoopAgreementCode } from "../types/enum/coop-agreement-code";
 
