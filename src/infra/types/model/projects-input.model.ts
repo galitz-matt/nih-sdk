@@ -36,7 +36,7 @@ export type ProjectsInput = {
         activity_codes?: string[];
         cooperative_agreement_codes?: string[];
         award_types?: AwardType[];
-        dept_types?: DeptType[]; // TODO: add builder method
+        dept_types?: DeptType[];
         cong_dists?: CongDist[];
         foa?: string[]; // TODO: add builder method
         opportunity_numbers?: string[]; // TODO: add builder method
