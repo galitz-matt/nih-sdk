@@ -33,7 +33,7 @@ export type ProjectsInput = {
         is_agency_admin?: boolean
         is_agency_funding?: boolean;
         activity_codes?: string[];
-        cooperative_agreement_codes?: string[]; // TODO: add builder method
+        cooperative_agreement_codes?: string[];
         award_types?: string[]; // TODO: add builder method
         dept_types?: DeptType[]; // TODO: add builder method
         cong_dists?: CongDist[];
