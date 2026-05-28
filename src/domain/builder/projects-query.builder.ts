@@ -203,6 +203,13 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    /**
+     * Filter projects by their funding opportunity announcement numbers
+     * This method has the same filtering behavior as {@link opportunityNumbers}
+     * 
+     * @param num - first funding opportunity announcement number
+     * @param nums - rest of funding opportunity announcement numbers
+     */
     fundingOpportunityAnnouncements(num: string, ...nums: string[]): this {
         this.payload.criteria.foa = uniqueFlat<string>(num, nums);
         return this;
