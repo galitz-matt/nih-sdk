@@ -38,7 +38,7 @@ export type ProjectsInput = {
         award_types?: AwardType[];
         dept_types?: DeptType[];
         cong_dists?: CongDist[];
-        foa?: string[]; // TODO: add builder method
+        foa?: string[];
         opportunity_numbers?: string[]; // TODO: add builder method
         spending_categories?: SpendingCategoriesCriteria; 
         project_start_date?: DateRange; // TODO: add builder method
