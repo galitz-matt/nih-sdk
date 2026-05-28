@@ -204,6 +204,37 @@ export class ProjectsQueryBuilder {
     }
 
     /**
+     * Filter projects starting on or before the provided date
+     * If used with {@link toStartDate}, filters projects with start dates within from-to date range
+     * 
+     * @param month - project start date month
+     * @param day - project start date day
+     * @param year - project start day year
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .fromStartDate(6, 3, 2007)
+     * ```
+     * Filters projects starting on or before 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromStartDate(6, 3, 2007)
+     * .toStartDate(3, 10, 2010)
+     * ```
+     * Filters projects with start dates within the range, 6/3/2007-3/10/2010
+     */
+    fromStartDate(month: number, day: number, year: number): this {
+        const date = new Date(`${year}-${month}-${day}`);
+        this.payload.criteria.project_start_date = {
+            ...this.payload.criteria.project_start_date,
+            from_date: date
+        };
+        return this;
+    }
+
+    /**
      * Filter projects by their funding opportunity announcement numbers
      * This method has the same filtering behavior as {@link opportunityNumbers}
      * 
@@ -584,6 +615,37 @@ export class ProjectsQueryBuilder {
             values: unique<SpendingCategory>(input.values),
             match_all: input.matchAll ?? false
         }
+        return this;
+    }
+
+    /**
+     * Filter projects starting on or after the provided date
+     * If used with {@link fromStartDate}, filters projects with start dates within from-to date range
+     * 
+     * @param month - project start date month
+     * @param day - project start date day
+     * @param year - project start day year
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .toStartDate(6, 3, 2007)
+     * ```
+     * Filters projects starting on or after 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromStartDate(6, 3, 2007)
+     * .toStartDate(3, 10, 2010)
+     * ```
+     * Filters projects with start dates within the range, 6/3/2007-3/10/2010
+     */
+    toStartDate(month: number, day: number, year: number): this {
+        const date = new Date(`${year}-${month}-${day}`);
+        this.payload.criteria.project_start_date = {
+            ...this.payload.criteria.project_start_date,
+            to_date: date
+        };
         return this;
     }
 }
