@@ -180,6 +180,11 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    fundingOpportunityNumber(num: string, ...nums: string[]): this {
+        this.payload.criteria.foa = uniqueFlat<string>(num, nums);
+        return this;
+    }
+
     /**
      * Order search results based on how closely they match your specified search criteria (relevance)
      * @param sortByRelevance true/false
