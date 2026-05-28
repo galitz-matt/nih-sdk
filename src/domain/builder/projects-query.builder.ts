@@ -238,7 +238,9 @@ export class ProjectsQueryBuilder {
 
     /**
      * Include these fields in the results. If null then all fields are included by default. If empty, then no fields are included.
-     * @param fields - fields to include in results
+     * 
+     * @param field - first field to include in results
+     * @param fields - rest of fields to include in results
      * 
      * See {@link Field} for list of valid arguments
      */
@@ -262,6 +264,17 @@ export class ProjectsQueryBuilder {
      */
     offset(n: number): this {
         this.payload.offset = n;
+        return this;
+    }
+
+    /**
+     * Filter projects by the number of their funding opportunity announcement
+     * 
+     * @param num - first opportunity number
+     * @param nums - rest of opportunity numbers
+     */
+    opportunityNumbers(num: string, ...nums: string[]): this {
+        this.payload.criteria.opportunity_numbers = uniqueFlat<string>(num, nums);
         return this;
     }
 
