@@ -1,4 +1,4 @@
-import type { SortOrder } from "../enum/sort-order";
+import { SortOrder } from "../../../domain/types/enum/sort-order";
 
 export type ProjectsOutput = {
     meta: Meta;
