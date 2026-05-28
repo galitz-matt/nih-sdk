@@ -203,8 +203,7 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
-
-    fundingOpportunityNumber(num: string, ...nums: string[]): this {
+    fundingOpportunityAnnouncement(num: string, ...nums: string[]): this {
         this.payload.criteria.foa = uniqueFlat<string>(num, nums);
         return this;
     }
