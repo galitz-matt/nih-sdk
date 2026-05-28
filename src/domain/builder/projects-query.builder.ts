@@ -180,59 +180,6 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
-    fundingOpportunityNumber(num: string, ...nums: string[]): this {
-        this.payload.criteria.foa = uniqueFlat<string>(num, nums);
-        return this;
-    }
-
-    /**
-     * Order search results based on how closely they match your specified search criteria (relevance)
-     * @param sortByRelevance true/false
-     */
-    sortByRelevance(sortByRelevance: boolean): this {
-        this.payload.criteria.use_relevance = sortByRelevance;
-        return this;
-    }
-
-    /**
-     * Order search results in ascending or descending order
-     * @param order - sorting order
-     * 
-     */
-    setOrder(order: SortOrder): this {
-        this.payload.sort_order = order;
-        return this;
-    }
-
-    /**
-     * Set limit the on number of search results returned
-     * @param n - must be a positive integer less than or equal to 500 (default: 50)
-     */
-    limit(n: number): this {
-        this.payload.limit = n;
-        return this;
-    }
-
-    /**
-     * Set the starting counter for matching projects. Offset should not exceed total records count.
-     * @param n - must be a non-negative integer less than 15000
-     */
-    offset(n: number): this {
-        this.payload.offset = n;
-        return this;
-    }
-
-    /**
-     * Include these fields in the results. If null then all fields are included by default. If empty, then no fields are included.
-     * @param fields - fields to include in results
-     * 
-     * See {@link Field} for list of valid arguments
-     */
-    includeFields(field: Field, ...fields: Field[]): this {
-        this.payload.include_fields = [field, ...fields];
-        return this;
-    }
-
     /**
      * Exclude these fields in the results. If null or empty, no fields are excluded.
      * @param fields - fields to exclude from resutls
@@ -256,6 +203,28 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+
+    fundingOpportunityNumber(num: string, ...nums: string[]): this {
+        this.payload.criteria.foa = uniqueFlat<string>(num, nums);
+        return this;
+    }
+
+    /**
+     * Filter projects by their grant numbers
+     * 
+     * @param nums - core project number(s), maximum of 1000 values can be passed
+     * 
+     * This identifier is not specific to any particular year of the project. 
+     * It consists of the project activity code, administering IC, and serial number (a concatenation of Activity, Administering_IC, and Serial_Number).
+     * 
+     * The wildcard asterik "*" can be used to match zero or more characters.
+     * It is not recommended to use the wildcard at the beginning of the text
+     */
+    grantNumbers(num: string, ...nums: string[]): this {
+        this.payload.criteria.project_nums = unique<string>([num, ...nums]);
+        return this;
+    }
+
     /**
      * Include active projects in results.
      * An active project is one whose latest Budget End Date has not occurred yet. 
@@ -268,6 +237,76 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    /**
+     * Include these fields in the results. If null then all fields are included by default. If empty, then no fields are included.
+     * @param fields - fields to include in results
+     * 
+     * See {@link Field} for list of valid arguments
+     */
+    includeFields(field: Field, ...fields: Field[]): this {
+        this.payload.include_fields = [field, ...fields];
+        return this;
+    }
+
+    /**
+     * Set limit the on number of search results returned
+     * @param n - must be a positive integer less than or equal to 500 (default: 50)
+     */
+    limit(n: number): this {
+        this.payload.limit = n;
+        return this;
+    }
+
+    /**
+     * Set the starting counter for matching projects. Offset should not exceed total records count.
+     * @param n - must be a non-negative integer less than 15000
+     */
+    offset(n: number): this {
+        this.payload.offset = n;
+        return this;
+    }
+
+    /**
+     * Filter projects by city in which the business office of the grantee organization or contractor is located.
+     * 
+     * @param cities - Organization cities 
+     * 
+     * Example Usage:
+     * ```
+     * nih.projects.query()
+     * .orgCities(
+     *   "New York",
+     *   "Vegas"
+     * )
+     * ```
+     * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
+     */
+    orgCities(city: string, ...cities: string[]): this {
+        this.payload.criteria.org_cities = unique<string>([city, ...cities]);
+        return this;
+    }
+
+    /**
+     * Filter projects conducted by organization based in specified countries
+     * 
+     * @param countries - Countries
+     * 
+     * See {@link OrgCountry} for list of valid arguments
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .orgCountries(
+     *   OrgCountry.UnitedStates
+     * )
+     * ```
+     * 
+     * Filters projects conducted by organization based in the United States
+     */
+    orgCountries(country: OrgCountry, ...countries: OrgCountry[]): this {
+        this.payload.criteria.org_countries = unique<OrgCountry>([country, ...countries]);
+        return this;
+    }
 
     /**
      * Filters projects by Organization names
@@ -311,26 +350,6 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by city in which the business office of the grantee organization or contractor is located.
-     * 
-     * @param cities - Organization cities 
-     * 
-     * Example Usage:
-     * ```
-     * nih.projects.query()
-     * .orgCities(
-     *   "New York",
-     *   "Vegas"
-     * )
-     * ```
-     * matches projects conducted by organization based in cities whose names contain "New York" OR "Vegas"
-     */
-    orgCities(city: string, ...cities: string[]): this {
-        this.payload.criteria.org_cities = unique<string>([city, ...cities]);
-        return this;
-    }
-
-    /**
      * Filter projects conducted by organization based in specified states
      * 
      * @param states - US States & Territories (abbreviated)
@@ -354,28 +373,6 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects conducted by organization based in specified countries
-     * 
-     * @param countries - Countries
-     * 
-     * See {@link OrgCountry} for list of valid arguments
-     * 
-     * Example usage:
-     * ```
-     * nih.projects.query()
-     * .orgCountries(
-     *   OrgCountry.UnitedStates
-     * )
-     * ```
-     * 
-     * Filters projects conducted by organization based in the United States
-     */
-    orgCountries(country: OrgCountry, ...countries: OrgCountry[]): this {
-        this.payload.criteria.org_countries = unique<OrgCountry>([country, ...countries]);
-        return this;
-    }
-
-    /**
      * Filter projects conducted by specified organization types
      * 
      * @param types - organization types
@@ -394,6 +391,37 @@ export class ProjectsQueryBuilder {
      */
     orgTypes(type: OrgType, ...types: OrgType[]): this {
         this.payload.criteria.organization_type = unique<OrgType>([type, ...types]);
+        return this;
+    }
+
+    /**
+     * Filter projects by segments of their grant number
+     * 
+     * @param input - project num split object
+     * - appl_type_code: application type code
+     * - activity_code: activity code
+     * - ic_code: funding institute code
+     * - serial_num: 6 digit serial number
+     * - support_year: 2 digit support year
+     * - full_support_year: 4 digit support year
+     * - suffix_code: suffix code
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .partialGrantNumber({
+     *  appl_type_code: ApplicationTypeCode.New,
+     *  activity_code: "R37",
+     *  ic_code: IcCode.NationalEyeInstitute,
+     *  serial_num: 123456,
+     *  support_year: 20,
+     *  full_support_year: 2020,
+     *  suffix_code: "A1"
+     * })
+     * ```
+     */
+    partialGrantNumber(input: ProjectNumSplit): this {
+        this.payload.criteria.project_num_split = input;
         return this;
     }
 
@@ -435,7 +463,22 @@ export class ProjectsQueryBuilder {
         );
         return this;
     }
-    
+
+    /**
+     * Filters projects by PI Profile IDs
+     * 
+     * Each PI in the RePORTER database has a unique identifier that is constant
+    from project to project and year to year, but changes may be observed for investigators
+    that have had multiple accounts in the past, particularly for those associated with
+    contracts or sub-projects.
+     * 
+     * @param ids - PI Profile IDs
+     */
+    piProfileIds(id: number, ...ids: number[]): this {
+        this.payload.criteria.pi_profile_ids = unique<number>([id, ...ids]);
+        return this;
+    }
+
     /**
      * Filters projects by Project Officer (PO) names.
      * 
@@ -478,64 +521,21 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filters projects by PI Profile IDs
+     * Order search results in ascending or descending order
+     * @param order - sorting order
      * 
-     * Each PI in the RePORTER database has a unique identifier that is constant
-    from project to project and year to year, but changes may be observed for investigators
-    that have had multiple accounts in the past, particularly for those associated with
-    contracts or sub-projects.
-     * 
-     * @param ids - PI Profile IDs
      */
-    piProfileIds(id: number, ...ids: number[]): this {
-        this.payload.criteria.pi_profile_ids = unique<number>([id, ...ids]);
+    setOrder(order: SortOrder): this {
+        this.payload.sort_order = order;
         return this;
     }
 
     /**
-     * Filter projects by their grant numbers
-     * 
-     * @param nums - core project number(s), maximum of 1000 values can be passed
-     * 
-     * This identifier is not specific to any particular year of the project. 
-     * It consists of the project activity code, administering IC, and serial number (a concatenation of Activity, Administering_IC, and Serial_Number).
-     * 
-     * The wildcard asterik "*" can be used to match zero or more characters.
-     * It is not recommended to use the wildcard at the beginning of the text
+     * Order search results based on how closely they match your specified search criteria (relevance)
+     * @param sortByRelevance true/false
      */
-    grantNumbers(num: string, ...nums: string[]): this {
-        this.payload.criteria.project_nums = unique<string>([num, ...nums]);
-        return this;
-    }
-
-    /**
-     * Filter projects by segments of their grant number
-     * 
-     * @param input - project num split object
-     * - appl_type_code: application type code
-     * - activity_code: activity code
-     * - ic_code: funding institute code
-     * - serial_num: 6 digit serial number
-     * - support_year: 2 digit support year
-     * - full_support_year: 4 digit support year
-     * - suffix_code: suffix code
-     * 
-     * Example usage:
-     * ```
-     * nih.projects.query()
-     * .partialGrantNumber({
-     *  appl_type_code: ApplicationTypeCode.New,
-     *  activity_code: "R37",
-     *  ic_code: IcCode.NationalEyeInstitute,
-     *  serial_num: 123456,
-     *  support_year: 20,
-     *  full_support_year: 2020,
-     *  suffix_code: "A1"
-     * })
-     * ```
-     */
-    partialGrantNumber(input: ProjectNumSplit): this {
-        this.payload.criteria.project_num_split = input;
+    sortByRelevance(sortByRelevance: boolean): this {
+        this.payload.criteria.use_relevance = sortByRelevance;
         return this;
     }
 
