@@ -201,16 +201,6 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Excludes projects without outcomes.
-     * These projects will either have a Final or Interim Research Performance Progress Report (RPPR) submitted after October 1, 2017. 
-     * @param exclude - boolean
-     */
-    excludeWithoutOutcomes(exclude: boolean): this {
-        this.payload.criteria.outcomes_only = exclude;
-        return this;
-    }
-
-    /**
      * Filter results by fiscal year appropriation from which project funds were obligated
      * 
      * @param values - FiscalYear value or number representing year
@@ -851,6 +841,16 @@ export class ProjectsQueryBuilder {
             ...this.payload.criteria.project_start_date,
             to_date: date
         };
+        return this;
+    }
+
+    /**
+     * Excludes projects without outcomes.
+     * These projects will either have a Final or Interim Research Performance Progress Report (RPPR) submitted after October 1, 2017. 
+     * @param exclude - boolean
+     */
+    withOutcomes(exclude: boolean): this {
+        this.payload.criteria.outcomes_only = exclude;
         return this;
     }
 

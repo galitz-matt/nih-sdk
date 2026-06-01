@@ -54,7 +54,7 @@ export type ProjectsInput = {
         sub_project_only?: boolean; // TODO: add builder method
         funding_mechanism?: string[]; // TODO: add builder method
         covid_response?: string[]; // TODO: add builder method
-        outcomes_only?: boolean; // TODO: add builder method
+        outcomes_only?: boolean;
         arra_type?: string[]; // TODO: add builder method
         advanced_text_search?: AdvancedTextSearch; // TODO: add builder method, and dto builder
         publications_search?: PublicationsSearch; // TODO: add builder method, and dto builder
