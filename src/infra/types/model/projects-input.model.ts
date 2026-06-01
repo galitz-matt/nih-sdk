@@ -42,7 +42,7 @@ export type ProjectsInput = {
         opportunity_numbers?: string[];
         spending_categories?: SpendingCategoriesCriteria; 
         project_start_date?: DateRange;
-        project_end_date?: DateRange; // TODO: add builder method
+        project_end_date?: DateRange;
         date_added?: DateRange; // TODO: add builder method
         organization_type?: OrgType[]; 
         full_study_sections?: FullStudySection[]; // TODO: add builder method, and dto builder
