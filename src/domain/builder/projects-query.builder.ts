@@ -192,11 +192,21 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Exclude sub projects from results
+     * Excludes sub projects from results
      * @param exclude - boolean
      */
     excludeSubProjects(exclude: boolean): this {
         this.payload.criteria.exclude_sub_projects = exclude;
+        return this;
+    }
+
+    /**
+     * Excludes projects without outcomes.
+     * These projects will either have a Final or Interim Research Performance Progress Report (RPPR) submitted after October 1, 2017. 
+     * @param exclude - boolean
+     */
+    excludeWithoutOutcomes(exclude: boolean): this {
+        this.payload.criteria.outcomes_only = exclude;
         return this;
     }
 
