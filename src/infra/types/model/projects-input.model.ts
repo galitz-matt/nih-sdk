@@ -49,7 +49,7 @@ export type ProjectsInput = {
         award_notice_date?: DateRange;
         award_amount_range?: AmountRange; // TODO: add builder method
         exclude_sub_projects?: boolean;
-        multi_pi_only?: boolean; // TODO: add builder method
+        multi_pi_only?: boolean;
         newly_added_projects_only?: boolean; // TODO: add builder method
         sub_project_only?: boolean; // TODO: add builder method
         funding_mechanism?: string[]; // TODO: add builder method
