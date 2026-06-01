@@ -204,7 +204,38 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects starting on or before the provided date
+     * Filter projects ending on or after the provided date
+     * If used with {@link toEndDate}, filters projects with end dates within from-to date range
+     * 
+     * @param month - project end date month
+     * @param day - project end date day
+     * @param year - project end day year
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .fromEndDate(6, 3, 2007)
+     * ```
+     * Filters projects ending on or after 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromEndDate(6, 3, 2007)
+     * .toEndDate(3, 10, 2010)
+     * ```
+     * Filters projects with end dates within the range, 6/3/2007-3/10/2010
+     */
+    fromEndDate(month: number, day: number, year: number): this {
+        const date = new Date(`${year}-${month}-${day}`);
+        this.payload.criteria.project_end_date = {
+            ...this.payload.criteria.project_end_date,
+            from_date: date
+        };
+        return this;
+    }
+
+    /**
+     * Filter projects starting on or after the provided date
      * If used with {@link toStartDate}, filters projects with start dates within from-to date range
      * 
      * @param month - project start date month
@@ -216,7 +247,7 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .fromStartDate(6, 3, 2007)
      * ```
-     * Filters projects starting on or before 6/3/2007
+     * Filters projects starting on or after 6/3/2007
      * 
      * ```
      * nih.projects.query()
@@ -619,7 +650,38 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects starting on or after the provided date
+     * Filter projects ending on or before the provided date
+     * If used with {@link fromEndDate}, filters projects with end dates within from-to date range
+     * 
+     * @param month - project end date month
+     * @param day - project end date day
+     * @param year - project end day year
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .toEndDate(6, 3, 2007)
+     * ```
+     * Filters projects ending on or before 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromEndDate(6, 3, 2007)
+     * .toEndDate(3, 10, 2010)
+     * ```
+     * Filters projects with end dates within the range, 6/3/2007-3/10/2010
+     */
+    toEndDate(month: number, day: number, year: number): this {
+        const date = new Date(`${year}-${month}-${day}`);
+        this.payload.criteria.project_end_date = {
+            ...this.payload.criteria.project_end_date,
+            to_date: date
+        };
+        return this;
+    }
+
+    /**
+     * Filter projects starting on or before the provided date
      * If used with {@link fromStartDate}, filters projects with start dates within from-to date range
      * 
      * @param month - project start date month
@@ -631,7 +693,7 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .toStartDate(6, 3, 2007)
      * ```
-     * Filters projects starting on or after 6/3/2007
+     * Filters projects starting on or before 6/3/2007
      * 
      * ```
      * nih.projects.query()
