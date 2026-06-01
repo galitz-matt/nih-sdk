@@ -204,8 +204,39 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects ending on or after the provided date
-     * If used with {@link toEndDate}, filters projects with end dates within from-to date range
+     * Matches projects that were added to the RePORTER site on or after the provided date
+     * If used with {@link toDateAdded}, matches projects that were added to the RePORTER site within from-to date range
+     * 
+     * @param month - date added month
+     * @param day - date added day
+     * @param year - date added year 
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .fromDateAdded(6, 3, 2007)
+     * ```
+     * Matches projects added on or after 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromDateAdded(6, 3, 2007)
+     * .toDateAdded(3, 10, 2010)
+     * ```
+     * Matches projects added within the range 6/3/2007-3/10/2010
+     */
+    fromDateAdded(month: number, day: number, year: number): this {
+        const date = this.toDate(month, day, year);
+        this.payload.criteria.date_added = {
+            ...this.payload.criteria.date_added,
+            from_date: date
+        };
+        return this;
+    }
+
+    /**
+     * Matches projects ending on or after the provided date
+     * If used with {@link toEndDate}, matches projects with end dates within from-to date range
      * 
      * @param month - project end date month
      * @param day - project end date day
@@ -649,8 +680,34 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
-    fromDateAdded(month: number, day: number, year: number): this {
-
+    /**
+     * Matches projects that were added to the RePORTER site on or before the provided date
+     * If used with {@link fromDateAdded}, matches projects that were added to the RePORTER site within from-to date range
+     * 
+     * @param month - date added month
+     * @param day - date added day
+     * @param year - date added year 
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .toDateAdded(6, 3, 2007)
+     * ```
+     * Matches projects added on or before 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromDateAdded(6, 3, 2007)
+     * .toDateAdded(3, 10, 2010)
+     * ```
+     * Matches projects added within the range 6/3/2007-3/10/2010
+     */
+    toDateAdded(month: number, day: number, year: number): this {
+        const date = this.toDate(month, day, year);
+        this.payload.criteria.date_added = {
+            ...this.payload.criteria.date_added,
+            to_date: date
+        };
         return this;
     }
 
