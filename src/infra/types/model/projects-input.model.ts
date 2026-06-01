@@ -46,7 +46,7 @@ export type ProjectsInput = {
         date_added?: DateRange;
         organization_type?: OrgType[]; 
         full_study_sections?: FullStudySection[]; // TODO: add builder method, and dto builder
-        award_notice_date?: DateRange; // TODO: add builder method
+        award_notice_date?: DateRange;
         award_amount_range?: AmountRange; // TODO: add builder method
         exclude_sub_projects?: boolean;
         multi_pi_only?: boolean; // TODO: add builder method

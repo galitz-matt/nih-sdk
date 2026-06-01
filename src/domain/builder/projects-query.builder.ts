@@ -212,6 +212,37 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    /*
+     * Matches projects with award notice issued on or after the provided date
+     * If used with {@link toAwardNoticeDate}, matches projects with award notice issued within from-to date range
+     * 
+     * @param month - award notice issue date month
+     * @param day - award notice issue date day
+     * @param year - award notice issue date year 
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .fromAwardNoticeDate(6, 3, 2007)
+     * ```
+     * Matches projects with award notice issued on or after 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromDateAdded(6, 3, 2007)
+     * .toDateAdded(3, 10, 2010)
+     * ```
+     * Matches projects with award date notice issued within the range 6/3/2007-3/10/2010
+     */
+    fromAwardNoticeDate(month: number, day: number, year: number): this {
+        const date = this.toDate(month, day, year);
+        this.payload.criteria.award_notice_date = {
+            ...this.payload.criteria.award_notice_date,
+            from_date: date
+        };
+        return this;
+    }
+
     /**
      * Matches projects that were added to the RePORTER site on or after the provided date
      * If used with {@link toDateAdded}, matches projects that were added to the RePORTER site within from-to date range
@@ -686,6 +717,37 @@ export class ProjectsQueryBuilder {
             values: unique<SpendingCategory>(input.values),
             match_all: input.matchAll ?? false
         }
+        return this;
+    }
+
+    /*
+     * Matches projects with award notice issued on or before the provided date
+     * If used with {@link toAwardNoticeDate}, matches projects with award notice issued within from-to date range
+     * 
+     * @param month - award notice issue date month
+     * @param day - award notice issue date day
+     * @param year - award notice issue date year 
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .toAwardNoticeDate(6, 3, 2007)
+     * ```
+     * Matches projects with award notice issued on or before 6/3/2007
+     * 
+     * ```
+     * nih.projects.query()
+     * .fromDateAdded(6, 3, 2007)
+     * .toDateAdded(3, 10, 2010)
+     * ```
+     * Matches projects with award date notice issued within the range 6/3/2007-3/10/2010
+     */
+    toAwardNoticeDate(month: number, day: number, year: number): this {
+        const date = this.toDate(month, day, year);
+        this.payload.criteria.award_notice_date = {
+            ...this.payload.criteria.award_notice_date,
+            to_date: date
+        };
         return this;
     }
 
