@@ -226,7 +226,7 @@ export class ProjectsQueryBuilder {
      * Filters projects with end dates within the range, 6/3/2007-3/10/2010
      */
     fromEndDate(month: number, day: number, year: number): this {
-        const date = new Date(`${year}-${month}-${day}`);
+        const date = this.toDate(month, day, year);
         this.payload.criteria.project_end_date = {
             ...this.payload.criteria.project_end_date,
             from_date: date
@@ -257,7 +257,7 @@ export class ProjectsQueryBuilder {
      * Filters projects with start dates within the range, 6/3/2007-3/10/2010
      */
     fromStartDate(month: number, day: number, year: number): this {
-        const date = new Date(`${year}-${month}-${day}`);
+        const date = this.toDate(month, day, year);
         this.payload.criteria.project_start_date = {
             ...this.payload.criteria.project_start_date,
             from_date: date
@@ -649,6 +649,11 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    fromDateAdded(month: number, day: number, year: number): this {
+
+        return this;
+    }
+
     /**
      * Filter projects ending on or before the provided date
      * If used with {@link fromEndDate}, filters projects with end dates within from-to date range
@@ -672,7 +677,7 @@ export class ProjectsQueryBuilder {
      * Filters projects with end dates within the range, 6/3/2007-3/10/2010
      */
     toEndDate(month: number, day: number, year: number): this {
-        const date = new Date(`${year}-${month}-${day}`);
+        const date = this.toDate(month, day, year);
         this.payload.criteria.project_end_date = {
             ...this.payload.criteria.project_end_date,
             to_date: date
@@ -703,11 +708,16 @@ export class ProjectsQueryBuilder {
      * Filters projects with start dates within the range, 6/3/2007-3/10/2010
      */
     toStartDate(month: number, day: number, year: number): this {
-        const date = new Date(`${year}-${month}-${day}`);
+        const date = this.toDate(month, day, year);
         this.payload.criteria.project_start_date = {
             ...this.payload.criteria.project_start_date,
             to_date: date
         };
         return this;
     }
+
+    private toDate(month: number, day: number, year: number): Date {
+        return new Date(`${year}-${month}-${year}`);
+    }
+
 }
