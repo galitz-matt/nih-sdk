@@ -192,6 +192,15 @@ export class ProjectsQueryBuilder {
     }
 
     /**
+     * Exclude sub projects from results
+     * @param exclude - boolean
+     */
+    excludeSubProjects(exclude: boolean): this {
+        this.payload.criteria.exclude_sub_projects = exclude;
+        return this;
+    }
+
+    /**
      * Filter results by fiscal year appropriation from which project funds were obligated
      * 
      * @param values - FiscalYear value or number representing year
