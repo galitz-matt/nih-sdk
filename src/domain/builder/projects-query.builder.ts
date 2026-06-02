@@ -21,6 +21,7 @@ import type { SpendingCategoryIr } from "../types/ir/spending-category.ir";
 import type { CoopAgreementCode } from "../types/enum/coop-agreement-code";
 import { AwardType } from "../types/enum/award-type";
 import { DeptType } from "../types/enum/dept-type";
+import { MIN_AWARD_AMOUNT, MAX_AWARD_AMOUNT } from "../constants/amount-range";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -96,6 +97,18 @@ export class ProjectsQueryBuilder {
      */
     applIds(id: number, ...ids: number[]): this {
         this.payload.criteria.appl_ids = unique<number>([id, ...ids]);
+        return this;
+    }
+
+    /**
+     * Matches projects with award amounts within provided range
+     * 
+     * @param min - minimum award granted to project
+     * @param max - maxmimum award granted to project
+     * 
+     * See {@link MIN_AWARD_AMOUNT} and {@link MAX_AWARD_AMOUNT} for valid range values
+     */
+    awardAmountRange(min: number, max: number): this {
         return this;
     }
 
