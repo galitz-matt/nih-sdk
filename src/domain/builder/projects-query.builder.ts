@@ -388,17 +388,6 @@ export class ProjectsQueryBuilder {
         this.payload.include_fields = [field, ...fields];
         return this;
     }
-    
-    /**
-     * Excludes projects that are not "newly added" to RePORTER site.
-     * Please confirm cut-off date here: https://reporter.nih.gov/advanced-search
-     * @param flag - boolean
-     */
-    isNewlyAdded(flag: boolean): this {
-        this.payload.criteria.newly_added_projects_only = flag;
-        return this;
-    }
-
 
     /**
      * Set limit the on number of search results returned
@@ -415,6 +404,25 @@ export class ProjectsQueryBuilder {
      */
     offset(n: number): this {
         this.payload.offset = n;
+        return this;
+    }
+
+    /**
+     * Matches projects that are "newly added" to RePORTER site.
+     * Please confirm cut-off date here: https://reporter.nih.gov/advanced-search
+     * @param flag - if true, results will only include "newly added" projects
+     */
+    onlyNewlyAdded(flag: boolean): this {
+        this.payload.criteria.newly_added_projects_only = flag;
+        return this;
+    }
+
+    /**
+     * Matches projects that are subprojects
+     * @param flag - if true, results will only include subprojects
+     */
+    onlySubProjects(flag: boolean): this {
+        this.payload.criteria.sub_project_only = flag;
         return this;
     }
 

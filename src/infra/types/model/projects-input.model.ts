@@ -51,7 +51,7 @@ export type ProjectsInput = {
         exclude_sub_projects?: boolean;
         multi_pi_only?: boolean;
         newly_added_projects_only?: boolean;
-        sub_project_only?: boolean; // TODO: add builder method
+        sub_project_only?: boolean;
         funding_mechanism?: string[]; // TODO: add builder method
         covid_response?: string[]; // TODO: add builder method
         outcomes_only?: boolean;

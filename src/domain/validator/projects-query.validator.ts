@@ -105,6 +105,18 @@ export class ProjectsQueryValidator {
         }
     }
 
+    static validateSubProjectFilter(
+        isSubProject: boolean,
+        excludeSubProjects: boolean
+    ) {
+        if (isSubProject && excludeSubProjects) {
+            throw new DomainError(
+                "onlySubProjects and excludeSubProjects methods cannot be included in same query.\n" +
+                "Remove onlySubProjects or excludeSubProjects call from the query."
+            );
+        }
+    }
+
     private static hasCongDists(state: string): state is keyof typeof CongDistGroup {
         return state in CongDistGroup;
     }
