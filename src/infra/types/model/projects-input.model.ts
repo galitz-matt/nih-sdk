@@ -6,6 +6,7 @@ import type { CongDist } from "../../../domain/types/enum/cong-dist";
 import type { DeptType } from "../../../domain/types/enum/dept-type";
 import type { Field } from "../../../domain/types/enum/field";
 import type { FiscalYear } from "../../../domain/types/enum/fiscal-year";
+import type { FundingMechanism } from "../../../domain/types/enum/funding-mechanism";
 import type { IcCode } from "../../../domain/types/enum/ic-code";
 import type { OrgCountry } from "../../../domain/types/enum/org-country";
 import type { OrgState } from "../../../domain/types/enum/org-state";
@@ -52,7 +53,7 @@ export type ProjectsInput = {
         multi_pi_only?: boolean;
         newly_added_projects_only?: boolean;
         sub_project_only?: boolean;
-        funding_mechanism?: string[]; // TODO: add builder method
+        funding_mechanism?: FundingMechanism[];
         covid_response?: string[]; // TODO: add builder method
         outcomes_only?: boolean;
         arra_type?: string[]; // TODO: add builder method

@@ -22,6 +22,7 @@ import type { CoopAgreementCode } from "../types/enum/coop-agreement-code";
 import { AwardType } from "../types/enum/award-type";
 import { DeptType } from "../types/enum/dept-type";
 import { MIN_AWARD_AMOUNT, MAX_AWARD_AMOUNT } from "../constants/amount-range";
+import { FundingMechanism } from "../types/enum/funding-mechanism";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -346,6 +347,11 @@ export class ProjectsQueryBuilder {
             ...this.payload.criteria.project_start_date,
             from_date: date
         };
+        return this;
+    }
+
+    fundingMechanisms(mechanism: FundingMechanism, ...mechanisms: FundingMechanism[]): this {
+        this.payload.criteria.funding_mechanism = uniqueFlat<FundingMechanism>(mechanism, mechanisms);
         return this;
     }
 
