@@ -27,8 +27,8 @@ async function main() {
     }
 
     const output = render(seq(
-        line(`const MIN_AWARD_AMOUNT = ${raw.min_award_amount};`),
-        line(`const MAX_AWARD_AMOUNT = ${raw.max_award_amount};`)
+        line(`export const MIN_AWARD_AMOUNT = ${raw.min_award_amount};`),
+        line(`export const MAX_AWARD_AMOUNT = ${raw.max_award_amount};`)
     ))
 
     const output_path = join(
