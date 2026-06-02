@@ -350,6 +350,18 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    /**
+     * Matches projects with provided funding mechanisms
+     * 
+     * @param mechanism - first funding mechanism
+     * @param mechanisms - rest of funding mechanisms
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .fundingMechanisms(FundingMechanism.RAndDContracts)
+     * ```
+     */
     fundingMechanisms(mechanism: FundingMechanism, ...mechanisms: FundingMechanism[]): this {
         this.payload.criteria.funding_mechanism = uniqueFlat<FundingMechanism>(mechanism, mechanisms);
         return this;
