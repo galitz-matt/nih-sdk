@@ -388,6 +388,17 @@ export class ProjectsQueryBuilder {
         this.payload.include_fields = [field, ...fields];
         return this;
     }
+    
+    /**
+     * Excludes projects that are not "newly added" to RePORTER site.
+     * Please confirm cut-off date here: https://reporter.nih.gov/advanced-search
+     * @param flag - boolean
+     */
+    isNewlyAdded(flag: boolean): this {
+        this.payload.criteria.newly_added_projects_only = flag;
+        return this;
+    }
+
 
     /**
      * Set limit the on number of search results returned
