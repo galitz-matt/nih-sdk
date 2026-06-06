@@ -1,12 +1,12 @@
 import { OrgNameIrBuilder } from "../builder/org-name-ir.builder";
-import { NameCriteriaIrBuilder } from "../builder/name-criteria-ir.builder";
+import { NameCriteriaBuilder } from "../builder/name-criteria.builder";
 
-export function pi(): NameCriteriaIrBuilder {
-    return new NameCriteriaIrBuilder();
+export function pi(): NameCriteriaBuilder {
+    return new NameCriteriaBuilder();
 }
 
-export function po(): NameCriteriaIrBuilder {
-    return new NameCriteriaIrBuilder();
+export function po(): NameCriteriaBuilder {
+    return new NameCriteriaBuilder();
 }
 
 export function orgName(): OrgNameIrBuilder {

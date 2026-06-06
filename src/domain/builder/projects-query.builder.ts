@@ -1,11 +1,9 @@
 import { DefaultsFactory } from "../factory/defaults.factory";
-import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
-import type { FullStudySection, ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
+import type { FullStudySection, NameCriteria, ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import { OrgState } from "../types/enum/org-state";
-import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
-import type { NameCriteriaIr } from "../types/ir/name-criteria.ir";
+import type { NameCriteriaBuilder } from "./name-criteria.builder";
 import type { SortOrder } from "../types/enum/sort-order";
 import type { FiscalYear } from "../types/enum/fiscal-year";
 import { OrgType } from "../types/enum/org-type";
@@ -662,17 +660,16 @@ export class ProjectsQueryBuilder {
      * - a PI with last name containing "Smith"
      * 
      * ```
-     * piNames(
-     *   pi().firstName("John").lastName("Smith").build()
-     * )
+     * nih.projects.query()
+     * .piNames({
+     *  first_name: "John",
+     *  last_name: "Smith"
+     * })
      * ```
      * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
-    piNames(name: NameCriteriaIr, ...names: NameCriteriaIr[]): this {
-        const allNames = [name, ...names];
-        this.payload.criteria.pi_names = allNames.map(n =>
-            IrToModelMapper.toNameCriteria(n)
-        );
+    piNames(name: NameCriteria, ...names: NameCriteria[]): this {
+        this.payload.criteria.pi_names = [name, ...names];    
         return this;
     }
 
@@ -700,7 +697,7 @@ export class ProjectsQueryBuilder {
      * - Fields chained on a single builder are combined with AND (same PI)
      * - Multiple builders are combined with OR (across PIs)
      *
-     * See {@link NameCriteriaIrBuilder} for matching modes and constraints.
+     * See {@link NameCriteriaBuilder} for matching modes and constraints.
      * 
      * Example Usage:
      * 
@@ -717,17 +714,16 @@ export class ProjectsQueryBuilder {
      * - a PO with last name containing "Smith"
      * 
      * ```
-     * poNames(
-     *   po().firstName("John").lastName("Smith").build()
-     * )
+     * nih.projects.query()
+     * .poNames({
+     *  first_name: "John",
+     *  last_name: "Smith"
+     * })
      * ```
      * matches projects with a PO with first name containing "John" AND last name containing "Smith"
      */
-    poNames(name: NameCriteriaIr, ...names: NameCriteriaIr[]): this {
-        const allNames = [name, ...names];
-        this.payload.criteria.po_names = allNames.map(n =>
-            IrToModelMapper.toNameCriteria(n)
-        );
+    poNames(name: NameCriteria, ...names: NameCriteria[]): this {
+        this.payload.criteria.po_names = [name, ...names];
         return this;
     }
 
