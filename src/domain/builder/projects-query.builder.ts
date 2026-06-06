@@ -1,7 +1,7 @@
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 import { Field } from "../types/enum/field";
-import type { ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
+import type { FullStudySection, ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
 import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaIrBuilder } from "./name-criteria-ir.builder";
@@ -347,6 +347,11 @@ export class ProjectsQueryBuilder {
             ...this.payload.criteria.project_start_date,
             from_date: date
         };
+        return this;
+    }
+
+    fullStudySections(...sections: FullStudySection[]): this {
+        this.payload.criteria.full_study_sections = sections;
         return this;
     }
 
