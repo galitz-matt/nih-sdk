@@ -5,7 +5,6 @@ import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgState } from "../types/enum/org-state";
 import type { ProjectsInput, SpendingCategoriesCriteria } from "../../infra/types/model/projects-input.model";
 
-// TODO: centralize domain validation
 export class ProjectsQueryValidator {
     static validate(payload: ProjectsInput): void {
         this.validateApplIds(payload.criteria.appl_ids);
