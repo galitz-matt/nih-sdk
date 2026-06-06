@@ -545,9 +545,10 @@ export class ProjectsQueryBuilder {
      * matches projects conducted by an organization with exact name "UNIV OF NORTH CAROLINA CHAPEL HILL"
      * 
      * ```
-     * orgNames(
-     *   orgName().name("Yale").build()
-     * )
+     * orgNames({
+     *  kind: "partial"
+     *  name: "Yale"
+     * })
      * ```
      * identical behavior as first example, defaults to "partial"
      */
