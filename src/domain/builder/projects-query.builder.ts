@@ -23,6 +23,7 @@ import { AwardType } from "../types/enum/award-type";
 import { DeptType } from "../types/enum/dept-type";
 import { MIN_AWARD_AMOUNT, MAX_AWARD_AMOUNT } from "../constants/amount-range";
 import { FundingMechanism } from "../types/enum/funding-mechanism";
+import type { OrgNameIr } from "../types/ir/org-name.ir";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -532,7 +533,7 @@ export class ProjectsQueryBuilder {
      * ```
      * nih.projects.query()
      * .orgNames(
-     *   orgName().name("Yale").partial()
+     *   orgName().name("Yale").partial().build()
      * )
      * ```
      * matches projects conducted by an organization with name contain "Yale"
@@ -540,25 +541,24 @@ export class ProjectsQueryBuilder {
      * ```
      * nih.projects.query()
      * .orgNames(
-     *   orgName().name("UNIV OF NORTH CAROLINA CHAPEL HILL").exact()
+     *   orgName().name("UNIV OF NORTH CAROLINA CHAPEL HILL").exact().build()
      * )
      * ```
      * matches projects conducted by an organization with exact name "UNIV OF NORTH CAROLINA CHAPEL HILL"
      * 
      * ```
      * orgNames(
-     *   orgName().name("Yale")
+     *   orgName().name("Yale").build()
      * )
      * ```
      * identical behavior as first example, defaults to "partial"
      */
-    orgNames(org: OrgNameIrBuilder, ...orgs: OrgNameIrBuilder[]): this {
+    orgNames(org: OrgNameIr, ...orgs: OrgNameIr[]): this {
         const allOrgs = [org, ...orgs];
-        const builtOrgs = allOrgs.map(o => o.build());
         this.payload.criteria.org_names =
-            builtOrgs.filter(o => o.kind === "partial").map(o => o.name);
+            allOrgs.filter(o => o.kind === "partial").map(o => o.name);
         this.payload.criteria.org_names_exact_match =
-            builtOrgs.filter(o => o.kind === "exact").map(o => o.name);
+            allOrgs.filter(o => o.kind === "exact").map(o => o.name);
         return this;
     }
 
@@ -641,7 +641,7 @@ export class ProjectsQueryBuilder {
     /**
      * Matches projects by Principal Investigator (PI) names.
      * 
-     * @param names - PI builders
+     * @param names - PIs
      *
      * Matching Behavior:
      * - Fields chained on a single builder are combined with AND (same PI)
@@ -653,8 +653,8 @@ export class ProjectsQueryBuilder {
      * ```
      * nih.projects.query()
      * .piNames(
-     *   pi().firstName("John"),
-     *   pi().lastName("Smith")
+     *   pi().firstName("John").build(),
+     *   pi().lastName("Smith").build()
      * )
      * ```
      * matches projects with:
@@ -663,16 +663,15 @@ export class ProjectsQueryBuilder {
      * 
      * ```
      * piNames(
-     *   pi().firstName("John").lastName("Smith")
+     *   pi().firstName("John").lastName("Smith").build()
      * )
      * ```
      * matches projects with a PI with first name containing "John" AND last name containing "Smith"
      */
-    piNames(name: NameCriteriaIrBuilder, ...names: NameCriteriaIrBuilder[]): this {
-        // TODO: do not use builder
+    piNames(name: NameCriteriaIr, ...names: NameCriteriaIr[]): this {
         const allNames = [name, ...names];
         this.payload.criteria.pi_names = allNames.map(n =>
-            IrToModelMapper.toNameCriteria(n.build())
+            IrToModelMapper.toNameCriteria(n)
         );
         return this;
     }
@@ -708,8 +707,8 @@ export class ProjectsQueryBuilder {
      * ```
      * nih.projects.query()
      * .poNames(
-     *   po().firstName("John"),
-     *   po().lastName("Smith")
+     *   po().firstName("John").build(),
+     *   po().lastName("Smith").build()
      * )
      * ```
      * 
@@ -719,16 +718,15 @@ export class ProjectsQueryBuilder {
      * 
      * ```
      * poNames(
-     *   po().firstName("John").lastName("Smith")
+     *   po().firstName("John").lastName("Smith").build()
      * )
      * ```
      * matches projects with a PO with first name containing "John" AND last name containing "Smith"
      */
-    poNames(name: NameCriteriaIrBuilder, ...names: NameCriteriaIrBuilder[]): this {
-        // TODO: do not use builder
+    poNames(name: NameCriteriaIr, ...names: NameCriteriaIr[]): this {
         const allNames = [name, ...names];
         this.payload.criteria.po_names = allNames.map(n =>
-            IrToModelMapper.toNameCriteria(n.build())
+            IrToModelMapper.toNameCriteria(n)
         );
         return this;
     }
