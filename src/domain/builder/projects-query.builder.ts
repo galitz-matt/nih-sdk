@@ -41,7 +41,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by associated activity codes, or activity code group
+     * Matches projects by associated activity codes, or activity code group
      * 
      * @param code - first (group of) activity code
      * @param codes - rest of (group(s) of) activity code(s)
@@ -60,7 +60,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by the agencies respondible for the administering of a research grant, project, or contract
+     * Matches projects by the agencies respondible for the administering of a research grant, project, or contract
      * 
      * @param input - AgencyIr object
      * 
@@ -88,7 +88,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by their application ID (unique project identifier)
+     * Matches projects by their application ID (unique project identifier)
      * 
      * @param id - first application ID
      * @param ids - rest of application IDs
@@ -114,7 +114,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by type of award received
+     * Matches projects by type of award received
      * 
      * @param type - first award type
      * @param types - rest of award types
@@ -133,7 +133,7 @@ export class ProjectsQueryBuilder {
     }
     
     /**
-     * Filter projects by the congressional district in which business office of the grantee organization or contractor is located
+     * Matches projects by the congressional district in which business office of the grantee organization or contractor is located
      * Must call orgStates() before congDists()
      * orgStates() arguments must contain OrgStates associated with provided CongDists
      * 
@@ -149,7 +149,7 @@ export class ProjectsQueryBuilder {
      * .congDists(CongDist.AL_02)
      * ```
      * 
-     * Filter projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
+     * Matches projects conducted by grantee organizations with business offices located in Alabama's 2nd congressional district
      * 
      */
     congDists(congDist: CongDist, ...congDists: CongDist[]): this {
@@ -158,7 +158,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by cooperative agreement codes
+     * Matches projects by cooperative agreement codes
      * 
      * @param code - first cooperative agreement code
      * @param codes - rest of cooperative agreement codes
@@ -176,7 +176,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by the departmental affiliation of the PI for a project
+     * Matches projects by the departmental affiliation of the PI for a project
      * 
      * @param type - first dept type
      * @param types - rest of dept types
@@ -215,7 +215,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter results by fiscal year appropriation from which project funds were obligated
+     * Matches results by fiscal year appropriation from which project funds were obligated
      * 
      * @param values - FiscalYear value or number representing year
      * 
@@ -301,14 +301,14 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .fromEndDate(6, 3, 2007)
      * ```
-     * Filters projects ending on or after 6/3/2007
+     * Matches projects ending on or after 6/3/2007
      * 
      * ```
      * nih.projects.query()
      * .fromEndDate(6, 3, 2007)
      * .toEndDate(3, 10, 2010)
      * ```
-     * Filters projects with end dates within the range, 6/3/2007-3/10/2010
+     * Matches projects with end dates within the range, 6/3/2007-3/10/2010
      */
     fromEndDate(month: number, day: number, year: number): this {
         const date = this.toDate(month, day, year);
@@ -320,8 +320,8 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects starting on or after the provided date
-     * If used with {@link toStartDate}, filters projects with start dates within from-to date range
+     * Matches projects starting on or after the provided date
+     * If used with {@link toStartDate}, matches projects with start dates within from-to date range
      * 
      * @param month - project start date month
      * @param day - project start date day
@@ -332,14 +332,14 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .fromStartDate(6, 3, 2007)
      * ```
-     * Filters projects starting on or after 6/3/2007
+     * Matches projects starting on or after 6/3/2007
      * 
      * ```
      * nih.projects.query()
      * .fromStartDate(6, 3, 2007)
      * .toStartDate(3, 10, 2010)
      * ```
-     * Filters projects with start dates within the range, 6/3/2007-3/10/2010
+     * Matches projects with start dates within the range, 6/3/2007-3/10/2010
      */
     fromStartDate(month: number, day: number, year: number): this {
         const date = this.toDate(month, day, year);
@@ -350,6 +350,12 @@ export class ProjectsQueryBuilder {
         return this;
     }
 
+    /**
+     * Match projects 
+     * 
+     * @param sections
+     * @returns 
+     */
     fullStudySections(...sections: FullStudySection[]): this {
         this.payload.criteria.full_study_sections = sections;
         return this;
@@ -373,7 +379,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by their funding opportunity announcement numbers
+     * Match projects by their funding opportunity announcement numbers
      * This method has the same filtering behavior as {@link opportunityNumbers}
      * 
      * @param num - first funding opportunity announcement number
@@ -385,7 +391,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by their grant numbers
+     * Match projects by their grant numbers
      * 
      * @param nums - core project number(s), maximum of 1000 values can be passed
      * 
@@ -463,7 +469,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by the number of their funding opportunity announcement
+     * Match projects by the number of their funding opportunity announcement
      * 
      * @param num - first opportunity number
      * @param nums - rest of opportunity numbers
@@ -474,7 +480,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by city in which the business office of the grantee organization or contractor is located.
+     * Match projects by city in which the business office of the grantee organization or contractor is located.
      * 
      * @param cities - Organization cities 
      * 
@@ -494,7 +500,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects conducted by organization based in specified countries
+     * Match projects conducted by organization based in specified countries
      * 
      * @param countries - Countries
      * 
@@ -508,7 +514,7 @@ export class ProjectsQueryBuilder {
      * )
      * ```
      * 
-     * Filters projects conducted by organization based in the United States
+     * Matches projects conducted by organization based in the United States
      */
     orgCountries(country: OrgCountry, ...countries: OrgCountry[]): this {
         this.payload.criteria.org_countries = unique<OrgCountry>([country, ...countries]);
@@ -516,7 +522,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filters projects by Organization names
+     * Matches projects by Organization names
      * 
      * @param orgs - Organization name builders
      * 
@@ -557,7 +563,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects conducted by organization based in specified states
+     * Matches projects conducted by organization based in specified states
      * 
      * @param states - US States & Territories (abbreviated)
      * 
@@ -572,7 +578,7 @@ export class ProjectsQueryBuilder {
      * )
      * ```
      * 
-     * Filters projects conducted by organization based in New York state OR New Jersey
+     * Matches projects conducted by organization based in New York state OR New Jersey
      */
     orgStates(state: OrgState, ...states: OrgState[]): this {
         this.payload.criteria.org_states = unique<OrgState>([state, ...states]);
@@ -580,7 +586,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects conducted by specified organization types
+     * Matches projects conducted by specified organization types
      * 
      * @param types - organization types
      * 
@@ -594,7 +600,7 @@ export class ProjectsQueryBuilder {
      * )
      * ```
      * 
-     * Filters projects conducted by schools of engineering
+     * Matches projects conducted by schools of engineering
      */
     orgTypes(type: OrgType, ...types: OrgType[]): this {
         this.payload.criteria.organization_type = unique<OrgType>([type, ...types]);
@@ -602,7 +608,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by segments of their grant number
+     * Matches projects by segments of their grant number
      * 
      * @param input - project num split object
      * - appl_type_code: application type code
@@ -633,7 +639,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filters projects by Principal Investigator (PI) names.
+     * Matches projects by Principal Investigator (PI) names.
      * 
      * @param names - PI builders
      *
@@ -672,7 +678,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filters projects by PI Profile IDs
+     * Matches projects by PI Profile IDs
      * 
      * Each PI in the RePORTER database has a unique identifier that is constant
     from project to project and year to year, but changes may be observed for investigators
@@ -687,7 +693,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filters projects by Project Officer (PO) names.
+     * Matches projects by Project Officer (PO) names.
      * 
      * @param names PO builders
      *
@@ -747,7 +753,7 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects by (congressionally mandated) reporting categories
+     * Matches projects by (congressionally mandated) reporting categories
      * Available for fiscal years 2008 and later.
      * 
      * @param input - spending categories and filtering behavior, must include at least one spending category value
@@ -838,8 +844,8 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects ending on or before the provided date
-     * If used with {@link fromEndDate}, filters projects with end dates within from-to date range
+     * Matches projects ending on or before the provided date
+     * If used with {@link fromEndDate}, matches projects with end dates within from-to date range
      * 
      * @param month - project end date month
      * @param day - project end date day
@@ -850,14 +856,14 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .toEndDate(6, 3, 2007)
      * ```
-     * Filters projects ending on or before 6/3/2007
+     * Matches projects ending on or before 6/3/2007
      * 
      * ```
      * nih.projects.query()
      * .fromEndDate(6, 3, 2007)
      * .toEndDate(3, 10, 2010)
      * ```
-     * Filters projects with end dates within the range, 6/3/2007-3/10/2010
+     * Matches projects with end dates within the range, 6/3/2007-3/10/2010
      */
     toEndDate(month: number, day: number, year: number): this {
         const date = this.toDate(month, day, year);
@@ -869,8 +875,8 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Filter projects starting on or before the provided date
-     * If used with {@link fromStartDate}, filters projects with start dates within from-to date range
+     * Matches projects starting on or before the provided date
+     * If used with {@link fromStartDate}, matches projects with start dates within from-to date range
      * 
      * @param month - project start date month
      * @param day - project start date day
@@ -881,14 +887,14 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .toStartDate(6, 3, 2007)
      * ```
-     * Filters projects starting on or before 6/3/2007
+     * Matches projects starting on or before 6/3/2007
      * 
      * ```
      * nih.projects.query()
      * .fromStartDate(6, 3, 2007)
      * .toStartDate(3, 10, 2010)
      * ```
-     * Filters projects with start dates within the range, 6/3/2007-3/10/2010
+     * Matches projects with start dates within the range, 6/3/2007-3/10/2010
      */
     toStartDate(month: number, day: number, year: number): this {
         const date = this.toDate(month, day, year);
