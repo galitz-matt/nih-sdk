@@ -6,6 +6,6 @@ export const CovidResponse = {
     C4PaycheckProtectionProgramAndHealthCareEnhancementAct: "C4",
     C5CoronavirusResponseAndReliefSupplementalAppropriationsAct: "C5",
     C6AmericanRescuePlanActOf2021: "C6",
-} as const
+} as const;
 
 export type CovidResponse = typeof CovidResponse[keyof typeof CovidResponse];
