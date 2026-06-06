@@ -23,17 +23,33 @@ async function main() {
             throw new Error("Unexpected response: invalid item");
         }
 
-        return { display: item.display, value: item.value };
+        const split: string[] = item.value.split(";");
+
+        if (split.length > 1) {
+            return {
+                display: item.display,
+                value: `[${split.map(v => `"${v}"`).join(", ")}]`
+            }
+        }
+
+        return { 
+            display: item.display, 
+            value:`"${item.value}"`
+        };
     });
 
-    const unique = [...new Set(data)];
+    const unique = [
+        ...new Map(
+            data.map(item => [item.display, item])
+        ).values()
+    ];
 
     const output = render(
         seq(
             block(
                 "export const CovidResponse = {",
                 unique.map(item => 
-                    line(`${toPascalCase(item.display)}: "${item.value}",`)
+                    line(`${toPascalCase(item.display)}: ${item.value},`)
                 ),
                 "} as const;"
             ),
