@@ -3,6 +3,7 @@ import type { Agency } from "../../../domain/types/enum/agency";
 import type { ApplicationTypeCode } from "../../../domain/types/enum/application-type-code";
 import type { AwardType } from "../../../domain/types/enum/award-type";
 import type { CongDist } from "../../../domain/types/enum/cong-dist";
+import type { CovidResponse } from "../../../domain/types/enum/covid-response";
 import type { DeptType } from "../../../domain/types/enum/dept-type";
 import type { Field } from "../../../domain/types/enum/field";
 import type { FiscalYear } from "../../../domain/types/enum/fiscal-year";
@@ -46,7 +47,7 @@ export type ProjectsInput = {
         project_end_date?: DateRange;
         date_added?: DateRange;
         organization_type?: OrgType[]; 
-        full_study_sections?: FullStudySection[]; // TODO: add builder method, and dto builder
+        full_study_sections?: FullStudySection[];
         award_notice_date?: DateRange;
         award_amount_range?: AmountRange;
         exclude_sub_projects?: boolean;
@@ -54,7 +55,7 @@ export type ProjectsInput = {
         newly_added_projects_only?: boolean;
         sub_project_only?: boolean;
         funding_mechanism?: FundingMechanism[];
-        covid_response?: string[]; // TODO: add builder method
+        covid_response?: CovidResponse[]; // TODO: add builder method
         outcomes_only?: boolean;
         arra_type?: string[]; // TODO: add builder method
         advanced_text_search?: AdvancedTextSearch; // TODO: add builder method, and dto builder
