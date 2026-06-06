@@ -22,6 +22,7 @@ import { DeptType } from "../types/enum/dept-type";
 import { MIN_AWARD_AMOUNT, MAX_AWARD_AMOUNT } from "../constants/amount-range";
 import { FundingMechanism } from "../types/enum/funding-mechanism";
 import type { OrgNameIr } from "../types/ir/org-name.ir";
+import type { CovidResponse } from "../types/enum/covid-response";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -171,6 +172,27 @@ export class ProjectsQueryBuilder {
      */
     coopAgreementCodes(code: CoopAgreementCode, ...codes: CoopAgreementCode[]): this {
         this.payload.criteria.cooperative_agreement_codes = unique([code, ...codes]);
+        return this;
+    }
+
+    /**
+     * Matches projects awarded to study COVID-19 and related topics as funded under provided funding codes
+     * 
+     * @param response - first covid response
+     * @param responses - rest of covid responses
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .covidResponse(
+     * CovidResponse.NihRegularAppropriationsFundingUsedForCovid19Research,
+     * "C3"
+     * )
+     * ```
+     * Matches projects awarded to study COVID-19 under the NIH Regular Appropriations Funding and the CARES Act
+     */
+    covidResponse(response: CovidResponse, ...responses: CovidResponse[]): this {
+        this.payload.criteria.covid_response = uniqueFlat(response, responses);
         return this;
     }
 
