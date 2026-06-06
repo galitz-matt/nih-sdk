@@ -35,7 +35,7 @@ async function main() {
                 unique.map(item => 
                     line(`${toPascalCase(item.display)}: "${item.value}",`)
                 ),
-                "} as const"
+                "} as const;"
             ),
             newline(),
             line("export type CovidResponse = typeof CovidResponse[keyof typeof CovidResponse];")
