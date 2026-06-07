@@ -71,7 +71,7 @@ export type ProjectsInput = {
 }
 
 export type AdvancedTextSearch = {
-    searchText?: string;
+    search_text?: string;
     operator?: "and" | "or" | "advanced";
     search_region?: string;
     search_field?: Field;
