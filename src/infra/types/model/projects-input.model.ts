@@ -66,7 +66,7 @@ export type ProjectsInput = {
     exclude_fields?: Field[];
     offset?: number;
     limit?: number;
-    sort_field?: string; // TODO: add builder method
+    sort_field?: Field;
     sort_order?: SortOrder;
 }
 

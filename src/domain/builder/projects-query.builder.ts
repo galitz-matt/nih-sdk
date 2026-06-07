@@ -790,6 +790,21 @@ export class ProjectsQueryBuilder {
     }
 
     /**
+     * Sort results by provided field
+     * Sorting behavior reflects the data type of the field
+     * Numeric fields are sorted least to greatest
+     * String fields are sorted alphabetically
+     * 
+     * This method may cause query to fail resulting in 500 status code, not all fields are supported
+     * 
+     * @param field - field to sort results by
+     */
+    sortByField(field: Field): this {
+        this.payload.sort_field = field;
+        return this;
+    }
+
+    /**
      * Matches projects by (congressionally mandated) reporting categories
      * Available for fiscal years 2008 and later.
      * 
