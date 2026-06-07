@@ -1,7 +1,6 @@
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { Field } from "../types/enum/field";
 import type { FullStudySection, NameCriteria, ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
-import type { OrgNameIrBuilder } from "./org-name-ir.builder";
 import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaBuilder } from "./name-criteria.builder";
 import type { SortOrder } from "../types/enum/sort-order";
@@ -563,41 +562,35 @@ export class ProjectsQueryBuilder {
     }
 
     /**
-     * Matches projects by Organization names
+     * Matches projects by Organization names according to specificed matching behavior,
+     * defaults to partial matching
      * 
-     * @param orgs - Organization name builders
-     * 
-     * See {@link OrgNameIrBuilder} for more on constraints 
+     * @param org - first organization
+     * @param orgs - rest of organizations
      * 
      * Example Usage:
      * ```
      * nih.projects.query()
-     * .orgNames(
-     *   orgName().name("Yale").partial().build()
-     * )
+     * .orgNames({
+     *  name: "Yale",
+     *  kind: 
+     * })
      * ```
      * matches projects conducted by an organization with name contain "Yale"
      * 
      * ```
      * nih.projects.query()
-     * .orgNames(
-     *   orgName().name("UNIV OF NORTH CAROLINA CHAPEL HILL").exact().build()
-     * )
-     * ```
-     * matches projects conducted by an organization with exact name "UNIV OF NORTH CAROLINA CHAPEL HILL"
-     * 
-     * ```
-     * orgNames({
-     *  kind: "partial"
-     *  name: "Yale"
+     * .orgNames({
+     *  name: "UNIV OF NORTH CAROLINA CHAPEL HILL",
+     *  kind: "exact"
      * })
      * ```
-     * identical behavior as first example, defaults to "partial"
+     * matches projects conducted by an organization with exact name "UNIV OF NORTH CAROLINA CHAPEL HILL"
      */
     orgNames(org: OrgNameIr, ...orgs: OrgNameIr[]): this {
         const allOrgs = [org, ...orgs];
         this.payload.criteria.org_names =
-            allOrgs.filter(o => o.kind === "partial").map(o => o.name);
+            allOrgs.filter(o => o.kind ?? "partial" === "partial").map(o => o.name);
         this.payload.criteria.org_names_exact_match =
             allOrgs.filter(o => o.kind === "exact").map(o => o.name);
         return this;
@@ -795,7 +788,7 @@ export class ProjectsQueryBuilder {
      * Numeric fields are sorted least to greatest
      * String fields are sorted alphabetically
      * 
-     * This method may cause query to fail resulting in 500 status code, not all fields are supported
+     * This method may cause query to fail resulting in 500 status, not all fields are supported
      * 
      * @param field - field to sort results by
      */
