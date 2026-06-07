@@ -60,7 +60,8 @@ export class FetchHttpClient implements HttpClient {
                     continue;
                 }
 
-                throw new Error(`Network error ${String(err)}`);
+                // TODO: figure out how to report errors better
+                throw new Error(`Network ${String(err)}`);
             } finally {
                 clearTimeout(timeout);
             }
