@@ -1,6 +1,6 @@
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { Field } from "../types/enum/field";
-import type { FullStudySection, NameCriteria, ProjectNumSplit, ProjectsInput, PublicationsSearch } from "../../infra/types/model/projects-input.model"
+import type { FullStudySection, NameCriteria, ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
 import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaBuilder } from "./name-criteria.builder";
 import type { SortOrder } from "../types/enum/sort-order";
@@ -25,6 +25,7 @@ import type { CovidResponse } from "../types/enum/covid-response";
 import type { ArraType } from "../types/enum/arra-type";
 import type { PublicationsSearchIr } from "../types/ir/publications-search.ir";
 import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
+import type { AdvancedTextSearchIr } from "../types/ir/advanced-text-search.ir";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -58,6 +59,47 @@ export class ProjectsQueryBuilder {
      */
     activityCodes(code: ActivityCode | ActivityCodeGroup, ...codes: (ActivityCode | ActivityCodeGroup)[]): this {
         this.payload.criteria.activity_codes = uniqueFlat<ActivityCode>(code, ...codes);
+        return this;
+    }
+
+    /**
+     * Matches projects containing  terms (or boolean expression) in specified field/region on basis of operator
+     * @param search - advanced search
+     * 
+     * See {@link AdvancedTextSearchIr} for documentation
+     * 
+     * Example usage:
+     * ```
+     * nih.projects.query()
+     * .advancedSearch({
+     *  kind: "and",
+     *  terms: ["cancer", "seizure"],
+     *  field: Field.AbstractText
+     * })
+     * ```
+     * Matches projects containing "cancer" AND "seizure" in abstract text
+     * 
+     * ```
+     * nih.projects.query()
+     * .advancedSearch({
+     *  kind: "or",
+     *  terms: ["cancer", "seizure"],
+     *  field: Field.AbstractText
+     * })
+     * ```
+     * Matches projects containing "cancer" OR "seizure" in abstract text
+     * 
+     * ```
+     * nih.projects.query()
+     * .advancedSearch({
+     *  kind: "expr",
+     *  expr: "(cancer and seizure) or autism"
+     * })
+     * ```
+     * Matches projects containing "cancer" AND "seizure" in abstract text, OR "autism"
+     */
+    advancedSearch(search: AdvancedTextSearchIr): this {
+        this.payload.criteria.advanced_text_search = IrToModelMapper.toAdvancedTextSearch(search);
         return this;
     }
 
