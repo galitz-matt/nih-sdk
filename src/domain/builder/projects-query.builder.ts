@@ -23,6 +23,7 @@ import { MIN_AWARD_AMOUNT, MAX_AWARD_AMOUNT } from "../constants/amount-range";
 import { FundingMechanism } from "../types/enum/funding-mechanism";
 import type { OrgNameIr } from "../types/ir/org-name.ir";
 import type { CovidResponse } from "../types/enum/covid-response";
+import type { ArraType } from "../types/enum/arra-type";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -98,6 +99,25 @@ export class ProjectsQueryBuilder {
      */
     applIds(id: number, ...ids: number[]): this {
         this.payload.criteria.appl_ids = unique<number>([id, ...ids]);
+        return this;
+    }
+
+    /**
+     * Matches projects funded, entirely or in part, with provided funds appropriated 
+     * under the American Recovery and Reinvestment Act of 2009
+     * 
+     * @param type - first arra type
+     * @param types - rest of arra types
+     * 
+     * Example usage:
+     * ```
+     * nih.projcects.query()
+     * .arraTypes(ArraType.ComparativeEffectivenessResearchArraSetAside)
+     * ```
+     * Matches projects with comparative effectiveness research 
+     */
+    arraTypes(type: ArraType, ...types: ArraType[]): this {
+        this.payload.criteria.arra_type = uniqueFlat(type, types);
         return this;
     }
 

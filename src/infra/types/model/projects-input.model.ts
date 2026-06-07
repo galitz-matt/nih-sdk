@@ -1,6 +1,7 @@
 import type { ActivityCode } from "../../../domain/types/enum/activity-code";
 import type { Agency } from "../../../domain/types/enum/agency";
 import type { ApplicationTypeCode } from "../../../domain/types/enum/application-type-code";
+import type { ArraType } from "../../../domain/types/enum/arra-type";
 import type { AwardType } from "../../../domain/types/enum/award-type";
 import type { CongDist } from "../../../domain/types/enum/cong-dist";
 import type { CovidResponse } from "../../../domain/types/enum/covid-response";
@@ -57,7 +58,7 @@ export type ProjectsInput = {
         funding_mechanism?: FundingMechanism[];
         covid_response?: CovidResponse[];
         outcomes_only?: boolean;
-        arra_type?: string[]; // TODO: add builder method
+        arra_type?: ArraType[];
         advanced_text_search?: AdvancedTextSearch; // TODO: add builder method, and dto builder
         publications_search?: PublicationsSearch; // TODO: add builder method, and dto builder
     };
