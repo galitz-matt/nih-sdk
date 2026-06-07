@@ -70,12 +70,11 @@ export type ProjectsInput = {
     sort_order?: SortOrder;
 }
 
-
 export type AdvancedTextSearch = {
     searchText?: string;
-    operator?: string;
+    operator?: "and" | "or" | "advanced";
     search_region?: string;
-    search_field?: string;
+    search_field?: Field;
 }
 
 export type AmountRange = {
