@@ -1,6 +1,6 @@
 import { DefaultsFactory } from "../factory/defaults.factory";
 import { Field } from "../types/enum/field";
-import type { FullStudySection, NameCriteria, ProjectNumSplit, ProjectsInput } from "../../infra/types/model/projects-input.model"
+import type { FullStudySection, NameCriteria, ProjectNumSplit, ProjectsInput, PublicationsSearch } from "../../infra/types/model/projects-input.model"
 import { OrgState } from "../types/enum/org-state";
 import type { NameCriteriaBuilder } from "./name-criteria.builder";
 import type { SortOrder } from "../types/enum/sort-order";
@@ -23,6 +23,8 @@ import { FundingMechanism } from "../types/enum/funding-mechanism";
 import type { OrgNameIr } from "../types/ir/org-name.ir";
 import type { CovidResponse } from "../types/enum/covid-response";
 import type { ArraType } from "../types/enum/arra-type";
+import type { PublicationsSearchIr } from "../types/ir/publications-search.ir";
+import { IrToModelMapper } from "../mapper/ir-to-model.mapper";
 
 export class ProjectsQueryBuilder {
     private payload: ProjectsInput;
@@ -759,6 +761,21 @@ export class ProjectsQueryBuilder {
      */
     poNames(name: NameCriteria, ...names: NameCriteria[]): this {
         this.payload.criteria.po_names = [name, ...names];
+        return this;
+    }
+    
+    /**
+     * Matches projects based on associated publications
+     * 
+     * See {@link PublicationsSearchIr} for documentation on properties
+     * 
+     * Not publicly documented by NIH.
+     * May change or behave inconsistently
+     * 
+     * @param search - publications search
+     */
+    publications(search: PublicationsSearchIr): this {
+        this.payload.criteria.publications_search = IrToModelMapper.toPublicationsSearch(search);
         return this;
     }
 

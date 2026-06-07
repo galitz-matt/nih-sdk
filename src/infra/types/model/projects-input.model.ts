@@ -60,7 +60,7 @@ export type ProjectsInput = {
         outcomes_only?: boolean;
         arra_type?: ArraType[];
         advanced_text_search?: AdvancedTextSearch; // TODO: add builder method, and dto builder
-        publications_search?: PublicationsSearch; // TODO: add builder method, and dto builder
+        publications_search?: PublicationsSearch;
     };
     include_fields?: Field[];
     exclude_fields?: Field[];
