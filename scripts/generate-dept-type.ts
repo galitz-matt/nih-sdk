@@ -1,12 +1,12 @@
 import { BASE_URLS } from "../src/infra/config";
 import { toPascalCase } from "./utils";
 import { join } from "path";
-import { writeFileSync } from "fs";
+import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
 
 const URL = BASE_URLS.WEBAPP + "/services/Lookup/deptTypes"
 
 async function main() {
-    const res = await fetch(URL);
+    const res = await Bun.fetch(URL);
     const raw = await res.json();
 
     if (!Array.isArray(raw)) {
@@ -26,26 +26,28 @@ async function main() {
 
     const unique = [ ...new Set(data) ].sort();
 
-    const lines = unique.map(value => {
-        const key = toPascalCase(value);
-        return `    ${key}: "${value}",`
-    });
+    const output = render(
+        seq(
+            block(
+                "export const DeptType = {",
+                unique.map(value => 
+                    line(`${toPascalCase(value)}: "${value}",`)
+                ),
+                "} as const;"
+            ),
+            newline(),
+            line("export type DeptType = typeof DeptType[keyof typeof DeptType];")
+        )
+    )
 
-    // TODO: rewrite w/ ts-struct
-    const output = `export const DeptType = {
-${lines.join("\n")}
-} as const;
-
-export type DeptType = typeof DeptType[keyof typeof DeptType];
-`;
-    const OUTPUT_PATH = join(
+    const outputPath = join(
         import.meta.dir,
         "../src/domain/types/enum/dept-type.ts"
     );
 
-    writeFileSync(OUTPUT_PATH, output);
+    Bun.write(outputPath, output);
 
-    console.log(`Generated ${unique.length} dept types`);
+    console.log(`Generated ${unique.length} dept types.`);
 }
 
 main();

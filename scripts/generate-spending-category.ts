@@ -2,11 +2,13 @@ import { BASE_URLS } from "../src/infra/config";
 import { toPascalCase } from "./utils";
 import { join } from "path";
 import { writeFileSync } from "fs";
+import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
 
-const URL = BASE_URLS.WEBAPP + "/services/Lookup/spendingCategories"
 
 async function main() {
-    const res = await fetch(URL);
+    const URL = BASE_URLS.WEBAPP + "/services/Lookup/spendingCategories"
+
+    const res = await Bun.fetch(URL);
     const raw = await res.json();
 
     if (!Array.isArray(raw)) {
@@ -28,21 +30,26 @@ async function main() {
         new Map(entries.map(e => [e.key, e])).values()
     ).sort((a, b) => a.key.localeCompare(b.key));
 
-    const lines = unique.map(e => `   ${e.key}: ${e.value},`);
+    const output = render(
+        seq(
+            block(
+                "export const SpendingCategories = {",
+                unique.map(item =>
+                    line(`${item.key}: "${item.value}"`)
+                ),
+                "} as const;"
+            ),
+            newline(),
+            line("export type SpendingCategory = typeof SpendingCategory[keyof typeof SpendingCategory];")
+        )
+    );
 
-    // TODO: rewrite w/ ts-struct
-    const output = `export const SpendingCategory = {
-${lines.join("\n")}
-} as const;
-
-export type SpendingCategory = typeof SpendingCategory[keyof typeof SpendingCategory];
-`;
-    const OUTPUT_PATH = join(
+    const outputPath = join(
         import.meta.dir,
         "../src/domain/types/enum/spending-category.ts"
     );
 
-    writeFileSync(OUTPUT_PATH, output);
+    Bun.write(outputPath, output);
 
     console.log(`Generated ${unique.length} spending categories`);
 }

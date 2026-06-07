@@ -6,3 +6,7 @@ export function toPascalCase(value: string): string {
     .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
     .join("");
 }
+
+export function safeKey(key: string): string {
+    return /^[0-9]/.test(key) ? `_${key}` : key;
+}

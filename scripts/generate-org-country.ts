@@ -2,60 +2,59 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { BASE_URLS } from "../src/infra/config";
 import type { ApiItem } from "./types"
-import { toPascalCase } from "./utils";
+import { safeKey, toPascalCase } from "./utils";
+import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
 
 const URL = BASE_URLS.WEBAPP + "/services/Lookup/orgCountries";
 
 async function main() {
-  const res = await fetch(URL);
-  const raw = await res.json();
+	const res = await fetch(URL);
+	const raw = await res.json();
 
-  if (!Array.isArray(raw)) {
-    throw new Error("Unexpected response: not an array");
-  }
-  const data: ApiItem[] = raw.map(item => {
-    if (
-        typeof item !== "object" ||
-        item === null ||
-        typeof (item as any).value !== "string"
-    ) {
-        throw new Error("Unexpected resposne: invalid item shape")
-    }
+	if (!Array.isArray(raw)) {
+		throw new Error("Unexpected response: not an array");
+	}
+	const data: ApiItem[] = raw.map(item => {
+		if (
+			typeof item !== "object" ||
+			item === null ||
+			typeof (item as any).value !== "string"
+		) {
+			throw new Error("Unexpected resposne: invalid item shape")
+		}
 
-    return { value: (item as any).value }
-  });
+		return { value: (item as any).value }
+	});
 
-  const entries = data
-    .map(item => item.value)
-    .filter(Boolean);
+	const entries = data
+		.map(item => item.value)
+		.filter(Boolean);
 
-  // Deduplicate just in case
-  const unique = Array.from(new Set(entries)).sort();
+	// Deduplicate just in case
+	const unique = Array.from(new Set(entries)).sort();
 
-  const lines = unique.map(value => {
-    const key = toPascalCase(value);
+	const output = render(
+		seq(
+			block(
+				"export const OrgCountry = {",
+				unique.map(value =>
+					line(`${safeKey(toPascalCase(value))}: "${value}",`)
+				),
+				"} as const;"
+			),
+			newline(),
+			line("export type OrgCountry = typeof OrgCountry[keyof typeof OrgCountry];")
+		)
+	);
 
-    // Edge case: keys starting with number
-    const safeKey = /^[0-9]/.test(key) ? `_${key}` : key;
+	const outputPath = join(
+		import.meta.dir,
+		"../src/domain/types/enum/org-country.ts"
+	);
 
-    return `   ${safeKey}: "${value}",`;
-  });
+	Bun.write(outputPath, output);
 
-  // TODO: rewrite w/ ts-struct
-  const output = `export const OrgCountry = {
-${lines.join("\n")}
-} as const;
-
-export type OrgCountry = typeof OrgCountry[keyof typeof OrgCountry];
-`;
-
-  const OUTPUT_PATH = join(
-    import.meta.dir,
-    "../src/domain/types/enum/org-country.ts"
-  )
-  writeFileSync(OUTPUT_PATH, output);
-
-  console.log(`Generated ${unique.length} org countries.`);
+	console.log(`Generated ${unique.length} org countries.`);
 }
 
 main();

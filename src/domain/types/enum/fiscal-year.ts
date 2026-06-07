@@ -42,5 +42,5 @@ export const FiscalYear = {
     _2025: 2025,
     _2026: 2026,
 } as const;
+
 export type FiscalYear = typeof FiscalYear[keyof typeof FiscalYear];
-    

@@ -1,6 +1,8 @@
 import { writeFileSync } from "fs";
 import { BASE_URLS } from "../src/infra/config";
 import { join } from "path";
+import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
+import { safeKey } from "./utils";
 
 const URL = BASE_URLS.WEBAPP + "/services/Lookup/fiscalYears";
 
@@ -31,21 +33,30 @@ async function main() {
         return `    ${safeKey.toUpperCase()}: ${key},`;
     })
 
-    // TODO: rewrite w/ ts-struct
-    const output = `export const FiscalYear = {
-${lines.join("\n")}
-} as const;
-export type FiscalYear = typeof FiscalYear[keyof typeof FiscalYear];
-    `;
+    const output = render(
+        seq(
+            block(
+                "export const FiscalYear = {",
+                unique.map(value => 
+                    line(`${safeKey(value).toUpperCase()}: ${value},`)
+                ),
+                "} as const;"
+            ),
+            newline(),
+            line("export type FiscalYear = typeof FiscalYear[keyof typeof FiscalYear];")
+        )
+    )
 
-    const OUTPUT_PATH = join(
+    const outputPath = join(
         import.meta.dir,
         "../src/domain/types/enum/fiscal-year.ts"
     )
 
-    writeFileSync(OUTPUT_PATH, output);
+    writeFileSync(outputPath, output);
 
     console.log(`Generated ${unique.length} fiscal year values`)
 }
+
+
 
 main();

@@ -1,13 +1,13 @@
+import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
 import { BASE_URLS } from "../src/infra/config";
 import type { ApiItemWithChildren } from "./types";
 import { toPascalCase } from "./utils";
 import { join } from "path"
-import { writeFileSync } from "fs";
 
 async function main() {
     const URL = BASE_URLS.WEBAPP + "/services/Lookup/organizationTypes"
 
-    const res = await fetch(URL);
+    const res = await Bun.fetch(URL);
     const raw = await res.json();
 
 
@@ -33,19 +33,26 @@ async function main() {
 
     const lines = unique.map(e => `    ${e.key}: "${e.value}",`);
 
-    // TODO: rewrite with ts-struct
-    const output = `export const OrgType = {
-${lines.join("\n")}
-} as const;
+    const output = render(
+        seq(
+            block(
+                "export const OrgType = {",
+                unique.map(item =>
+                    line(`${item.key}: "${item.value}"`)
+                ),
+                "} as const;"
+            ),
+            newline(),
+            line("export type OrgType = typeof OrgType[keyof typeof OrgType];")
+        )
+    );
 
-export type OrgType = typeof OrgType[keyof typeof OrgType];`
-
-    const OUTPUT_PATH = join(
+    const outputPath = join(
         import.meta.dir,
         "../src/domain/types/enum/org-type.ts"
     );
 
-    writeFileSync(OUTPUT_PATH, output);
+    Bun.write(outputPath, output);
 
     console.log(`Generated ${unique.length} org types`);
 }
