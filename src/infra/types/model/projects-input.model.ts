@@ -59,7 +59,7 @@ export type ProjectsInput = {
         covid_response?: CovidResponse[];
         outcomes_only?: boolean;
         arra_type?: ArraType[];
-        advanced_text_search?: AdvancedTextSearch; // TODO: add builder method, and dto builder
+        advanced_text_search?: AdvancedTextSearch;
         publications_search?: PublicationsSearch;
     };
     include_fields?: Field[];
