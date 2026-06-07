@@ -1,4 +1,5 @@
-import type { PublicationsSearch } from "../../infra/types/model/projects-input.model";
+import type { AdvancedTextSearch, PublicationsSearch } from "../../infra/types/model/projects-input.model";
+import type { AdvancedTextSearchIr } from "../types/ir/advanced-text-search.ir";
 import type { PublicationsSearchIr } from "../types/ir/publications-search.ir";
 
 export class IrToModelMapper {
@@ -11,6 +12,19 @@ export class IrToModelMapper {
             core_project_nums: ir.coreProjectNumbers,
             get_non_nih_pubs: ir.includeNonNih ?? false,
             filter_appl_ids: ir.filterApplicationIds ?? false
+        };
+    }
+
+    static toAdvancedTextSearch(ir: AdvancedTextSearchIr): AdvancedTextSearch {
+        return {
+            operator: ir.kind === "expr"
+                ? "advanced"
+                : ir.kind,
+            search_field: ir.field,
+            search_region: ir.region,
+            search_text: ir.kind === "expr"
+                ? ir.expr
+                : ir.terms.join(" ")
         };
     }
 }
