@@ -563,7 +563,6 @@ export class ProjectsQueryBuilder {
 
     /**
      * Matches projects by Organization names according to specificed matching behavior,
-     * defaults to partial matching
      * 
      * @param org - first organization
      * @param orgs - rest of organizations
@@ -590,7 +589,7 @@ export class ProjectsQueryBuilder {
     orgNames(org: OrgNameIr, ...orgs: OrgNameIr[]): this {
         const allOrgs = [org, ...orgs];
         this.payload.criteria.org_names =
-            allOrgs.filter(o => o.kind ?? "partial" === "partial").map(o => o.name);
+            allOrgs.filter(o => o.kind === "partial").map(o => o.name);
         this.payload.criteria.org_names_exact_match =
             allOrgs.filter(o => o.kind === "exact").map(o => o.name);
         return this;
