@@ -3,7 +3,7 @@ import { CongDist, CongDistGroup } from "../types/enum/cong-dist";
 import type { Field } from "../types/enum/field";
 import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgState } from "../types/enum/org-state";
-import type { ProjectsInput, SpendingCategoriesCriteria } from "../../infra/types/model/projects-input.model";
+import type { ProjectsInput, PublicationsSearch, SpendingCategoriesCriteria } from "../../infra/types/model/projects-input.model";
 
 export class ProjectsQueryValidator {
     static validate(payload: ProjectsInput): void {
@@ -84,6 +84,12 @@ export class ProjectsQueryValidator {
 
         if (nums.length > 1000) {
             throw new DomainError("Too many projectNums: Count of provided project numbers cannot exceed 1000");
+        }
+    }
+
+    static validatePublications(search: PublicationsSearch): void {
+        if (search.publications_text_search?.length ?? 0 > 2500) {
+            throw new DomainError("Text too long: Publications search text cannot exceed 2500 characters");
         }
     }
 
