@@ -1,5 +1,5 @@
-import type { ProjectsInput } from "../../domain/types/model/projects-input.model";
-import type { ProjectsOutput } from "../../domain/types/model/projects-output.model";
+import type { ProjectsInput } from "../types/model/projects-input.model";
+import type { ProjectsOutput } from "../types/model/projects-output.model";
 import { BASE_URLS } from "../config";
 import type { HttpClient } from "../http/http.client.interface";
 
