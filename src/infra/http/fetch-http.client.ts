@@ -44,7 +44,6 @@ export class FetchHttpClient implements HttpClient {
                     });
                 }
 
-                // TODO: need to validate shape of parsed JSON against ProjectsOutput
                 return parsed as TResponse
             } catch (err) {
                 if (this.isAbortError(err)) {
