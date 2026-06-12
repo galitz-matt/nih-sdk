@@ -620,7 +620,7 @@ export class ProjectsQueryBuilder {
      * nih.projects.query()
      * .orgNames({
      *  name: "Yale",
-     *  kind: 
+     *  kind: "partial"
      * })
      * ```
      * matches projects conducted by an organization with name contain "Yale"
