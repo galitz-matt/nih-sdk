@@ -18,5 +18,4 @@ export class NihSdk {
     }
 }
 
-const nih = createNihSdk();
-export default nih;
+export const nih = createNihSdk();

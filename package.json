@@ -1,18 +1,25 @@
 {
-  "name": "ts-nih",
-  "module": "index.ts",
+  "name": "@galitz-matt/nih-sdk",
+  "version": "0.1.0",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
+    "@galitz-matt/ts-struct": "^0.1.5",
     "@types/bun": "latest",
-    "barrelsby": "^2.8.1"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "@galitz-matt/ts-struct": "^0.1.5"
+    "barrelsby": "^2.8.1",
+    "typescript": "^6.0.3"
   },
   "scripts": {
     "build": "tsc"
-  }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ]
 }
