@@ -1,4 +1,4 @@
-import type { ProjectsInput } from "../types/model/projects-input.model";
+import type { ProjectsInput } from "../../infra/types/model/projects-input.model"
 
 export class DefaultsFactory {
     static createDefaultProjectsInput(): ProjectsInput {

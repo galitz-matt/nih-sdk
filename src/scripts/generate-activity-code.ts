@@ -23,7 +23,11 @@ async function main() {
 
     const codeGroups = new Map<string, Set<string>>();
     for (const item of filtered) {
-        const group = codeGroups.getOrInsert(item.parent_value!, new Set<string>());
+        let group = codeGroups.get(item.parent_value!);
+        if (!group) {
+            group = new Set<string>();
+        }
+
         group.add(item.value!);
         codeGroups.set(item.parent_value as string, group);
     }
