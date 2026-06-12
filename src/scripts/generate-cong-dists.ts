@@ -1,5 +1,5 @@
-import { OrgState } from "../src/domain/types/enum/org-state";
-import { BASE_URLS } from "../src/infra/config";
+import { OrgState } from "../domain/types/enum/org-state";
+import { BASE_URLS } from "../infra/config";
 import { join } from "path";
 import { writeFileSync } from "fs"
 import { line, block, seq, render, newline } from "@galitz-matt/ts-struct";

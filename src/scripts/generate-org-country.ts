@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { BASE_URLS } from "../src/infra/config";
+import { BASE_URLS } from "../infra/config";
 import type { ApiItem } from "./types"
 import { safeKey, toPascalCase } from "./utils";
 import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";

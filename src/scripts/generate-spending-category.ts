@@ -1,4 +1,4 @@
-import { BASE_URLS } from "../src/infra/config";
+import { BASE_URLS } from "../infra/config";
 import { toPascalCase } from "./utils";
 import { join } from "path";
 import { writeFileSync } from "fs";

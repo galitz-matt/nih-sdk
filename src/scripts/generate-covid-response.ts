@@ -1,10 +1,10 @@
 import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
-import { BASE_URLS } from "../src/infra/config";
+import { BASE_URLS } from "../infra/config";
 import { toPascalCase } from "./utils";
 import { join } from "path";
 
 async function main() {
-    const URL = BASE_URLS.WEBAPP + "/services/Lookup/arraType";
+    const URL = BASE_URLS.WEBAPP + "/services/Lookup/covid19";
 
     const res = await Bun.fetch(URL);
     const raw = await res.json();
@@ -31,7 +31,11 @@ async function main() {
                 value: `[${split.map(v => `"${v}"`).join(", ")}]`
             }
         }
-        return { display: item.display, value: `"${item.value}"` };
+
+        return { 
+            display: item.display, 
+            value:`"${item.value}"`
+        };
     });
 
     const unique = [
@@ -43,25 +47,25 @@ async function main() {
     const output = render(
         seq(
             block(
-                "export const ArraType = {",
-                unique.map(item =>
+                "export const CovidResponse = {",
+                unique.map(item => 
                     line(`${toPascalCase(item.display)}: ${item.value},`)
                 ),
                 "} as const;"
             ),
             newline(),
-            line("export type ArraType = typeof ArraType[keyof typeof ArraType];")
+            line("export type CovidResponse = typeof CovidResponse[keyof typeof CovidResponse];")
         )
     );
 
     const outputPath = join(
         import.meta.dir,
-        "../src/domain/types/enum/arra-type.ts"
+        "../src/domain/types/enum/covid-response.ts"
     );
 
     Bun.write(outputPath, output);
-
-    console.log(`Generated ${unique.length} arraType types`);
+    
+    console.log(`Generated ${unique.length} covid response types.`);
 }
 
 main();

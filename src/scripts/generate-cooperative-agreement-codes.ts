@@ -1,5 +1,5 @@
 import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
-import { BASE_URLS } from "../src/infra/config";
+import { BASE_URLS } from "../infra/config";
 import { join } from "path"
 
 async function main() {

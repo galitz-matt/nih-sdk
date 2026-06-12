@@ -1,5 +1,5 @@
 import { join } from "path";
-import { BASE_URLS } from "../src/infra/config";
+import { BASE_URLS } from "../infra/config";
 import type { ApiItemWithChildren } from "./types";
 import { toPascalCase } from "./utils";
 import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";

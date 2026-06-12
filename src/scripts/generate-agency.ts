@@ -1,11 +1,11 @@
-import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
-import { BASE_URLS } from "../src/infra/config";
+import { BASE_URLS } from "../infra/config";
 import type { ApiItemWithChildren } from "./types";
 import { toPascalCase } from "./utils";
 import { join } from "path"
+import { block, line, newline, render, seq } from "@galitz-matt/ts-struct";
 
 async function main() {
-    const URL = BASE_URLS.WEBAPP + "/services/Lookup/organizationTypes"
+    const URL = BASE_URLS.WEBAPP + "/services/Lookup/agencies"
 
     const res = await Bun.fetch(URL);
     const raw = await res.json();
@@ -34,25 +34,25 @@ async function main() {
     const output = render(
         seq(
             block(
-                "export const OrgType = {",
+                "export const Agency = {",
                 unique.map(item =>
                     line(`${item.key}: "${item.value}",`)
                 ),
                 "} as const;"
             ),
             newline(),
-            line("export type OrgType = typeof OrgType[keyof typeof OrgType];")
+            line("export type Agency = typeof Agency[keyof typeof Agency];")
         )
-    );
+    )
 
     const outputPath = join(
         import.meta.dir,
-        "../src/domain/types/enum/org-type.ts"
+        "../src/domain/types/enum/agency.ts"
     );
 
     Bun.write(outputPath, output);
 
-    console.log(`Generated ${unique.length} org types`);
+    console.log(`Generated ${unique.length} agencies`);
 }
 
 main();
