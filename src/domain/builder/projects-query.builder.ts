@@ -173,6 +173,10 @@ export class ProjectsQueryBuilder {
      * See {@link MIN_AWARD_AMOUNT} and {@link MAX_AWARD_AMOUNT} for valid range values
      */
     awardAmountRange(min: number, max: number): this {
+        this.payload.criteria.award_amount_range = {
+            min_amount: min,
+            max_amount: max
+        };
         return this;
     }
 

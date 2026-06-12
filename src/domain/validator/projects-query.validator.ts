@@ -4,10 +4,12 @@ import type { Field } from "../types/enum/field";
 import type { FiscalYear } from "../types/enum/fiscal-year";
 import type { OrgState } from "../types/enum/org-state";
 import type { ProjectsInput, PublicationsSearch, SpendingCategoriesCriteria } from "../../infra/types/model/projects-input.model";
+import { MAX_AWARD_AMOUNT, MIN_AWARD_AMOUNT } from "../constants/amount-range";
 
 export class ProjectsQueryValidator {
     static validate(payload: ProjectsInput): void {
         this.validateApplIds(payload.criteria.appl_ids);
+        this.validateAwardAmountRange(payload.criteria.award_amount_range?.min_amount, payload.criteria.award_amount_range?.max_amount);
         this.validateCongDists(payload.criteria.cong_dists, payload.criteria.org_states);
         this.validateFields(payload.include_fields, payload.exclude_fields);
         this.validateLimit(payload.limit);
@@ -21,6 +23,15 @@ export class ProjectsQueryValidator {
 
         if (applIds.length > 1000) {
             throw new DomainError("Too many applIds: Count of provided application IDs cannot exceed 1000");
+        }
+    }
+
+    static validateAwardAmountRange(min: number | undefined, max: number | undefined): void {
+        if (min && min < MIN_AWARD_AMOUNT) {
+            throw new DomainError(`Invalid minimum award amount: must be greater than or equal to ${MIN_AWARD_AMOUNT}`);
+        }
+        if (max && max > MAX_AWARD_AMOUNT) {
+            throw new DomainError(`Invalid maximum award amount: must be less than or equal to ${MAX_AWARD_AMOUNT}`);
         }
     }
 
