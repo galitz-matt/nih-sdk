@@ -31,14 +31,12 @@ async function main() {
         new Map(entries.map(e => [e.key, e])).values()
     ).sort((a, b) => a.key.localeCompare(b.key));
 
-    const lines = unique.map(e => `    ${e.key}: "${e.value}",`);
-
     const output = render(
         seq(
             block(
                 "export const OrgType = {",
                 unique.map(item =>
-                    line(`${item.key}: "${item.value}"`)
+                    line(`${item.key}: "${item.value}",`)
                 ),
                 "} as const;"
             ),
